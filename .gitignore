@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Builds y tests
+dist/
+coverage/
+*.local
+
+# Variables de entorno (solo se suben los .env.example)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Despliegue
+.vercel/
+
+# Editores y sistema
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code (configuración local de cada persona)
+.claude/settings.local.json
