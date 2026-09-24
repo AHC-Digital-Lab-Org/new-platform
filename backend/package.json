@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#infrastructure/*": "./src/infrastructure/*",
+    "#middleware/*": "./src/middleware/*",
+    "#shared/*": "./src/shared/*",
+    "#platform/*": "./src/platform/*"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env src/server.js",
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "postinstall": "prisma generate --schema prisma/schema",
+    "db:generate": "prisma generate --schema prisma/schema",
+    "db:migrate": "prisma migrate dev --schema prisma/schema",
+    "db:deploy": "prisma migrate deploy --schema prisma/schema",
+    "db:seed": "node --env-file-if-exists=.env prisma/seed.js",
+    "db:studio": "prisma studio --schema prisma/schema"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3",
+    "vitest": "^5.0.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.6.5"
+  }
+}

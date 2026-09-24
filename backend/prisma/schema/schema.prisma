@@ -1,0 +1,10 @@
+// Configuración común. Cada módulo define sus modelos en su propio fichero
+// (prisma/schema/<modulo>.prisma) y prefija sus tablas con el nombre del módulo.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // MariaDB
+  url      = env("DATABASE_URL")
+}

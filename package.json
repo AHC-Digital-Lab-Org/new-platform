@@ -1,0 +1,29 @@
+{
+  "name": "web-platform",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "build": "npm run build -w frontend",
+    "start": "npm run start -w backend",
+    "test": "npm test -w backend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "db:deploy": "npm run db:deploy -w backend",
+    "db:seed": "npm run db:seed -w backend",
+    "db:studio": "npm run db:studio -w backend",
+    "new:module": "node scripts/new-module.js"
+  },
+  "allowScripts": {
+    "@prisma/engines@6.19.3": true,
+    "prisma@6.19.3": true,
+    "@prisma/client@6.19.3": true,
+    "@scarf/scarf": false
+  }
+}

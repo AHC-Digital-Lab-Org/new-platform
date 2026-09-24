@@ -1,0 +1,13 @@
+// Módulo ECOGESTOS — tienda
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(120)
+  description String?  @db.Text
+  priceCents  Int
+  stock       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("ecogestos_products")
+}
