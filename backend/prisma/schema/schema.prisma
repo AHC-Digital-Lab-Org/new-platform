@@ -8,3 +8,24 @@ datasource db {
   provider = "mysql" // MariaDB
   url      = env("DATABASE_URL")
 }
+model User {
+  id              String   @id @default(cuid())
+  alias           String   @unique
+  email           String   @unique
+  nombre          String?
+  passwordHash    String?  @map("password_hash")
+  tipoUsuario     String   @default("usuario_registrado") @map("tipo_usuario")
+  ciudad          String?
+  pais            String   @default("España")
+  fechaAlta       DateTime @default(now()) @map("fecha_alta")
+  consentimientos Json
+  estado          String   @default("pendiente_verificacion")
+
+  emailVerificado Boolean  @default(false) @map("email_verificado")
+
+  // 2FA / TOTP — se utilizará posteriormente
+  totpSecret      String?  @map("totp_secret")
+  twoFactorOn     Boolean  @default(false) @map("two_factor_on")
+
+  @@map("users")
+}
