@@ -1,8 +1,5 @@
-import path from 'node:path';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
-const srcDir = path.resolve(import.meta.dirname, '../..');
 
 // Cada equipo documenta sus endpoints con comentarios `@openapi` en su *.routes.js.
 // Aquí solo se recogen: no hay un fichero OpenAPI central que editar.
@@ -29,7 +26,11 @@ export const openapiSpec = swaggerJsdoc({
       },
     },
   },
-  apis: [path.join(srcDir, '{platform,modules}/**/*.routes.js'), path.join(srcDir, 'app.js')],
+  apis: [
+    'src/platform/**/*.routes.js',
+    'src/modules/**/*.routes.js',
+    'src/app.js',
+  ],
 });
 
 export const mountSwagger = (app) => {
