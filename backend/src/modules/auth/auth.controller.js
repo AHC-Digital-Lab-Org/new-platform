@@ -1,11 +1,11 @@
 import * as authService from './auth.service.js';
 
-export const register = async (_req, res, _next) => {
-  // Implementación real en Commit 3
-  return res.status(501).json({ message: 'Not implemented yet' });
+export const register = async (req, res) => {
+  const user = await authService.register(req.valid.body);
+
+  return res.status(201).json({ user });
 };
 
-export const login = async (_req, res, _next) => {
-  // Implementación real en Commit 4
+export const login = async (_req, res) => {
   return res.status(501).json({ message: 'Not implemented yet' });
 };

@@ -12,11 +12,44 @@ export const router = Router();
  *     tags:
  *       - Auth
  *     summary: Registrar un nuevo usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - alias
+ *               - email
+ *               - password
+ *               - consentimientos
+ *             properties:
+ *               alias:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *               nombre:
+ *                 type: string
+ *               ciudad:
+ *                 type: string
+ *               pais:
+ *                 type: string
+ *               consentimientos:
+ *                 type: object
  *     responses:
- *       501:
- *         description: Pendiente de implementación (Commit 3)
+ *       201:
+ *         description: Usuario creado
+ *       409:
+ *         description: Email o alias ya en uso
+ *       400:
+ *         description: Datos inválidos
  */
-router.post('/register', validate(registerSchema), authController.register);
+router.post('/register', validate({ body: registerSchema }), authController.register);
+
 
 /**
  * @openapi
@@ -29,4 +62,4 @@ router.post('/register', validate(registerSchema), authController.register);
  *       501:
  *         description: Pendiente de implementación (Commit 4)
  */
-router.post('/login', validate(loginSchema), authController.login);
+router.post('/login', validate({ body: loginSchema }), authController.login);
