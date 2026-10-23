@@ -1,6 +1,14 @@
 import { Router } from 'express';
 import { validate } from '#middleware/validate.middleware.js';
 import { authenticate } from '#middleware/auth.middleware.js';
+import {
+  registerLimiter,
+  loginLimiter,
+  resendVerificationLimiter,
+  twoFactorLoginIpLimiter,
+  twoFactorLoginTokenLimiter,
+  twoFactorManageLimiter,
+} from '#middleware/rate-limit.middleware.js';
 import * as authController from './auth.controller.js';
 import {
   registerSchema,
@@ -56,8 +64,15 @@ export const router = Router();
  *         description: Email o alias ya en uso
  *       400:
  *         description: Datos inválidos
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
  */
-router.post('/register', validate({ body: registerSchema }), authController.register);
+router.post(
+  '/register',
+  registerLimiter,
+  validate({ body: registerSchema }),
+  authController.register,
+);
 
 
 /**
@@ -91,8 +106,15 @@ router.post('/register', validate({ body: registerSchema }), authController.regi
  *         description: Email sin verificar (`EMAIL_NOT_VERIFIED`)
  *       400:
  *         description: Datos inválidos
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
  */
-router.post('/login', validate({ body: loginSchema }), authController.login);
+router.post(
+  '/login',
+  loginLimiter,
+  validate({ body: loginSchema }),
+  authController.login,
+);
 
 /**
  * @openapi
@@ -165,9 +187,12 @@ router.post(
  *         description: Respuesta genérica (no revela si el email existe)
  *       400:
  *         description: Datos inválidos
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
  */
 router.post(
   '/resend-verification',
+  resendVerificationLimiter,
   validate({ body: resendVerificationSchema }),
   authController.resendVerification,
 );
@@ -221,10 +246,13 @@ router.post('/2fa/setup', authenticate, authController.twoFactorSetup);
  *         description: Token ausente, inválido o expirado
  *       409:
  *         description: El 2FA ya está activado
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
  */
 router.post(
   '/2fa/enable',
   authenticate,
+  twoFactorManageLimiter,
   validate({ body: twoFactorCodeSchema }),
   authController.twoFactorEnable,
 );
@@ -260,10 +288,13 @@ router.post(
  *         description: Contraseña o código incorrectos, 2FA no activado o datos inválidos
  *       401:
  *         description: Token ausente, inválido o expirado
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
  */
 router.post(
   '/2fa/disable',
   authenticate,
+  twoFactorManageLimiter,
   validate({ body: twoFactorDisableSchema }),
   authController.twoFactorDisable,
 );
@@ -297,9 +328,13 @@ router.post(
  *         description: Datos inválidos
  *       401:
  *         description: Código incorrecto (`INVALID_TWO_FACTOR_CODE`) o twoFactorToken inválido/expirado (`INVALID_TWO_FACTOR_TOKEN`)
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
  */
 router.post(
   '/2fa/login',
   validate({ body: twoFactorLoginSchema }),
+  twoFactorLoginIpLimiter,
+  twoFactorLoginTokenLimiter,
   authController.twoFactorLogin,
 );

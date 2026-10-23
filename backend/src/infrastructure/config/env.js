@@ -26,6 +26,7 @@ export const env = {
     pass: process.env.SMTP_PASS,
     from: process.env.MAIL_FROM ?? 'no-reply@localhost',
   },
+  trustProxy: process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) : false,
   get databaseUrl() {
     return required('DATABASE_URL');
   },

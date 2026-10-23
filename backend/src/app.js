@@ -9,6 +9,8 @@ import { modules } from './modules/index.js';
 export const createApp = () => {
   const app = express();
 
+  if (env.trustProxy) app.set('trust proxy', env.trustProxy);
+
   app.use(cors({ origin: env.corsOrigin }));
   app.use(express.json());
   if (env.nodeEnv !== 'test') app.use(logging);
