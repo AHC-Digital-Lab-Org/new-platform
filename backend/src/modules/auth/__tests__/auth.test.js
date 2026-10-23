@@ -401,6 +401,27 @@ describe('Auth service — login', () => {
 
     expect(sign).not.toHaveBeenCalled();
   });
+
+  it('pide el segundo factor si el usuario tiene 2FA activado', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, twoFactorOn: true });
+
+    const result = await login({
+      email: 'usuario@example.com',
+      password: 'password123',
+    });
+
+    expect(sign).toHaveBeenCalledWith(
+      { sub: 'user-1', purpose: '2fa' },
+      expect.any(String),
+      { expiresIn: '5m' },
+    );
+    expect(result).toEqual({
+      twoFactorRequired: true,
+      twoFactorToken: 'jwt-token',
+    });
+    expect(result).not.toHaveProperty('token');
+    expect(result).not.toHaveProperty('user');
+  });
 });
 
 describe('Auth endpoint — login', () => {

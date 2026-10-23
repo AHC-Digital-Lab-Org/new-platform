@@ -108,4 +108,20 @@ describe('Auth endpoint — GET /me', () => {
     expect(response.status).toBe(401);
     expect(response.body.error.code).toBe('UNAUTHORIZED');
   });
+
+  it('responde 401 si el token es de segundo factor', async () => {
+    const twoFactorToken = jwt.sign(
+      { sub: 'user-1', purpose: '2fa' },
+      env.jwtSecret,
+      { expiresIn: '5m' },
+    );
+
+    const response = await request(app)
+      .get('/api/auth/me')
+      .set('Authorization', `Bearer ${twoFactorToken}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe('INVALID_TOKEN');
+    expect(findUnique).not.toHaveBeenCalled();
+  });
 });

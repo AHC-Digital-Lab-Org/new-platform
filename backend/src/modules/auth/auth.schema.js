@@ -22,3 +22,19 @@ export const verifyEmailSchema = z.object({
 export const resendVerificationSchema = z.object({
   email: z.string().email(),
 });
+
+const codeSchema = z.string().regex(/^\d{6}$/, 'El código debe tener 6 dígitos');
+
+export const twoFactorCodeSchema = z.object({
+  code: codeSchema,
+});
+
+export const twoFactorLoginSchema = z.object({
+  twoFactorToken: z.string().min(1),
+  code: codeSchema,
+});
+
+export const twoFactorDisableSchema = z.object({
+  password: z.string().min(1),
+  code: codeSchema,
+});

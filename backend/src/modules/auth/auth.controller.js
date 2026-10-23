@@ -7,9 +7,9 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { token, user } = await authService.login(req.valid.body);
+  const result = await authService.login(req.valid.body);
 
-  return res.status(200).json({ token, user });
+  return res.status(200).json(result);
 };
 
 export const me = async (req, res) => {
@@ -30,4 +30,34 @@ export const resendVerification = async (req, res) => {
   return res.status(200).json({
     message: 'Si el email existe y no está verificado, recibirás un nuevo enlace',
   });
+};
+
+export const twoFactorSetup = async (req, res) => {
+  const setup = await authService.setupTwoFactor(req.auth.userId);
+
+  return res.status(200).json(setup);
+};
+
+export const twoFactorEnable = async (req, res) => {
+  const user = await authService.enableTwoFactor(
+    req.auth.userId,
+    req.valid.body.code,
+  );
+
+  return res.status(200).json({ user });
+};
+
+export const twoFactorDisable = async (req, res) => {
+  const user = await authService.disableTwoFactor(
+    req.auth.userId,
+    req.valid.body,
+  );
+
+  return res.status(200).json({ user });
+};
+
+export const twoFactorLogin = async (req, res) => {
+  const { token, user } = await authService.loginWithTwoFactor(req.valid.body);
+
+  return res.status(200).json({ token, user });
 };

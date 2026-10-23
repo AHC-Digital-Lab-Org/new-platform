@@ -7,6 +7,9 @@ import {
   loginSchema,
   verifyEmailSchema,
   resendVerificationSchema,
+  twoFactorCodeSchema,
+  twoFactorLoginSchema,
+  twoFactorDisableSchema,
 } from './auth.schema.js';
 
 export const router = Router();
@@ -81,7 +84,7 @@ router.post('/register', validate({ body: registerSchema }), authController.regi
  *                 type: string
  *     responses:
  *       200:
- *         description: Login correcto. Devuelve `token` (JWT) y `user`
+ *         description: Login correcto. Devuelve `token` y `user`; si el usuario tiene 2FA, devuelve `twoFactorRequired` y `twoFactorToken` (usar en `/api/auth/2fa/login`)
  *       401:
  *         description: Credenciales incorrectas
  *       403:
@@ -167,4 +170,136 @@ router.post(
   '/resend-verification',
   validate({ body: resendVerificationSchema }),
   authController.resendVerification,
+);
+
+/**
+ * @openapi
+ * /api/auth/2fa/setup:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Inicia la configuración del 2FA (devuelve secreto y QR)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Devuelve `secret`, `otpauthUrl` y `qrCode` (data URL). El 2FA aún no está activo
+ *       401:
+ *         description: Token ausente, inválido o expirado
+ *       409:
+ *         description: El 2FA ya está activado
+ */
+router.post('/2fa/setup', authenticate, authController.twoFactorSetup);
+
+/**
+ * @openapi
+ * /api/auth/2fa/enable:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Activa el 2FA confirmando un código de la app autenticadora
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - code
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: 2FA activado. Devuelve `user`
+ *       400:
+ *         description: Código incorrecto, datos inválidos o setup sin iniciar
+ *       401:
+ *         description: Token ausente, inválido o expirado
+ *       409:
+ *         description: El 2FA ya está activado
+ */
+router.post(
+  '/2fa/enable',
+  authenticate,
+  validate({ body: twoFactorCodeSchema }),
+  authController.twoFactorEnable,
+);
+
+/**
+ * @openapi
+ * /api/auth/2fa/disable:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Desactiva el 2FA (requiere contraseña y código)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *               - code
+ *             properties:
+ *               password:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: 2FA desactivado. Devuelve `user`
+ *       400:
+ *         description: Contraseña o código incorrectos, 2FA no activado o datos inválidos
+ *       401:
+ *         description: Token ausente, inválido o expirado
+ */
+router.post(
+  '/2fa/disable',
+  authenticate,
+  validate({ body: twoFactorDisableSchema }),
+  authController.twoFactorDisable,
+);
+
+/**
+ * @openapi
+ * /api/auth/2fa/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Segundo paso del login con 2FA
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - twoFactorToken
+ *               - code
+ *             properties:
+ *               twoFactorToken:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Login correcto. Devuelve `token` y `user`
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: Código incorrecto (`INVALID_TWO_FACTOR_CODE`) o twoFactorToken inválido/expirado (`INVALID_TWO_FACTOR_TOKEN`)
+ */
+router.post(
+  '/2fa/login',
+  validate({ body: twoFactorLoginSchema }),
+  authController.twoFactorLogin,
 );

@@ -24,7 +24,8 @@ export const authenticate = (req, _res, next) => {
     typeof payload !== 'object' ||
     payload === null ||
     typeof payload.sub !== 'string' ||
-    typeof payload.tipo !== 'string'
+    typeof payload.tipo !== 'string' ||
+    payload.purpose
   ) {
     throw new AppError(401, 'INVALID_TOKEN', 'Token inválido');
   }
