@@ -44,7 +44,10 @@ describe('Auth endpoint — GET /me', () => {
       .set('Authorization', `Bearer ${makeToken()}`);
 
     expect(response.status).toBe(200);
-    expect(findUnique).toHaveBeenCalledWith({ where: { id: 'user-1' } });
+    expect(findUnique).toHaveBeenCalledWith({
+      where: { id: 'user-1' },
+      select: { tokenVersion: true, tipoUsuario: true },
+    });
     expect(response.body.user.email).toBe('usuario@example.com');
     expect(response.body.user).not.toHaveProperty('passwordHash');
     expect(response.body.user).not.toHaveProperty('totpSecret');

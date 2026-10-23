@@ -33,7 +33,7 @@ export const authenticate = async (req, _res, next) => {
 
   const user = await prisma.user.findUnique({
     where: { id: payload.sub },
-    select: { tokenVersion: true },
+    select: { tokenVersion: true, tipoUsuario: true },
   });
 
   if (!user) {
@@ -48,6 +48,6 @@ export const authenticate = async (req, _res, next) => {
     );
   }
 
-  req.auth = { userId: payload.sub, tipo: payload.tipo };
+  req.auth = { userId: payload.sub, tipo: user.tipoUsuario };
   return next();
 };

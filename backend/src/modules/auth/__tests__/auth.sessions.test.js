@@ -62,7 +62,7 @@ describe('Auth — revocación de sesiones', () => {
     expect(response.body.error.code).toBe('SESSION_REVOKED');
     expect(findUnique).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      select: { tokenVersion: true },
+      select: { tokenVersion: true, tipoUsuario: true },
     });
   });
 
