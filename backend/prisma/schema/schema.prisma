@@ -26,6 +26,7 @@ model User {
   emailVerificationExpires        DateTime? @map("email_verification_expires")
   passwordResetTokenHash          String?   @unique @map("password_reset_token_hash")
   passwordResetExpires            DateTime? @map("password_reset_expires")
+  tokenVersion                    Int       @default(0) @map("token_version")
 
   // 2FA / TOTP — se utilizará posteriormente
   totpSecret      String?  @map("totp_secret")

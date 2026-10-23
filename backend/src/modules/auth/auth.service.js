@@ -10,6 +10,7 @@ import { sendMail } from '#infrastructure/mail/mailer.js';
 import { decryptSecret, encryptSecret } from '#shared/crypto/secret-box.js';
 import { AppError } from '#shared/errors/index.js';
 import {
+  buildPasswordChangedMail,
   buildPasswordResetMail,
   buildVerificationMail,
 } from './auth.mail.js';
@@ -31,15 +32,18 @@ export const sanitizeUser = (user) => {
     emailVerificationExpires,
     passwordResetTokenHash,
     passwordResetExpires,
+    tokenVersion,
     ...safeUser
   } = user;
   return safeUser;
 };
 
 const signToken = (user) =>
-  jwt.sign({ sub: user.id, tipo: user.tipoUsuario }, env.jwtSecret, {
-    expiresIn: env.jwtExpiresIn,
-  });
+  jwt.sign(
+    { sub: user.id, tipo: user.tipoUsuario, v: user.tokenVersion ?? 0 },
+    env.jwtSecret,
+    { expiresIn: env.jwtExpiresIn },
+  );
 
 const signTwoFactorToken = (user) =>
   jwt.sign({ sub: user.id, purpose: '2fa' }, env.jwtSecret, {
@@ -429,25 +433,44 @@ export const forgotPassword = async (email) => {
 };
 
 export const resetPassword = async ({ token, password }) => {
+  const tokenHash = hashToken(token);
+  const invalid = () =>
+    new AppError(400, 'INVALID_RESET_TOKEN', 'El enlace es inválido o ha expirado');
+
+  const user = await prisma.user.findUnique({
+    where: { passwordResetTokenHash: tokenHash },
+  });
+  if (!user) throw invalid();
+
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
   const { count } = await prisma.user.updateMany({
     where: {
-      passwordResetTokenHash: hashToken(token),
+      passwordResetTokenHash: tokenHash,
       passwordResetExpires: { gt: new Date() },
     },
     data: {
       passwordHash,
       passwordResetTokenHash: null,
       passwordResetExpires: null,
+      tokenVersion: { increment: 1 },
     },
   });
 
-  if (count !== 1) {
-    throw new AppError(
-      400,
-      'INVALID_RESET_TOKEN',
-      'El enlace es inválido o ha expirado',
+  if (count !== 1) throw invalid();
+
+  try {
+    await sendMail({ to: user.email, ...buildPasswordChangedMail() });
+  } catch (err) {
+    logger.error(
+      `No se pudo enviar el aviso de cambio de contraseña al usuario ${user.id}: ${err.message}`,
     );
   }
+};
+
+export const logoutAll = async (userId) => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { tokenVersion: { increment: 1 } },
+  });
 };

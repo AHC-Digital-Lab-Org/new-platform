@@ -84,3 +84,11 @@ export const resetPassword = async (req, res) => {
 
   return res.status(200).json({ message: 'Contraseña actualizada' });
 };
+
+export const logoutAll = async (req, res) => {
+  await authService.logoutAll(req.auth.userId);
+
+  return res.status(200).json({
+    message: 'Todas las sesiones han sido cerradas',
+  });
+};

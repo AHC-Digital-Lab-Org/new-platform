@@ -98,6 +98,13 @@ describe('Auth endpoint — forgot-password', () => {
 });
 
 describe('Auth endpoint — reset-password', () => {
+  beforeEach(() => {
+    findUnique.mockResolvedValue({
+      ...user,
+      passwordResetTokenHash: sha('token-abc'),
+    });
+  });
+
   it('cambia la contraseña y consume el token', async () => {
     updateMany.mockResolvedValue({ count: 1 });
 
@@ -106,6 +113,9 @@ describe('Auth endpoint — reset-password', () => {
       .send({ token: 'token-abc', password: 'nueva-password-123' });
 
     expect(response.status).toBe(200);
+    expect(findUnique).toHaveBeenCalledWith({
+      where: { passwordResetTokenHash: sha('token-abc') },
+    });
     expect(hash).toHaveBeenCalledWith('nueva-password-123', 10);
     expect(updateMany).toHaveBeenCalledWith({
       where: {
@@ -116,11 +126,50 @@ describe('Auth endpoint — reset-password', () => {
         passwordHash: 'new-hash',
         passwordResetTokenHash: null,
         passwordResetExpires: null,
+        tokenVersion: { increment: 1 },
       },
     });
   });
 
-  it('responde 400 si el token no existe, expiró o ya se usó', async () => {
+  it('envía un aviso de cambio de contraseña', async () => {
+    updateMany.mockResolvedValue({ count: 1 });
+
+    await request(app)
+      .post('/api/auth/reset-password')
+      .send({ token: 'token-abc', password: 'nueva-password-123' });
+
+    expect(sendMail).toHaveBeenCalledTimes(1);
+    expect(sendMail.mock.calls[0][0].to).toBe('usuario@example.com');
+    expect(sendMail.mock.calls[0][0].subject).toBe(
+      'Tu contraseña ha sido cambiada',
+    );
+  });
+
+  it('responde 200 aunque el aviso no se pueda enviar', async () => {
+    updateMany.mockResolvedValue({ count: 1 });
+    sendMail.mockRejectedValueOnce(new Error('SMTP caído'));
+
+    const response = await request(app)
+      .post('/api/auth/reset-password')
+      .send({ token: 'token-abc', password: 'nueva-password-123' });
+
+    expect(response.status).toBe(200);
+  });
+
+  it('responde 400 si el token no existe', async () => {
+    findUnique.mockResolvedValue(null);
+
+    const response = await request(app)
+      .post('/api/auth/reset-password')
+      .send({ token: 'token-malo', password: 'nueva-password-123' });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('INVALID_RESET_TOKEN');
+    expect(hash).not.toHaveBeenCalled();
+    expect(updateMany).not.toHaveBeenCalled();
+  });
+
+  it('responde 400 si el token expiró o ya se usó', async () => {
     updateMany.mockResolvedValue({ count: 0 });
 
     const response = await request(app)
@@ -129,6 +178,7 @@ describe('Auth endpoint — reset-password', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('INVALID_RESET_TOKEN');
+    expect(sendMail).not.toHaveBeenCalled();
   });
 
   it('responde 400 si la contraseña es demasiado corta', async () => {
@@ -138,6 +188,7 @@ describe('Auth endpoint — reset-password', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(findUnique).not.toHaveBeenCalled();
     expect(hash).not.toHaveBeenCalled();
     expect(updateMany).not.toHaveBeenCalled();
   });

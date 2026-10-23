@@ -19,3 +19,9 @@ export const buildPasswordResetMail = (token) => {
     html: `<p>Hemos recibido una solicitud para restablecer tu contraseña. Usa este enlace (válido 1 hora):</p><p><a href="${link}">Restablecer contraseña</a></p><p>Si no has sido tú, ignora este mensaje: tu contraseña no cambiará.</p>`,
   };
 };
+
+export const buildPasswordChangedMail = () => ({
+  subject: 'Tu contraseña ha sido cambiada',
+  text: 'Tu contraseña se ha restablecido y se han cerrado todas tus sesiones abiertas.\n\nSi no has sido tú, restablece tu contraseña de inmediato y contacta con soporte.',
+  html: '<p>Tu contraseña se ha restablecido y se han cerrado todas tus sesiones abiertas.</p><p>Si no has sido tú, restablece tu contraseña de inmediato y contacta con soporte.</p>',
+});

@@ -206,7 +206,7 @@ describe('Auth endpoint — 2FA enable', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('VALIDATION_ERROR');
-    expect(findUnique).not.toHaveBeenCalled();
+    expect(update).not.toHaveBeenCalled();
   });
 
   it('descifra el secreto guardado antes de comprobar el código', async () => {

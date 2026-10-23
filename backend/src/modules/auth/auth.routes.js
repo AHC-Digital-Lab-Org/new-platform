@@ -459,3 +459,20 @@ router.post(
   validate({ body: resetPasswordSchema }),
   authController.resetPassword,
 );
+
+/**
+ * @openapi
+ * /api/auth/logout-all:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Cierra todas las sesiones del usuario (incluida la actual)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Sesiones cerradas. El frontend debe descartar su token
+ *       401:
+ *         description: Token ausente, inválido, expirado o revocado (`SESSION_REVOKED`)
+ */
+router.post('/logout-all', authenticate, authController.logoutAll);

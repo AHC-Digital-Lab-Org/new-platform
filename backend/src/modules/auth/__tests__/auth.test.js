@@ -348,7 +348,7 @@ describe('Auth service — login', () => {
     });
     expect(compare).toHaveBeenCalledWith('password123', 'hashed-password');
     expect(sign).toHaveBeenCalledWith(
-      { sub: 'user-1', tipo: 'usuario_registrado' },
+      { sub: 'user-1', tipo: 'usuario_registrado', v: 0 },
       expect.any(String),
       expect.objectContaining({ expiresIn: expect.anything() }),
     );
