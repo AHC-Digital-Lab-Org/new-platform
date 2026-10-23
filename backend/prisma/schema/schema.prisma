@@ -21,7 +21,9 @@ model User {
   consentimientos Json
   estado          String   @default("pendiente_verificacion")
 
-  emailVerificado Boolean  @default(false) @map("email_verificado")
+  emailVerificado                 Boolean   @default(false) @map("email_verificado")
+  emailVerificationTokenHash      String?   @unique @map("email_verification_token_hash")
+  emailVerificationExpires        DateTime? @map("email_verification_expires")
 
   // 2FA / TOTP — se utilizará posteriormente
   totpSecret      String?  @map("totp_secret")

@@ -1,18 +1,31 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
 
-const { findFirst, findUnique, create, hash, compare, sign } = vi.hoisted(() => ({
+const {
+  findFirst,
+  findUnique,
+  create,
+  update,
+  hash,
+  compare,
+  sign,
+  sendMail,
+} = vi.hoisted(() => ({
   findFirst: vi.fn(),
   findUnique: vi.fn(),
   create: vi.fn(),
+  update: vi.fn(),
   hash: vi.fn(),
   compare: vi.fn(),
   sign: vi.fn(),
+  sendMail: vi.fn(),
 }));
 
 vi.mock('#infrastructure/database/prisma.js', () => ({
-  prisma: { user: { findFirst, findUnique, create } },
+  prisma: { user: { findFirst, findUnique, create, update } },
 }));
+
+vi.mock('#infrastructure/mail/mailer.js', () => ({ sendMail }));
 
 vi.mock('bcrypt', () => ({
   default: { hash, compare },
@@ -148,6 +161,51 @@ describe('Auth service — register', () => {
     expect(user).not.toHaveProperty('passwordHash');
     expect(user).not.toHaveProperty('totpSecret');
   });
+
+  it('guarda solo el hash del token y envía el correo de verificación', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      consentimientos: {},
+    });
+
+    await register({
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      password: 'password123',
+      consentimientos: {},
+    });
+
+    const { where, data } = update.mock.calls[0][0];
+    expect(where).toEqual({ id: 'user-1' });
+    expect(data.emailVerificationTokenHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(data.emailVerificationExpires).toBeInstanceOf(Date);
+
+    const mail = sendMail.mock.calls[0][0];
+    expect(mail.to).toBe('usuario@example.com');
+    expect(mail.text).toContain('verify-email?token=');
+    expect(mail.text).not.toContain(data.emailVerificationTokenHash);
+  });
+
+  it('no falla el registro si el correo no se puede enviar', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      consentimientos: {},
+    });
+    sendMail.mockRejectedValueOnce(new Error('SMTP caído'));
+
+    await expect(
+      register({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: {},
+      }),
+    ).resolves.toHaveProperty('id', 'user-1');
+  });
 });
 
 describe('Auth endpoint — register', () => {
@@ -265,8 +323,8 @@ const storedUser = {
   passwordHash: 'hashed-password',
   totpSecret: 'secret',
   tipoUsuario: 'usuario_registrado',
-  estado: 'pendiente_verificacion',
-  emailVerificado: false,
+  estado: 'activo',
+  emailVerificado: true,
   twoFactorOn: false,
   consentimientos: {},
 };
@@ -330,6 +388,16 @@ describe('Auth service — login', () => {
       code: 'INVALID_CREDENTIALS',
       message: 'Email o contraseña incorrectos',
     });
+
+    expect(sign).not.toHaveBeenCalled();
+  });
+
+  it('rechaza si el email no está verificado', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, emailVerificado: false });
+
+    await expect(
+      login({ email: 'usuario@example.com', password: 'password123' }),
+    ).rejects.toMatchObject({ status: 403, code: 'EMAIL_NOT_VERIFIED' });
 
     expect(sign).not.toHaveBeenCalled();
   });
