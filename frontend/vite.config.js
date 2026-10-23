@@ -12,4 +12,7 @@ export default defineConfig({
     // En desarrollo /api se redirige al backend: sin problemas de CORS ni URLs absolutas.
     proxy: { '/api': 'http://localhost:3000' },
   },
+  test: {
+    environment: 'jsdom',
+  },
 });
