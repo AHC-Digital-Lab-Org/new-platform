@@ -9,6 +9,9 @@ export const openapiSpec = swaggerJsdoc({
     info: { title: 'Web Platform API', version: '0.1.0' },
     servers: [{ url: '/api' }],
     components: {
+      securitySchemes: {
+        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      },
       schemas: {
         Error: {
           type: 'object',

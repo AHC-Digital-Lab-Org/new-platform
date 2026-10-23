@@ -11,3 +11,9 @@ export const login = async (req, res) => {
 
   return res.status(200).json({ token, user });
 };
+
+export const me = async (req, res) => {
+  const user = await authService.getProfile(req.auth.userId);
+
+  return res.status(200).json({ user });
+};

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { validate } from '#middleware/validate.middleware.js';
+import { authenticate } from '#middleware/auth.middleware.js';
 import * as authController from './auth.controller.js';
 import { registerSchema, loginSchema } from './auth.schema.js';
 
@@ -82,3 +83,20 @@ router.post('/register', validate({ body: registerSchema }), authController.regi
  *         description: Datos inválidos
  */
 router.post('/login', validate({ body: loginSchema }), authController.login);
+
+/**
+ * @openapi
+ * /api/auth/me:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: Perfil del usuario autenticado
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Devuelve `user` (sin datos sensibles)
+ *       401:
+ *         description: Token ausente, inválido o expirado
+ */
+router.get('/me', authenticate, authController.me);

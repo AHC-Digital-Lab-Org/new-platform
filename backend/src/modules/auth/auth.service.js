@@ -72,3 +72,13 @@ export const login = async ({ email, password }) => {
 
   return { token: signToken(user), user: sanitizeUser(user) };
 };
+
+export const getProfile = async (userId) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+
+  if (!user) {
+    throw new AppError(401, 'UNAUTHORIZED', 'Usuario no encontrado');
+  }
+
+  return sanitizeUser(user);
+};
