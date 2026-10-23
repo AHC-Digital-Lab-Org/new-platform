@@ -8,6 +8,8 @@ import {
   twoFactorLoginIpLimiter,
   twoFactorLoginTokenLimiter,
   twoFactorManageLimiter,
+  forgotPasswordLimiter,
+  resetPasswordLimiter,
 } from '#middleware/rate-limit.middleware.js';
 import * as authController from './auth.controller.js';
 import {
@@ -19,6 +21,8 @@ import {
   twoFactorLoginSchema,
   twoFactorDisableSchema,
   twoFactorRegenerateSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from './auth.schema.js';
 
 export const router = Router();
@@ -383,4 +387,75 @@ router.post(
   twoFactorManageLimiter,
   validate({ body: twoFactorRegenerateSchema }),
   authController.twoFactorRecoveryCodes,
+);
+
+/**
+ * @openapi
+ * /api/auth/forgot-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Solicitar el enlace para restablecer la contraseña
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       200:
+ *         description: Respuesta genérica (no revela si el email existe)
+ *       400:
+ *         description: Datos inválidos
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
+ */
+router.post(
+  '/forgot-password',
+  forgotPasswordLimiter,
+  validate({ body: forgotPasswordSchema }),
+  authController.forgotPassword,
+);
+
+/**
+ * @openapi
+ * /api/auth/reset-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Establecer una nueva contraseña con el token recibido por correo
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - password
+ *             properties:
+ *               token:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *     responses:
+ *       200:
+ *         description: Contraseña actualizada
+ *       400:
+ *         description: Token inválido o expirado (`INVALID_RESET_TOKEN`) o datos inválidos
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
+ */
+router.post(
+  '/reset-password',
+  resetPasswordLimiter,
+  validate({ body: resetPasswordSchema }),
+  authController.resetPassword,
 );

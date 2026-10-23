@@ -9,13 +9,17 @@ import { logger } from '#infrastructure/logger/logger.js';
 import { sendMail } from '#infrastructure/mail/mailer.js';
 import { decryptSecret, encryptSecret } from '#shared/crypto/secret-box.js';
 import { AppError } from '#shared/errors/index.js';
-import { buildVerificationMail } from './auth.mail.js';
+import {
+  buildPasswordResetMail,
+  buildVerificationMail,
+} from './auth.mail.js';
 
 const { authenticator } = otplib;
 authenticator.options = { window: 1 };
 
 const SALT_ROUNDS = 10;
 const VERIFICATION_TTL_MS = 24 * 60 * 60 * 1000;
+const PASSWORD_RESET_TTL_MS = 60 * 60 * 1000;
 const TWO_FACTOR_TOKEN_TTL = '5m';
 const TOTP_ISSUER = 'Plataforma';
 
@@ -25,6 +29,8 @@ export const sanitizeUser = (user) => {
     totpSecret,
     emailVerificationTokenHash,
     emailVerificationExpires,
+    passwordResetTokenHash,
+    passwordResetExpires,
     ...safeUser
   } = user;
   return safeUser;
@@ -397,4 +403,51 @@ export const regenerateRecoveryCodes = async (userId, credentials) => {
   await prisma.$transaction(ops);
 
   return codes;
+};
+
+export const forgotPassword = async (email) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) return;
+
+  const token = crypto.randomBytes(32).toString('hex');
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      passwordResetTokenHash: hashToken(token),
+      passwordResetExpires: new Date(Date.now() + PASSWORD_RESET_TTL_MS),
+    },
+  });
+
+  try {
+    await sendMail({ to: user.email, ...buildPasswordResetMail(token) });
+  } catch (err) {
+    logger.error(
+      `No se pudo enviar el reset de contraseña al usuario ${user.id}: ${err.message}`,
+    );
+  }
+};
+
+export const resetPassword = async ({ token, password }) => {
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+  const { count } = await prisma.user.updateMany({
+    where: {
+      passwordResetTokenHash: hashToken(token),
+      passwordResetExpires: { gt: new Date() },
+    },
+    data: {
+      passwordHash,
+      passwordResetTokenHash: null,
+      passwordResetExpires: null,
+    },
+  });
+
+  if (count !== 1) {
+    throw new AppError(
+      400,
+      'INVALID_RESET_TOKEN',
+      'El enlace es inválido o ha expirado',
+    );
+  }
 };

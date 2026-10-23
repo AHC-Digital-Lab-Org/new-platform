@@ -70,3 +70,17 @@ export const twoFactorRecoveryCodes = async (req, res) => {
 
   return res.status(200).json({ recoveryCodes });
 };
+
+export const forgotPassword = async (req, res) => {
+  await authService.forgotPassword(req.valid.body.email);
+
+  return res.status(200).json({
+    message: 'Si el email existe, recibirás un enlace para restablecer tu contraseña',
+  });
+};
+
+export const resetPassword = async (req, res) => {
+  await authService.resetPassword(req.valid.body);
+
+  return res.status(200).json({ message: 'Contraseña actualizada' });
+};

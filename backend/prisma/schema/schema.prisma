@@ -24,6 +24,8 @@ model User {
   emailVerificado                 Boolean   @default(false) @map("email_verificado")
   emailVerificationTokenHash      String?   @unique @map("email_verification_token_hash")
   emailVerificationExpires        DateTime? @map("email_verification_expires")
+  passwordResetTokenHash          String?   @unique @map("password_reset_token_hash")
+  passwordResetExpires            DateTime? @map("password_reset_expires")
 
   // 2FA / TOTP — se utilizará posteriormente
   totpSecret      String?  @map("totp_secret")

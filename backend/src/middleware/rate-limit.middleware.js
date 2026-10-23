@@ -64,3 +64,11 @@ export const twoFactorManageLimiter = create({
   skipSuccessfulRequests: true,
   keyGenerator: (req) => `user:${req.auth.userId}`,
 });
+
+export const forgotPasswordLimiter = create({ windowMs: HOUR, limit: 5 });
+
+export const resetPasswordLimiter = create({
+  windowMs: 15 * MINUTE,
+  limit: 10,
+  skipSuccessfulRequests: true,
+});
