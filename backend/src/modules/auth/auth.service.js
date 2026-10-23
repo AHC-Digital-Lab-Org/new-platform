@@ -50,6 +50,80 @@ const isValidCode = (code, secret) => {
   }
 };
 
+const RECOVERY_CODE_COUNT = 10;
+const RECOVERY_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789';
+const TOTP_FORMAT = /^\d{6}$/;
+
+const randomChunk = (length) =>
+  Array.from(
+    { length },
+    () => RECOVERY_ALPHABET[crypto.randomInt(RECOVERY_ALPHABET.length)],
+  ).join('');
+
+const generateRecoveryCodes = () =>
+  Array.from(
+    { length: RECOVERY_CODE_COUNT },
+    () => `${randomChunk(4)}-${randomChunk(4)}-${randomChunk(4)}`,
+  );
+
+const hashRecoveryCode = (code) =>
+  hashToken(code.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+const buildRecoveryCodeOps = (userId) => {
+  const codes = generateRecoveryCodes();
+
+  return {
+    codes,
+    ops: [
+      prisma.recoveryCode.deleteMany({ where: { userId } }),
+      prisma.recoveryCode.createMany({
+        data: codes.map((code) => ({
+          userId,
+          codeHash: hashRecoveryCode(code),
+        })),
+      }),
+    ],
+  };
+};
+
+const verifySecondFactor = async (user, code) => {
+  if (TOTP_FORMAT.test(code)) {
+    return isValidCode(code, user.totpSecret) ? 'totp' : null;
+  }
+
+  const { count } = await prisma.recoveryCode.updateMany({
+    where: {
+      userId: user.id,
+      codeHash: hashRecoveryCode(code),
+      usedAt: null,
+    },
+    data: { usedAt: new Date() },
+  });
+
+  return count === 1 ? 'recovery' : null;
+};
+
+const assertReauthenticated = async (user, { password, code }) => {
+  if (!user.twoFactorOn || !user.totpSecret) {
+    throw new AppError(
+      400,
+      'TWO_FACTOR_NOT_ENABLED',
+      'El 2FA no está activado',
+    );
+  }
+
+  const passwordOk = user.passwordHash
+    ? await bcrypt.compare(password, user.passwordHash)
+    : false;
+  if (!passwordOk) {
+    throw new AppError(400, 'INVALID_PASSWORD', 'Contraseña incorrecta');
+  }
+
+  if (!(await verifySecondFactor(user, code))) {
+    throw new AppError(400, 'INVALID_TWO_FACTOR_CODE', 'Código incorrecto');
+  }
+};
+
 const findUserOrFail = async (userId) => {
   const user = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -180,11 +254,20 @@ export const loginWithTwoFactor = async ({ twoFactorToken, code }) => {
   const user = await prisma.user.findUnique({ where: { id: payload.sub } });
   if (!user || !user.twoFactorOn || !user.totpSecret) throw invalidSession();
 
-  if (!isValidCode(code, user.totpSecret)) {
+  const method = await verifySecondFactor(user, code);
+  if (!method) {
     throw new AppError(401, 'INVALID_TWO_FACTOR_CODE', 'Código incorrecto');
   }
 
-  return { token: signToken(user), user: sanitizeUser(user) };
+  const result = { token: signToken(user), user: sanitizeUser(user) };
+
+  if (method === 'recovery') {
+    result.recoveryCodesRemaining = await prisma.recoveryCode.count({
+      where: { userId: user.id, usedAt: null },
+    });
+  }
+
+  return result;
 };
 
 export const getProfile = async (userId) => {
@@ -276,40 +359,41 @@ export const enableTwoFactor = async (userId, code) => {
     throw new AppError(400, 'INVALID_TWO_FACTOR_CODE', 'Código incorrecto');
   }
 
-  const updated = await prisma.user.update({
-    where: { id: userId },
-    data: { twoFactorOn: true },
-  });
+  const { codes, ops } = buildRecoveryCodeOps(userId);
+  const [updated] = await prisma.$transaction([
+    prisma.user.update({
+      where: { id: userId },
+      data: { twoFactorOn: true },
+    }),
+    ...ops,
+  ]);
+
+  return { user: sanitizeUser(updated), recoveryCodes: codes };
+};
+
+export const disableTwoFactor = async (userId, credentials) => {
+  const user = await findUserOrFail(userId);
+
+  await assertReauthenticated(user, credentials);
+
+  const [updated] = await prisma.$transaction([
+    prisma.user.update({
+      where: { id: userId },
+      data: { twoFactorOn: false, totpSecret: null },
+    }),
+    prisma.recoveryCode.deleteMany({ where: { userId } }),
+  ]);
 
   return sanitizeUser(updated);
 };
 
-export const disableTwoFactor = async (userId, { password, code }) => {
+export const regenerateRecoveryCodes = async (userId, credentials) => {
   const user = await findUserOrFail(userId);
 
-  if (!user.twoFactorOn || !user.totpSecret) {
-    throw new AppError(
-      400,
-      'TWO_FACTOR_NOT_ENABLED',
-      'El 2FA no está activado',
-    );
-  }
+  await assertReauthenticated(user, credentials);
 
-  const passwordOk = user.passwordHash
-    ? await bcrypt.compare(password, user.passwordHash)
-    : false;
-  if (!passwordOk) {
-    throw new AppError(400, 'INVALID_PASSWORD', 'Contraseña incorrecta');
-  }
+  const { codes, ops } = buildRecoveryCodeOps(userId);
+  await prisma.$transaction(ops);
 
-  if (!isValidCode(code, user.totpSecret)) {
-    throw new AppError(400, 'INVALID_TWO_FACTOR_CODE', 'Código incorrecto');
-  }
-
-  const updated = await prisma.user.update({
-    where: { id: userId },
-    data: { twoFactorOn: false, totpSecret: null },
-  });
-
-  return sanitizeUser(updated);
+  return codes;
 };

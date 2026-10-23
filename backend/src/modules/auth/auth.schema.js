@@ -25,16 +25,23 @@ export const resendVerificationSchema = z.object({
 
 const codeSchema = z.string().regex(/^\d{6}$/, 'El código debe tener 6 dígitos');
 
+const secondFactorCodeSchema = z.string().trim().min(6).max(32);
+
 export const twoFactorCodeSchema = z.object({
   code: codeSchema,
 });
 
 export const twoFactorLoginSchema = z.object({
   twoFactorToken: z.string().min(1),
-  code: codeSchema,
+  code: secondFactorCodeSchema,
 });
 
 export const twoFactorDisableSchema = z.object({
   password: z.string().min(1),
-  code: codeSchema,
+  code: secondFactorCodeSchema,
+});
+
+export const twoFactorRegenerateSchema = z.object({
+  password: z.string().min(1),
+  code: secondFactorCodeSchema,
 });

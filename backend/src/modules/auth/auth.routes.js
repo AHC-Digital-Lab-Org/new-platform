@@ -18,6 +18,7 @@ import {
   twoFactorCodeSchema,
   twoFactorLoginSchema,
   twoFactorDisableSchema,
+  twoFactorRegenerateSchema,
 } from './auth.schema.js';
 
 export const router = Router();
@@ -239,7 +240,7 @@ router.post('/2fa/setup', authenticate, authController.twoFactorSetup);
  *                 example: "123456"
  *     responses:
  *       200:
- *         description: 2FA activado. Devuelve `user`
+ *         description: 2FA activado. Devuelve `user` y `recoveryCodes` (10 códigos de un solo uso, se muestran solo esta vez)
  *       400:
  *         description: Código incorrecto, datos inválidos o setup sin iniciar
  *       401:
@@ -280,6 +281,7 @@ router.post(
  *                 type: string
  *               code:
  *                 type: string
+ *                 description: Código TOTP de 6 dígitos o código de recuperación
  *                 example: "123456"
  *     responses:
  *       200:
@@ -320,10 +322,11 @@ router.post(
  *                 type: string
  *               code:
  *                 type: string
+ *                 description: Código TOTP de 6 dígitos o código de recuperación
  *                 example: "123456"
  *     responses:
  *       200:
- *         description: Login correcto. Devuelve `token` y `user`
+ *         description: Login correcto. Devuelve `token` y `user`; si se usó un código de recuperación, también `recoveryCodesRemaining`
  *       400:
  *         description: Datos inválidos
  *       401:
@@ -337,4 +340,47 @@ router.post(
   twoFactorLoginIpLimiter,
   twoFactorLoginTokenLimiter,
   authController.twoFactorLogin,
+);
+
+/**
+ * @openapi
+ * /api/auth/2fa/recovery-codes:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Regenera los códigos de recuperación (invalida los anteriores)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *               - code
+ *             properties:
+ *               password:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *                 description: Código TOTP de 6 dígitos o código de recuperación
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Devuelve `recoveryCodes` (10 códigos nuevos, se muestran solo esta vez)
+ *       400:
+ *         description: Contraseña o código incorrectos, 2FA no activado o datos inválidos
+ *       401:
+ *         description: Token ausente, inválido o expirado
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
+ */
+router.post(
+  '/2fa/recovery-codes',
+  authenticate,
+  twoFactorManageLimiter,
+  validate({ body: twoFactorRegenerateSchema }),
+  authController.twoFactorRecoveryCodes,
 );

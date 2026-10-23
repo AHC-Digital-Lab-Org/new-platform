@@ -28,6 +28,20 @@ model User {
   // 2FA / TOTP — se utilizará posteriormente
   totpSecret      String?  @map("totp_secret")
   twoFactorOn     Boolean  @default(false) @map("two_factor_on")
+  recoveryCodes   RecoveryCode[]
 
   @@map("users")
+}
+
+model RecoveryCode {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  codeHash  String    @map("code_hash")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("recovery_codes")
 }

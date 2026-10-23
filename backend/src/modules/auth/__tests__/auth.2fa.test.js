@@ -11,6 +11,10 @@ const {
   keyuri,
   check,
   toDataURL,
+  transaction,
+  deleteMany,
+  createMany,
+  updateMany,
 } = vi.hoisted(() => ({
   findUnique: vi.fn(),
   update: vi.fn(),
@@ -19,10 +23,18 @@ const {
   keyuri: vi.fn(),
   check: vi.fn(),
   toDataURL: vi.fn(),
+  transaction: vi.fn(),
+  deleteMany: vi.fn(),
+  createMany: vi.fn(),
+  updateMany: vi.fn(),
 }));
 
 vi.mock('#infrastructure/database/prisma.js', () => ({
-  prisma: { user: { findUnique, update, findFirst: vi.fn(), create: vi.fn() } },
+  prisma: {
+    user: { findUnique, update, findFirst: vi.fn(), create: vi.fn() },
+    recoveryCode: { deleteMany, createMany, updateMany, count: vi.fn() },
+    $transaction: transaction,
+  },
 }));
 
 vi.mock('bcrypt', () => ({ default: { compare, hash: vi.fn() } }));
@@ -74,6 +86,10 @@ beforeEach(() => {
   findUnique.mockResolvedValue(baseUser);
   check.mockReturnValue(true);
   compare.mockResolvedValue(true);
+  deleteMany.mockResolvedValue({ count: 0 });
+  createMany.mockResolvedValue({ count: 10 });
+  updateMany.mockResolvedValue({ count: 0 });
+  transaction.mockImplementation((ops) => Promise.all(ops));
 });
 
 describe('Auth endpoint — 2FA setup', () => {
@@ -142,10 +158,16 @@ describe('Auth endpoint — 2FA enable', () => {
 
     expect(response.status).toBe(200);
     expect(check).toHaveBeenCalledWith('123456', 'SECRET123');
+    expect(transaction).toHaveBeenCalledWith([
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    ]);
     expect(update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
       data: { twoFactorOn: true },
     });
+    expect(response.body.recoveryCodes).toHaveLength(10);
     expect(response.body.user.twoFactorOn).toBe(true);
     expect(response.body.user).not.toHaveProperty('totpSecret');
   });
@@ -203,10 +225,12 @@ describe('Auth endpoint — 2FA disable', () => {
 
     expect(response.status).toBe(200);
     expect(compare).toHaveBeenCalledWith('password123', 'hashed-password');
+    expect(transaction).toHaveBeenCalledTimes(1);
     expect(update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
       data: { twoFactorOn: false, totpSecret: null },
     });
+    expect(deleteMany).toHaveBeenCalledWith({ where: { userId: 'user-1' } });
     expect(response.body.user.twoFactorOn).toBe(false);
   });
 

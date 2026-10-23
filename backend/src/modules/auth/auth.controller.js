@@ -39,12 +39,12 @@ export const twoFactorSetup = async (req, res) => {
 };
 
 export const twoFactorEnable = async (req, res) => {
-  const user = await authService.enableTwoFactor(
+  const { user, recoveryCodes } = await authService.enableTwoFactor(
     req.auth.userId,
     req.valid.body.code,
   );
 
-  return res.status(200).json({ user });
+  return res.status(200).json({ user, recoveryCodes });
 };
 
 export const twoFactorDisable = async (req, res) => {
@@ -57,7 +57,16 @@ export const twoFactorDisable = async (req, res) => {
 };
 
 export const twoFactorLogin = async (req, res) => {
-  const { token, user } = await authService.loginWithTwoFactor(req.valid.body);
+  const result = await authService.loginWithTwoFactor(req.valid.body);
 
-  return res.status(200).json({ token, user });
+  return res.status(200).json(result);
+};
+
+export const twoFactorRecoveryCodes = async (req, res) => {
+  const recoveryCodes = await authService.regenerateRecoveryCodes(
+    req.auth.userId,
+    req.valid.body,
+  );
+
+  return res.status(200).json({ recoveryCodes });
 };
