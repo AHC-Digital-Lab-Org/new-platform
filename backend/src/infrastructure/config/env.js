@@ -15,6 +15,11 @@ export const env = {
       ? required('JWT_SECRET')
       : 'dev-secret-no-usar-en-prod'),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '1h',
+  totpEncryptionKey:
+    process.env.TOTP_ENCRYPTION_KEY ??
+    (process.env.NODE_ENV === 'production'
+      ? required('TOTP_ENCRYPTION_KEY')
+      : '0000000000000000000000000000000000000000000000000000000000000000'),
   frontendUrl:
     process.env.FRONTEND_URL ??
     process.env.CORS_ORIGIN ??

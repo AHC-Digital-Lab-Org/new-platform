@@ -7,6 +7,7 @@ import { env } from '#infrastructure/config/env.js';
 import { prisma } from '#infrastructure/database/prisma.js';
 import { logger } from '#infrastructure/logger/logger.js';
 import { sendMail } from '#infrastructure/mail/mailer.js';
+import { decryptSecret, encryptSecret } from '#shared/crypto/secret-box.js';
 import { AppError } from '#shared/errors/index.js';
 import { buildVerificationMail } from './auth.mail.js';
 
@@ -42,9 +43,9 @@ const signTwoFactorToken = (user) =>
 const hashToken = (token) =>
   crypto.createHash('sha256').update(token).digest('hex');
 
-const isValidCode = (code, secret) => {
+const isValidCode = (code, storedSecret) => {
   try {
-    return authenticator.check(code, secret);
+    return authenticator.check(code, decryptSecret(storedSecret));
   } catch {
     return false;
   }
@@ -329,7 +330,7 @@ export const setupTwoFactor = async (userId) => {
 
   await prisma.user.update({
     where: { id: userId },
-    data: { totpSecret: secret },
+    data: { totpSecret: encryptSecret(secret) },
   });
 
   const otpauthUrl = authenticator.keyuri(user.email, TOTP_ISSUER, secret);

@@ -107,8 +107,9 @@ describe('Auth endpoint — 2FA setup', () => {
     expect(response.status).toBe(200);
     expect(update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      data: { totpSecret: 'SECRET123' },
+      data: { totpSecret: expect.stringMatching(/^v1:/) },
     });
+    expect(update.mock.calls[0][0].data.totpSecret).not.toContain('SECRET123');
     expect(keyuri).toHaveBeenCalledWith(
       'usuario@example.com',
       'Plataforma',
@@ -206,6 +207,23 @@ describe('Auth endpoint — 2FA enable', () => {
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('VALIDATION_ERROR');
     expect(findUnique).not.toHaveBeenCalled();
+  });
+
+  it('descifra el secreto guardado antes de comprobar el código', async () => {
+    const { encryptSecret } = await import('#shared/crypto/secret-box.js');
+    findUnique.mockResolvedValue({
+      ...baseUser,
+      totpSecret: encryptSecret('SECRET123'),
+    });
+    update.mockResolvedValue({ ...baseUser, twoFactorOn: true });
+
+    const response = await request(app)
+      .post('/api/auth/2fa/enable')
+      .set('Authorization', `Bearer ${sessionToken()}`)
+      .send({ code: '123456' });
+
+    expect(response.status).toBe(200);
+    expect(check).toHaveBeenCalledWith('123456', 'SECRET123');
   });
 });
 
