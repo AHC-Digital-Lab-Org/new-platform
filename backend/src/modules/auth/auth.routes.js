@@ -58,8 +58,27 @@ router.post('/register', validate({ body: registerSchema }), authController.regi
  *     tags:
  *       - Auth
  *     summary: Iniciar sesión
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
  *     responses:
- *       501:
- *         description: Pendiente de implementación (Commit 4)
+ *       200:
+ *         description: Login correcto. Devuelve `token` (JWT) y `user`
+ *       401:
+ *         description: Credenciales incorrectas
+ *       400:
+ *         description: Datos inválidos
  */
 router.post('/login', validate({ body: loginSchema }), authController.login);

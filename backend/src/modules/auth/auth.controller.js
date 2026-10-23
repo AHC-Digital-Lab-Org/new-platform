@@ -6,6 +6,8 @@ export const register = async (req, res) => {
   return res.status(201).json({ user });
 };
 
-export const login = async (_req, res) => {
-  return res.status(501).json({ message: 'Not implemented yet' });
+export const login = async (req, res) => {
+  const { token, user } = await authService.login(req.valid.body);
+
+  return res.status(200).json({ token, user });
 };
