@@ -22,6 +22,6 @@ export const buildPasswordResetMail = (token) => {
 
 export const buildPasswordChangedMail = () => ({
   subject: 'Tu contraseña ha sido cambiada',
-  text: 'Tu contraseña se ha restablecido y se han cerrado todas tus sesiones abiertas.\n\nSi no has sido tú, restablece tu contraseña de inmediato y contacta con soporte.',
-  html: '<p>Tu contraseña se ha restablecido y se han cerrado todas tus sesiones abiertas.</p><p>Si no has sido tú, restablece tu contraseña de inmediato y contacta con soporte.</p>',
+  text: 'Tu contraseña ha sido cambiada y se han cerrado tus otras sesiones abiertas.\n\nSi no has sido tú, restablece tu contraseña de inmediato y contacta con soporte.',
+  html: '<p>Tu contraseña ha sido cambiada y se han cerrado tus otras sesiones abiertas.</p><p>Si no has sido tú, restablece tu contraseña de inmediato y contacta con soporte.</p>',
 });

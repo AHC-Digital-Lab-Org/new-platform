@@ -10,6 +10,7 @@ import {
   twoFactorManageLimiter,
   forgotPasswordLimiter,
   resetPasswordLimiter,
+  changePasswordLimiter,
 } from '#middleware/rate-limit.middleware.js';
 import * as authController from './auth.controller.js';
 import {
@@ -23,6 +24,7 @@ import {
   twoFactorRegenerateSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  changePasswordSchema,
 } from './auth.schema.js';
 
 export const router = Router();
@@ -476,3 +478,45 @@ router.post(
  *         description: Token ausente, inválido, expirado o revocado (`SESSION_REVOKED`)
  */
 router.post('/logout-all', authenticate, authController.logoutAll);
+
+/**
+ * @openapi
+ * /api/auth/change-password:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Cambiar la contraseña (cierra las demás sesiones y devuelve un token nuevo)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *                 minLength: 8
+ *     responses:
+ *       200:
+ *         description: Contraseña cambiada. Devuelve `token` (nuevo, sustituye al anterior) y `user`
+ *       400:
+ *         description: Contraseña actual incorrecta (`INVALID_PASSWORD`), nueva igual a la actual (`SAME_PASSWORD`) o datos inválidos
+ *       401:
+ *         description: Token ausente, inválido, expirado o revocado (`SESSION_REVOKED`)
+ *       429:
+ *         description: Demasiados intentos (`TOO_MANY_REQUESTS`). Mira la cabecera `Retry-After`
+ */
+router.post(
+  '/change-password',
+  authenticate,
+  changePasswordLimiter,
+  validate({ body: changePasswordSchema }),
+  authController.changePassword,
+);

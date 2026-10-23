@@ -72,3 +72,10 @@ export const resetPasswordLimiter = create({
   limit: 10,
   skipSuccessfulRequests: true,
 });
+
+export const changePasswordLimiter = create({
+  windowMs: 15 * MINUTE,
+  limit: 5,
+  skipSuccessfulRequests: true,
+  keyGenerator: (req) => `user:${req.auth.userId}`,
+});

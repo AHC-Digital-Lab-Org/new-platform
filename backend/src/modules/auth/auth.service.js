@@ -474,3 +474,43 @@ export const logoutAll = async (userId) => {
     data: { tokenVersion: { increment: 1 } },
   });
 };
+
+export const changePassword = async (userId, { currentPassword, newPassword }) => {
+  const user = await findUserOrFail(userId);
+
+  const currentOk = user.passwordHash
+    ? await bcrypt.compare(currentPassword, user.passwordHash)
+    : false;
+  if (!currentOk) {
+    throw new AppError(400, 'INVALID_PASSWORD', 'La contraseña actual es incorrecta');
+  }
+
+  if (currentPassword === newPassword) {
+    throw new AppError(
+      400,
+      'SAME_PASSWORD',
+      'La nueva contraseña debe ser distinta de la actual',
+    );
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      passwordHash,
+      tokenVersion: { increment: 1 },
+      passwordResetTokenHash: null,
+      passwordResetExpires: null,
+    },
+  });
+
+  try {
+    await sendMail({ to: user.email, ...buildPasswordChangedMail() });
+  } catch (err) {
+    logger.error(
+      `No se pudo enviar el aviso de cambio de contraseña al usuario ${user.id}: ${err.message}`,
+    );
+  }
+
+  return { token: signToken(updated), user: sanitizeUser(updated) };
+};

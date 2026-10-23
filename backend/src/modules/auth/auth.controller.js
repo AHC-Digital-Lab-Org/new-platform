@@ -92,3 +92,12 @@ export const logoutAll = async (req, res) => {
     message: 'Todas las sesiones han sido cerradas',
   });
 };
+
+export const changePassword = async (req, res) => {
+  const { token, user } = await authService.changePassword(
+    req.auth.userId,
+    req.valid.body,
+  );
+
+  return res.status(200).json({ token, user });
+};
