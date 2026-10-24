@@ -1,6 +1,7 @@
 // Registro de módulos del frontend. Cada módulo se carga bajo demanda (code splitting),
 // así el código de un equipo no engorda la carga inicial del resto.
 // Los módulos habituales viven bajo `path/*`; las páginas independientes declaran `routes`.
+// guard: 'auth' exige sesión (RequireAuth).
 import { lazy } from 'react';
 
 export const modules = [
@@ -16,6 +17,11 @@ export const modules = [
       { path: '/resend-verification', Component: lazy(() => import('./auth/pages/ResendVerificationPage.jsx')) },
       { path: '/forgot-password', Component: lazy(() => import('./auth/pages/ForgotPasswordPage.jsx')) },
       { path: '/reset-password', Component: lazy(() => import('./auth/pages/ResetPasswordPage.jsx')) },
+      {
+        path: '/security',
+        guard: 'auth',
+        Component: lazy(() => import('./auth/pages/SecurityPage.jsx')),
+      },
     ],
   },
 ];

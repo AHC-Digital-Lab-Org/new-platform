@@ -30,6 +30,9 @@ export default function Layout() {
             {status === 'authenticated' && (
               <>
                 <span className="text-sm text-emerald-50">Hola, {user.alias}</span>
+                <NavLink to="/security" className={linkClass}>
+                  Seguridad
+                </NavLink>
                 <button
                   type="button"
                   onClick={onLogout}

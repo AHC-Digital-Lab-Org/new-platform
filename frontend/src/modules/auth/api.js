@@ -25,3 +25,12 @@ export const forgotPassword = (email) =>
 
 export const resetPassword = ({ token, password }) =>
   api('/auth/reset-password', { method: 'POST', body: { token, password } });
+
+export const changePassword = ({ currentPassword, newPassword }) =>
+  api('/auth/change-password', {
+    method: 'POST',
+    body: { currentPassword, newPassword },
+  });
+
+export const logoutAll = () =>
+  api('/auth/logout-all', { method: 'POST' });

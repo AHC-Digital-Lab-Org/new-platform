@@ -3,13 +3,17 @@ import { Route, Routes } from 'react-router';
 import Layout from '@/shared/components/Layout.jsx';
 import HomePage from '@/pages/HomePage.jsx';
 import NotFoundPage from '@/pages/NotFoundPage.jsx';
+import { RequireAuth } from '@/modules/auth/guards.jsx';
 import { modules } from '@/modules/index.js';
 
-const page = (Component) => (
-  <Suspense fallback={<p className="text-slate-500">Cargando…</p>}>
-    <Component />
-  </Suspense>
-);
+const page = (Component, guard) => {
+  const content = (
+    <Suspense fallback={<p className="text-slate-500">Cargando…</p>}>
+      <Component />
+    </Suspense>
+  );
+  return guard === 'auth' ? <RequireAuth>{content}</RequireAuth> : content;
+};
 
 export default function App() {
   return (
@@ -22,7 +26,7 @@ export default function App() {
                 <Route
                   key={route.path}
                   path={route.path}
-                  element={page(route.Component)}
+                  element={page(route.Component, route.guard)}
                 />
               ))
             : [

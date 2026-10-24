@@ -89,7 +89,9 @@ export default function LoginPage() {
     notice ??
     (location.state?.sessionExpired
       ? 'Tu sesión ha caducado. Inicia sesión de nuevo.'
-      : null);
+      : location.state?.loggedOutAll
+        ? 'Se han cerrado todas tus sesiones. Inicia sesión de nuevo.'
+        : null);
 
   return (
     <section className="mx-auto max-w-md">
