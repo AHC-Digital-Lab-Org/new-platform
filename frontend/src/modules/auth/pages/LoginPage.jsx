@@ -4,23 +4,32 @@ import FormError from '@/shared/components/FormError.jsx';
 import FormField from '@/shared/components/FormField.jsx';
 import { useSubmit } from '@/shared/hooks/useSubmit.js';
 import { useAuth } from '../AuthContext.jsx';
+import RecoveryNotice from '../components/RecoveryNotice.jsx';
+import TwoFactorStep from '../components/TwoFactorStep.jsx';
 import { authErrorMessage, formatWait } from '../errors.js';
+import { EMAIL_RE } from '../validation.js';
 
-const EMAIL_RE = /^\S+@\S+\.\S+$/;
+const TWO_FACTOR_EXPIRED =
+  'La verificación en dos pasos ha caducado. Inicia sesión de nuevo.';
 
 export default function LoginPage() {
-  const { status, isAuthenticated, login } = useAuth();
+  const { status, isAuthenticated, login, applySession } = useAuth();
   const location = useLocation();
   const { submit, loading, error, clearError, secondsLeft } = useSubmit(login);
   const [form, setForm] = useState({ email: '', password: '' });
   const [fieldErrors, setFieldErrors] = useState({});
-  const [needs2fa, setNeeds2fa] = useState(false);
+  const [twoFactorToken, setTwoFactorToken] = useState(null);
+  const [recoveryRemaining, setRecoveryRemaining] = useState(null);
+  const [notice, setNotice] = useState(null);
   const refs = useRef({});
 
   const from = location.state?.from
     ? `${location.state.from.pathname}${location.state.from.search ?? ''}`
     : '/';
 
+  if (recoveryRemaining !== null) {
+    return <RecoveryNotice remaining={recoveryRemaining} to={from} />;
+  }
   if (isAuthenticated) return <Navigate to={from} replace />;
   if (status === 'loading') return <p className="text-slate-500">Cargando…</p>;
 
@@ -49,31 +58,48 @@ export default function LoginPage() {
     }
 
     clearError();
+    setNotice(null);
     const result = await submit(form.email.trim(), form.password);
-    if (result.ok && result.data.twoFactorRequired) setNeeds2fa(true);
+    if (result.ok && result.data.twoFactorRequired) {
+      setForm((current) => ({ ...current, password: '' }));
+      setTwoFactorToken(result.data.twoFactorToken);
+    }
   };
 
-  if (needs2fa) {
+  const onTwoFactorSuccess = ({ token, user, recoveryCodesRemaining: remaining }) => {
+    if (typeof remaining === 'number') setRecoveryRemaining(remaining);
+    applySession(token, user);
+  };
+
+  if (twoFactorToken) {
     return (
-      <section className="mx-auto max-w-md rounded-lg border bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-bold">Verificación en dos pasos</h1>
-        <p className="mt-3 text-slate-600">
-          Tu cuenta tiene activada la verificación en dos pasos. Este paso aún no
-          está disponible en la web.
-        </p>
-      </section>
+      <TwoFactorStep
+        twoFactorToken={twoFactorToken}
+        onSuccess={onTwoFactorSuccess}
+        onExpired={() => {
+          setTwoFactorToken(null);
+          setNotice(TWO_FACTOR_EXPIRED);
+        }}
+        onBack={() => setTwoFactorToken(null)}
+      />
     );
   }
+
+  const bannerText =
+    notice ??
+    (location.state?.sessionExpired
+      ? 'Tu sesión ha caducado. Inicia sesión de nuevo.'
+      : null);
 
   return (
     <section className="mx-auto max-w-md">
       <h1 className="text-2xl font-bold">Iniciar sesión</h1>
-      {location.state?.sessionExpired && (
+      {bannerText && (
         <p
           role="status"
           className="mt-4 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900"
         >
-          Tu sesión ha caducado. Inicia sesión de nuevo.
+          {bannerText}
         </p>
       )}
       <form

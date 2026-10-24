@@ -23,6 +23,10 @@ export function authErrorMessage(error) {
       return 'El email o el alias ya están en uso.';
     case 'VALIDATION_ERROR':
       return 'Revisa los datos del formulario.';
+    case 'INVALID_TWO_FACTOR_CODE':
+      return 'Código incorrecto. Usa el código actual de tu app o un código de recuperación que no hayas usado.';
+    case 'INVALID_TWO_FACTOR_TOKEN':
+      return 'La verificación en dos pasos ha caducado. Inicia sesión de nuevo.';
     default:
       return error.message;
   }

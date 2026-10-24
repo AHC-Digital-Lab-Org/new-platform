@@ -5,6 +5,12 @@ export const me = () => api('/auth/me');
 export const login = (credentials) =>
   api('/auth/login', { method: 'POST', body: credentials });
 
+export const loginTwoFactor = ({ twoFactorToken, code }) =>
+  api('/auth/2fa/login', {
+    method: 'POST',
+    body: { twoFactorToken, code },
+  });
+
 export const register = (data) =>
   api('/auth/register', { method: 'POST', body: data });
 
