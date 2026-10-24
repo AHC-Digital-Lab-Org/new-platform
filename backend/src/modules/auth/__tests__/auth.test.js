@@ -50,7 +50,7 @@ describe('Auth service — register', () => {
       alias: 'usuario',
       email: 'usuario@example.com',
       nombre: 'Usuario',
-      ciudad: 'Bogotá',
+      ciudad: 'Bogotá D.C.',
       pais: 'Colombia',
       passwordHash: 'hashed-password',
       tipoUsuario: 'usuario_registrado',
@@ -65,7 +65,7 @@ describe('Auth service — register', () => {
       email: 'usuario@example.com',
       password: 'password123',
       nombre: 'Usuario',
-      ciudad: 'Bogotá',
+      ciudad: 'Bogotá D.C.',
       pais: 'Colombia',
       consentimientos: { terminos: true },
     });
@@ -82,7 +82,7 @@ describe('Auth service — register', () => {
         email: 'usuario@example.com',
         passwordHash: 'hashed-password',
         nombre: 'Usuario',
-        ciudad: 'Bogotá',
+        ciudad: 'Bogotá D.C.',
         pais: 'Colombia',
         consentimientos: { terminos: true },
         tipoUsuario: 'usuario_registrado',
@@ -222,13 +222,31 @@ describe('Auth endpoint — register', () => {
     hash.mockResolvedValue('hashed-password');
   });
 
+  it('lista países y devuelve ciudades filtradas por país y búsqueda', async () => {
+    const countriesResponse = await request(app).get(
+      '/api/auth/locations/countries',
+    );
+    const citiesResponse = await request(app).get(
+      '/api/auth/locations/cities?country=ES&q=madrid',
+    );
+
+    expect(countriesResponse.status).toBe(200);
+    expect(countriesResponse.body.countries).toContainEqual({
+      code: 'ES',
+      name: 'España',
+    });
+    expect(citiesResponse.status).toBe(200);
+    expect(citiesResponse.body.cities).toContain('Madrid');
+    expect(citiesResponse.body.cities.length).toBeLessThanOrEqual(25);
+  });
+
   it('registra usuario correctamente y responde 201', async () => {
     create.mockResolvedValue({
       id: 'user-1',
       alias: 'usuario',
       email: 'usuario@example.com',
       nombre: 'Usuario',
-      ciudad: 'Bogotá',
+      ciudad: 'Bogotá D.C.',
       pais: 'Colombia',
       passwordHash: 'hashed-password',
       tipoUsuario: 'usuario_registrado',
@@ -245,7 +263,7 @@ describe('Auth endpoint — register', () => {
         email: 'usuario@example.com',
         password: 'password123',
         nombre: 'Usuario',
-        ciudad: 'Bogotá',
+        ciudad: 'Bogotá D.C.',
         pais: 'Colombia',
         consentimientos: { terminos: true },
       });
@@ -256,7 +274,7 @@ describe('Auth endpoint — register', () => {
       alias: 'usuario',
       email: 'usuario@example.com',
       nombre: 'Usuario',
-      ciudad: 'Bogotá',
+      ciudad: 'Bogotá D.C.',
       pais: 'Colombia',
       tipoUsuario: 'usuario_registrado',
       estado: 'pendiente_verificacion',
@@ -290,6 +308,41 @@ describe('Auth endpoint — register', () => {
     expect(response.body.error.details).toBeDefined();
     expect(findFirst).not.toHaveBeenCalled();
     expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('rechaza alias con vulgaridades antes de crear la cuenta', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'Púta!!!',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: {},
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(findFirst).not.toHaveBeenCalled();
+    expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('rechaza una ciudad que no pertenece al país seleccionado', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        pais: 'España',
+        ciudad: 'Bogotá D.C.',
+        consentimientos: {},
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(findFirst).not.toHaveBeenCalled();
     expect(create).not.toHaveBeenCalled();
   });
 

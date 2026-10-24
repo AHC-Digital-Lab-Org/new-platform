@@ -3,9 +3,18 @@ import { Link, Navigate } from 'react-router';
 import FormError from '@/shared/components/FormError.jsx';
 import FormField from '@/shared/components/FormField.jsx';
 import { useSubmit } from '@/shared/hooks/useSubmit.js';
+import {
+  ALIAS_POLICY_MESSAGE,
+  isAliasAllowed,
+} from '../../../../../shared/alias-policy.js';
 import { useAuth } from '../AuthContext.jsx';
-import { register } from '../api.js';
+import {
+  listRegistrationCountries,
+  register,
+  searchRegistrationCities,
+} from '../api.js';
 import { authErrorMessage, formatWait } from '../errors.js';
+import SearchableSelect from '../components/SearchableSelect.jsx';
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
@@ -22,11 +31,13 @@ const INITIAL = {
   comunicaciones: false,
 };
 
-function validate(form) {
+function validate(form, countryCode, citySelected) {
   const errors = {};
   const alias = form.alias.trim();
   if (alias.length < 3 || alias.length > 30) {
     errors.alias = 'El alias debe tener entre 3 y 30 caracteres.';
+  } else if (!isAliasAllowed(alias)) {
+    errors.alias = ALIAS_POLICY_MESSAGE;
   }
   if (!EMAIL_RE.test(form.email.trim())) errors.email = 'Introduce un email válido.';
   if (form.password.length < 8) {
@@ -36,6 +47,12 @@ function validate(form) {
   if (!form.terminos) errors.terminos = 'Debes aceptar los términos de uso.';
   if (!form.privacidad) {
     errors.privacidad = 'Debes aceptar la política de privacidad.';
+  }
+  if (form.pais && !countryCode) {
+    errors.pais = 'Selecciona un país de la lista.';
+  }
+  if (form.ciudad && (!countryCode || !citySelected)) {
+    errors.ciudad = 'Selecciona una ciudad de la lista del país elegido.';
   }
   return errors;
 }
@@ -72,6 +89,14 @@ export default function RegisterPage() {
   const { submit, loading, error, clearError, secondsLeft } = useSubmit(register);
   const [form, setForm] = useState(INITIAL);
   const [fieldErrors, setFieldErrors] = useState({});
+  const [countryCode, setCountryCode] = useState('');
+  const [citySelected, setCitySelected] = useState(false);
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [cityOptions, setCityOptions] = useState([]);
+  const [countriesLoading, setCountriesLoading] = useState(true);
+  const [citiesLoading, setCitiesLoading] = useState(false);
+  const [locationError, setLocationError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [doneEmail, setDoneEmail] = useState(null);
   const refs = useRef({});
   const doneHeading = useRef(null);
@@ -79,6 +104,60 @@ export default function RegisterPage() {
   useEffect(() => {
     if (doneEmail) doneHeading.current?.focus();
   }, [doneEmail]);
+
+  useEffect(() => {
+    let active = true;
+    listRegistrationCountries()
+      .then(({ countries: options }) => {
+        if (active) {
+          setCountryOptions(options);
+          setCountriesLoading(false);
+        }
+      })
+      .catch((requestError) => {
+        if (active) {
+          setLocationError(authErrorMessage(requestError));
+          setCountriesLoading(false);
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!countryCode || form.ciudad.trim().length < 1) {
+      setCityOptions([]);
+      setCitiesLoading(false);
+      return undefined;
+    }
+
+    let active = true;
+    setCitiesLoading(true);
+    const timeout = setTimeout(() => {
+      searchRegistrationCities({
+        country: countryCode,
+        query: form.ciudad.trim(),
+      })
+        .then(({ cities: options }) => {
+          if (active) {
+            setCityOptions(options);
+            setLocationError('');
+          }
+        })
+        .catch((requestError) => {
+          if (active) setLocationError(authErrorMessage(requestError));
+        })
+        .finally(() => {
+          if (active) setCitiesLoading(false);
+        });
+    }, 200);
+
+    return () => {
+      active = false;
+      clearTimeout(timeout);
+    };
+  }, [countryCode, form.ciudad]);
 
   if (isAuthenticated) return <Navigate to="/" replace />;
 
@@ -96,7 +175,7 @@ export default function RegisterPage() {
     event.preventDefault();
     if (loading || secondsLeft > 0) return;
 
-    const errors = validate(form);
+    const errors = validate(form, countryCode, citySelected);
     setFieldErrors(errors);
     const firstError = Object.keys(errors)[0];
     if (firstError) {
@@ -181,27 +260,108 @@ export default function RegisterPage() {
         {text('alias', 'Alias', {
           required: true,
           autoComplete: 'username',
-          hint: 'Entre 3 y 30 caracteres.',
+          hint: 'Entre 3 y 30 caracteres. No se permiten insultos ni vulgaridades.',
         })}
         {text('email', 'Email', {
           required: true,
           type: 'email',
           autoComplete: 'email',
         })}
-        {text('password', 'Contraseña', {
-          required: true,
-          type: 'password',
-          autoComplete: 'new-password',
-          hint: 'Mínimo 8 caracteres.',
-        })}
+        <div className="relative">
+          {text('password', 'Contraseña', {
+            required: true,
+            type: showPassword ? 'text' : 'password',
+            autoComplete: 'new-password',
+            onPaste: (event) => event.preventDefault(),
+            className: 'pr-24',
+            hint: 'Mínimo 8 caracteres. Pegar está desactivado.',
+          })}
+          <button
+            type="button"
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-pressed={showPassword}
+            className="absolute right-2 top-8 rounded px-2 py-1 text-sm text-emerald-700 underline"
+          >
+            {showPassword ? 'Ocultar' : 'Mostrar'}
+          </button>
+        </div>
         {text('confirm', 'Repite la contraseña', {
           required: true,
-          type: 'password',
+          type: showPassword ? 'text' : 'password',
           autoComplete: 'new-password',
+          onPaste: (event) => event.preventDefault(),
+          hint: 'Pegar está desactivado.',
         })}
         {text('nombre', 'Nombre', { autoComplete: 'name' })}
-        {text('ciudad', 'Ciudad', { autoComplete: 'address-level2' })}
-        {text('pais', 'País', { autoComplete: 'country-name' })}
+        <SearchableSelect
+          label="País"
+          value={form.pais}
+          options={countryOptions.map(({ name }) => name)}
+          placeholder="Busca un país"
+          hint={
+            countriesLoading
+              ? 'Cargando países…'
+              : 'Escribe para buscar y selecciona un país de la lista.'
+          }
+          error={fieldErrors.pais}
+          disabled={countriesLoading || countryOptions.length === 0}
+          inputRef={(element) => {
+            refs.current.pais = element;
+          }}
+          onChange={(value) => {
+            setCountryCode('');
+            setCitySelected(false);
+            setForm((current) => ({ ...current, pais: value, ciudad: '' }));
+            setFieldErrors((current) => {
+              const { pais: _pais, ciudad: _ciudad, ...rest } = current;
+              return rest;
+            });
+          }}
+          onSelect={(name) => {
+            setCountryCode(
+              countryOptions.find((country) => country.name === name)?.code ??
+                '',
+            );
+            setCitySelected(false);
+            setCityOptions([]);
+            setForm((current) => ({ ...current, pais: name, ciudad: '' }));
+            setFieldErrors((current) => {
+              const { pais: _pais, ciudad: _ciudad, ...rest } = current;
+              return rest;
+            });
+          }}
+        />
+        <SearchableSelect
+          label="Ciudad"
+          value={form.ciudad}
+          options={cityOptions}
+          placeholder={countryCode ? 'Busca una ciudad' : 'Primero elige un país'}
+          hint="Escribe para buscar entre las ciudades del país seleccionado."
+          error={fieldErrors.ciudad}
+          disabled={!countryCode}
+          loading={citiesLoading}
+          inputRef={(element) => {
+            refs.current.ciudad = element;
+          }}
+          onChange={(value) => {
+            setCitySelected(false);
+            setCityOptions([]);
+            setForm((current) => ({ ...current, ciudad: value }));
+            setFieldErrors((current) => {
+              const { ciudad: _ciudad, ...rest } = current;
+              return rest;
+            });
+          }}
+          onSelect={(name) => {
+            setCitySelected(true);
+            setForm((current) => ({ ...current, ciudad: name }));
+            setFieldErrors((current) => {
+              const { ciudad: _ciudad, ...rest } = current;
+              return rest;
+            });
+          }}
+        />
+        {locationError && <FormError message={locationError} />}
 
         <fieldset className="space-y-3">
           <legend className="text-sm font-medium">Consentimientos</legend>

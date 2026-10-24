@@ -14,6 +14,14 @@ export const loginTwoFactor = ({ twoFactorToken, code }) =>
 export const register = (data) =>
   api('/auth/register', { method: 'POST', body: data });
 
+export const listRegistrationCountries = () =>
+  api('/auth/locations/countries');
+
+export const searchRegistrationCities = ({ country, query }) => {
+  const params = new URLSearchParams({ country, q: query });
+  return api(`/auth/locations/cities?${params.toString()}`);
+};
+
 export const verifyEmail = (token) =>
   api('/auth/verify-email', { method: 'POST', body: { token } });
 

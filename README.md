@@ -106,3 +106,4 @@ Crea el esqueleto en backend y frontend e indica las dos líneas que hay que añ
 - Variable: `VITE_API_URL` = URL de Render (p. ej. `https://web-platform-api.onrender.com`)
 - `frontend/vercel.json` redirige todas las rutas a `index.html` (SPA).
 - La CSP de `frontend/vercel.json` también debe permitir el mismo origen de API en `connect-src`; actualízalo si tu servicio de Render tiene otro dominio.
+- El catálogo de países y ciudades usa `country-state-city` (GPL-3.0) en el backend; revisa sus condiciones al distribuir el servicio.

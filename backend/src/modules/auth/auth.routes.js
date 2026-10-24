@@ -25,9 +25,55 @@ import {
   forgotPasswordSchema,
   resetPasswordSchema,
   changePasswordSchema,
+  citiesQuerySchema,
 } from './auth.schema.js';
 
 export const router = Router();
+
+/**
+ * @openapi
+ * /api/auth/locations/countries:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: Lista los países disponibles para el registro
+ *     responses:
+ *       200:
+ *         description: Países con código ISO y nombre localizado
+ */
+router.get('/locations/countries', authController.locationsCountries);
+
+/**
+ * @openapi
+ * /api/auth/locations/cities:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: Busca ciudades dentro de un país
+ *     parameters:
+ *       - in: query
+ *         name: country
+ *         required: true
+ *         schema:
+ *           type: string
+ *           pattern: '^[A-Z]{2}$'
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *           minLength: 1
+ *     responses:
+ *       200:
+ *         description: Hasta 25 coincidencias
+ *       400:
+ *         description: Parámetros inválidos
+ */
+router.get(
+  '/locations/cities',
+  validate({ query: citiesQuerySchema }),
+  authController.locationsCities,
+);
 
 /**
  * @openapi

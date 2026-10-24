@@ -1,4 +1,13 @@
 import * as authService from './auth.service.js';
+import { listCountries, searchCities } from './auth.locations.js';
+
+export const locationsCountries = (_req, res) =>
+  res.status(200).json({ countries: listCountries() });
+
+export const locationsCities = (req, res) =>
+  res
+    .status(200)
+    .json({ cities: searchCities(req.valid.query.country, req.valid.query.q) });
 
 export const register = async (req, res) => {
   const user = await authService.register(req.valid.body);
