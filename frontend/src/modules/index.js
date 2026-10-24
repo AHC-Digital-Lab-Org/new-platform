@@ -1,7 +1,7 @@
 // Registro de módulos del frontend. Cada módulo se carga bajo demanda (code splitting),
 // así el código de un equipo no engorda la carga inicial del resto.
 // Los módulos habituales viven bajo `path/*`; las páginas independientes declaran `routes`.
-// guard: 'auth' exige sesión (RequireAuth).
+// guard: 'auth' exige sesión; roles: [...] exige uno de esos roles (e implica sesión).
 import { lazy } from 'react';
 
 export const modules = [

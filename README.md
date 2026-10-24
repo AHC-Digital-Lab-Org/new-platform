@@ -105,3 +105,4 @@ Crea el esqueleto en backend y frontend e indica las dos líneas que hay que añ
 - Root directory: `frontend` · Framework: Vite
 - Variable: `VITE_API_URL` = URL de Render (p. ej. `https://web-platform-api.onrender.com`)
 - `frontend/vercel.json` redirige todas las rutas a `index.html` (SPA).
+- La CSP de `frontend/vercel.json` también debe permitir el mismo origen de API en `connect-src`; actualízalo si tu servicio de Render tiene otro dominio.

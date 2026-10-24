@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router';
+import ForbiddenPage from '@/pages/ForbiddenPage.jsx';
 import { useAuth } from './AuthContext.jsx';
 
 export function RequireAuth({ children }) {
@@ -34,15 +35,6 @@ export function RequireAuth({ children }) {
 
 export function RequireRole({ roles, children }) {
   const { user } = useAuth();
-  if (!roles.includes(user?.tipoUsuario)) {
-    return (
-      <section role="alert">
-        <h1 className="text-2xl font-bold">Acceso denegado</h1>
-        <p className="mt-2 text-slate-600">
-          No tienes permisos para ver esta página.
-        </p>
-      </section>
-    );
-  }
+  if (!roles.includes(user?.tipoUsuario)) return <ForbiddenPage />;
   return children ?? <Outlet />;
 }

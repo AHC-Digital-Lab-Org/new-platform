@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import { menuModules } from '@/modules/index.js';
 import { useAuth } from '@/modules/auth/AuthContext.jsx';
@@ -8,14 +9,27 @@ const linkClass = ({ isActive }) =>
 export default function Layout() {
   const { status, user, logout } = useAuth();
   const navigate = useNavigate();
+  const mainRef = useRef(null);
 
   const onLogout = () => {
     logout();
     navigate('/');
   };
 
+  const skipToContent = (event) => {
+    event.preventDefault();
+    mainRef.current?.focus();
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      <a
+        href="#contenido"
+        onClick={skipToContent}
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-10 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-emerald-800"
+      >
+        Saltar al contenido
+      </a>
       <header className="bg-emerald-800">
         <nav aria-label="Principal" className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3">
           <NavLink to="/" end className="mr-4 font-bold text-white">
@@ -55,7 +69,12 @@ export default function Layout() {
           </div>
         </nav>
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main
+        id="contenido"
+        ref={mainRef}
+        tabIndex={-1}
+        className="mx-auto max-w-6xl px-4 py-8 outline-none"
+      >
         <Outlet />
       </main>
     </div>
