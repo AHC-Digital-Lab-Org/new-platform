@@ -273,8 +273,8 @@ export default function RegisterPage() {
             type: showPassword ? 'text' : 'password',
             autoComplete: 'new-password',
             onPaste: (event) => event.preventDefault(),
-            className: 'pr-24',
-            hint: 'Mínimo 8 caracteres. Pegar está desactivado.',
+            className: 'pr-20',
+            hint: 'Mínimo 8 caracteres.',
           })}
           <button
             type="button"
@@ -290,7 +290,6 @@ export default function RegisterPage() {
           type: showPassword ? 'text' : 'password',
           autoComplete: 'new-password',
           onPaste: (event) => event.preventDefault(),
-          hint: 'Pegar está desactivado.',
         })}
         {text('nombre', 'Nombre', { autoComplete: 'name' })}
         <SearchableSelect

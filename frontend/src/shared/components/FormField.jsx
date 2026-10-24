@@ -6,6 +6,7 @@ export default function FormField({
   hint,
   required,
   ref,
+  className,
   ...inputProps
 }) {
   const id = useId();
@@ -26,7 +27,7 @@ export default function FormField({
         required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
-        className={`mt-1 block w-full rounded-md border px-3 py-2 focus:outline-2 focus:outline-emerald-600 ${error ? 'border-red-600' : 'border-slate-300'}`}
+        className={`mt-1 block w-full rounded-md border px-3 py-2 focus:outline-2 focus:outline-emerald-600 ${error ? 'border-red-600' : 'border-slate-300'} ${className ?? ''}`}
         {...inputProps}
       />
       {hint && (

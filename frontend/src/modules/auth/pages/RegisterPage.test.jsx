@@ -81,6 +81,9 @@ describe('RegisterPage', () => {
     renderPage();
     const password = screen.getByLabelText(/^Contraseña/);
     expect(password.type).toBe('password');
+    expect(password.className).toContain('w-full');
+    expect(password.className).toContain('pr-20');
+    expect(screen.queryByText(/pegar está desactivado/i)).toBeNull();
 
     const paste = createEvent.paste(password, {
       clipboardData: { getData: () => 'password123' },
