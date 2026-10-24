@@ -136,6 +136,16 @@ export default function RegisterPage() {
           <strong>{doneEmail}</strong>. Tienes que verificar tu email antes de
           poder iniciar sesión.
         </p>
+        <p className="mt-4 text-sm text-slate-600">
+          ¿No te ha llegado?{' '}
+          <Link
+            to="/resend-verification"
+            state={{ email: doneEmail }}
+            className="text-emerald-700 underline"
+          >
+            Reenviar el correo
+          </Link>
+        </p>
         <Link to="/login" className="mt-4 inline-block text-emerald-700 underline">
           Ir a iniciar sesión
         </Link>

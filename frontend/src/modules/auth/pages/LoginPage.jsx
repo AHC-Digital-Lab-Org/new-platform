@@ -108,6 +108,17 @@ export default function LoginPage() {
           }}
         />
         <FormError message={authErrorMessage(error)} />
+        {error?.code === 'EMAIL_NOT_VERIFIED' && (
+          <p className="text-sm">
+            <Link
+              to="/resend-verification"
+              state={{ email: form.email.trim() }}
+              className="text-emerald-700 underline"
+            >
+              Reenviar el correo de verificación
+            </Link>
+          </p>
+        )}
         <button
           type="submit"
           disabled={loading || secondsLeft > 0}
@@ -120,6 +131,11 @@ export default function LoginPage() {
               : 'Entrar'}
         </button>
       </form>
+      <p className="mt-4 text-center text-sm text-slate-600">
+        <Link to="/forgot-password" className="text-emerald-700 underline">
+          ¿Has olvidado tu contraseña?
+        </Link>
+      </p>
       <p className="mt-4 text-center text-sm text-slate-600">
         ¿No tienes cuenta?{' '}
         <Link to="/register" className="text-emerald-700 underline">

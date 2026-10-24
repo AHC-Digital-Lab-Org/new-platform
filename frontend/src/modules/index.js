@@ -12,6 +12,10 @@ export const modules = [
     routes: [
       { path: '/login', Component: lazy(() => import('./auth/pages/LoginPage.jsx')) },
       { path: '/register', Component: lazy(() => import('./auth/pages/RegisterPage.jsx')) },
+      { path: '/verify-email', Component: lazy(() => import('./auth/pages/VerifyEmailPage.jsx')) },
+      { path: '/resend-verification', Component: lazy(() => import('./auth/pages/ResendVerificationPage.jsx')) },
+      { path: '/forgot-password', Component: lazy(() => import('./auth/pages/ForgotPasswordPage.jsx')) },
+      { path: '/reset-password', Component: lazy(() => import('./auth/pages/ResetPasswordPage.jsx')) },
     ],
   },
 ];
