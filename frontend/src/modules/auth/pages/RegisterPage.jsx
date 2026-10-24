@@ -260,7 +260,7 @@ export default function RegisterPage() {
         {text('alias', 'Alias', {
           required: true,
           autoComplete: 'username',
-          hint: 'Entre 3 y 30 caracteres. No se permiten insultos ni vulgaridades.',
+          hint: 'Entre 3 y 30 caracteres.',
         })}
         {text('email', 'Email', {
           required: true,
