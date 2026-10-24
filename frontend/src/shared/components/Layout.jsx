@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
-import { menuModules } from '@/modules/index.js';
 import { useAuth } from '@/modules/auth/AuthContext.jsx';
 
 const linkClass = ({ isActive }) =>
@@ -35,11 +34,18 @@ export default function Layout() {
           <NavLink to="/" end className="mr-4 font-bold text-white">
             Web Platform
           </NavLink>
-          {menuModules.map(({ path, label }) => (
-            <NavLink key={path} to={path} className={linkClass}>
-              {label}
-            </NavLink>
-          ))}
+          <span
+            aria-label="Ecogestos, en desarrollo"
+            className="rounded-md px-3 py-2 text-sm font-medium text-emerald-50/70"
+          >
+            Ecogestos <span className="text-emerald-200">(En desarrollo…)</span>
+          </span>
+          <span
+            aria-label="Chatbot, en desarrollo"
+            className="rounded-md px-3 py-2 text-sm font-medium text-emerald-50/70"
+          >
+            Chatbot <span className="text-emerald-200">(En desarrollo…)</span>
+          </span>
           <div className="ml-auto flex items-center gap-2">
             {status === 'authenticated' && (
               <>
