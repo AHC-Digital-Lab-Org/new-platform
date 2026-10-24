@@ -31,13 +31,22 @@ export default function RecoveryNotice({ remaining, to }) {
         Cada código solo sirve una vez. Puedes generar códigos nuevos desde la
         sección de seguridad de tu cuenta.
       </p>
-      <Link
-        to={to}
-        replace
-        className="mt-4 inline-block rounded-md bg-emerald-700 px-4 py-2 font-medium text-white"
-      >
-        Continuar
-      </Link>
+      <div className="mt-4 flex flex-wrap items-center gap-4">
+        <Link
+          to={to}
+          replace
+          className="rounded-md bg-emerald-700 px-4 py-2 font-medium text-white"
+        >
+          Continuar
+        </Link>
+        <Link
+          to="/security"
+          replace
+          className="text-emerald-700 underline"
+        >
+          Ir a seguridad para generar códigos nuevos
+        </Link>
+      </div>
     </section>
   );
 }

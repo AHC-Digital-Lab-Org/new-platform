@@ -34,3 +34,21 @@ export const changePassword = ({ currentPassword, newPassword }) =>
 
 export const logoutAll = () =>
   api('/auth/logout-all', { method: 'POST' });
+
+export const twoFactorSetup = () =>
+  api('/auth/2fa/setup', { method: 'POST' });
+
+export const twoFactorEnable = (code) =>
+  api('/auth/2fa/enable', { method: 'POST', body: { code } });
+
+export const twoFactorDisable = ({ password, code }) =>
+  api('/auth/2fa/disable', {
+    method: 'POST',
+    body: { password, code },
+  });
+
+export const regenerateRecoveryCodes = ({ password, code }) =>
+  api('/auth/2fa/recovery-codes', {
+    method: 'POST',
+    body: { password, code },
+  });

@@ -4,11 +4,7 @@ import FormField from '@/shared/components/FormField.jsx';
 import { useSubmit } from '@/shared/hooks/useSubmit.js';
 import { loginTwoFactor } from '../api.js';
 import { authErrorMessage, formatWait } from '../errors.js';
-
-const normalizeCode = (raw) => {
-  const code = raw.trim();
-  return /^\d{3}\s\d{3}$/.test(code) ? code.replace(/\s/, '') : code;
-};
+import { normalizeSecondFactor } from '../validation.js';
 
 export default function TwoFactorStep({
   twoFactorToken,
@@ -34,7 +30,7 @@ export default function TwoFactorStep({
     event.preventDefault();
     if (loading || secondsLeft > 0) return;
 
-    const normalized = normalizeCode(code);
+    const normalized = normalizeSecondFactor(code);
     if (normalized.length < 6) {
       setFieldError('Introduce el código de 6 dígitos o un código de recuperación.');
       codeRef.current?.focus();
