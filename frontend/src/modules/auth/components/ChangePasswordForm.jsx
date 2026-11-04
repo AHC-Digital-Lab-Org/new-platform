@@ -5,7 +5,11 @@ import { useSubmit } from '@/shared/hooks/useSubmit.js';
 import { useAuth } from '../AuthContext.jsx';
 import { changePassword } from '../api.js';
 import { authErrorMessage, formatWait } from '../errors.js';
-import { MIN_PASSWORD } from '../validation.js';
+import {
+  MAX_PASSWORD_BYTES,
+  MIN_PASSWORD,
+  passwordByteLength,
+} from '../validation.js';
 
 const EMPTY = { currentPassword: '', newPassword: '', confirm: '' };
 
@@ -38,6 +42,8 @@ export default function ChangePasswordForm() {
     }
     if (form.newPassword.length < MIN_PASSWORD) {
       errors.newPassword = `La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`;
+    } else if (passwordByteLength(form.newPassword) > MAX_PASSWORD_BYTES) {
+      errors.newPassword = 'La contraseña no puede superar 72 bytes.';
     } else if (form.newPassword === form.currentPassword) {
       errors.newPassword = 'La nueva contraseña debe ser distinta de la actual.';
     }
@@ -106,7 +112,8 @@ export default function ChangePasswordForm() {
         name="newPassword"
         autoComplete="new-password"
         required
-        hint={`Mínimo ${MIN_PASSWORD} caracteres.`}
+        maxLength={MAX_PASSWORD_BYTES}
+        hint={`Mínimo ${MIN_PASSWORD} caracteres y máximo 72 bytes.`}
         value={form.newPassword}
         onChange={set('newPassword')}
         error={fieldErrors.newPassword}

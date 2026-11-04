@@ -59,7 +59,7 @@ export default function LoginPage() {
 
     clearError();
     setNotice(null);
-    const result = await submit(form.email.trim(), form.password);
+    const result = await submit(form.email.trim().toLowerCase(), form.password);
     if (result.ok && result.data.twoFactorRequired) {
       setForm((current) => ({ ...current, password: '' }));
       setTwoFactorToken(result.data.twoFactorToken);

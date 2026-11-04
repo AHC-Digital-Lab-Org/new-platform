@@ -100,6 +100,22 @@ describe('api()', () => {
     expect(handler).toHaveBeenCalledTimes(1);
   });
 
+  it('invalida la sesión si el backend informa ACCOUNT_INACTIVE', async () => {
+    const handler = vi.fn();
+    setSessionInvalidHandler(handler);
+    setAuthToken('abc');
+    fetchMock.mockResolvedValue(
+      jsonResponse(403, {
+        error: { code: 'ACCOUNT_INACTIVE', message: 'La cuenta no está activa' },
+      }),
+    );
+
+    await expect(api('/auth/me')).rejects.toMatchObject({
+      code: 'ACCOUNT_INACTIVE',
+    });
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+
   it('no avisa al handler si no había token (p. ej. credenciales incorrectas)', async () => {
     const handler = vi.fn();
     setSessionInvalidHandler(handler);

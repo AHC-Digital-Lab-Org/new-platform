@@ -56,6 +56,16 @@ describe('ChangePasswordForm', () => {
     expect(changePassword).not.toHaveBeenCalled();
   });
 
+  it('rechaza contraseñas nuevas que superan 72 bytes', async () => {
+    render(<ChangePasswordForm />);
+    fill('vieja1234', 'a'.repeat(73));
+
+    expect(
+      await screen.findByText('La contraseña no puede superar 72 bytes.'),
+    ).toBeTruthy();
+    expect(changePassword).not.toHaveBeenCalled();
+  });
+
   it('INVALID_PASSWORD se muestra bajo el campo de contraseña actual', async () => {
     changePassword.mockRejectedValue(
       new ApiError('x', { status: 400, code: 'INVALID_PASSWORD' }),

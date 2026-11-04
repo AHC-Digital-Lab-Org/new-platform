@@ -6,7 +6,11 @@ import { useSubmit } from '@/shared/hooks/useSubmit.js';
 import { useAuth } from '../AuthContext.jsx';
 import { resetPassword } from '../api.js';
 import { authErrorMessage, formatWait } from '../errors.js';
-import { MIN_PASSWORD } from '../validation.js';
+import {
+  MAX_PASSWORD_BYTES,
+  MIN_PASSWORD,
+  passwordByteLength,
+} from '../validation.js';
 
 export default function ResetPasswordPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,6 +47,8 @@ export default function ResetPasswordPage() {
     const errors = {};
     if (form.password.length < MIN_PASSWORD) {
       errors.password = `La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`;
+    } else if (passwordByteLength(form.password) > MAX_PASSWORD_BYTES) {
+      errors.password = 'La contraseña no puede superar 72 bytes.';
     }
     if (form.confirm !== form.password) {
       errors.confirm = 'Las contraseñas no coinciden.';
@@ -114,7 +120,8 @@ export default function ResetPasswordPage() {
           name="password"
           autoComplete="new-password"
           required
-          hint={`Mínimo ${MIN_PASSWORD} caracteres.`}
+          maxLength={MAX_PASSWORD_BYTES}
+          hint={`Mínimo ${MIN_PASSWORD} caracteres y máximo 72 bytes.`}
           value={form.password}
           onChange={setField('password')}
           error={fieldErrors.password}

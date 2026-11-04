@@ -67,4 +67,20 @@ describe('ResetPasswordPage', () => {
     expect(await screen.findByText('Las contraseñas no coinciden.')).toBeTruthy();
     expect(resetPassword).not.toHaveBeenCalled();
   });
+
+  it('rechaza contraseñas que superan 72 bytes', async () => {
+    renderPage();
+    fireEvent.change(screen.getByLabelText(/^Nueva contraseña/), {
+      target: { value: 'a'.repeat(73) },
+    });
+    fireEvent.change(screen.getByLabelText(/^Repite la contraseña/), {
+      target: { value: 'a'.repeat(73) },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Cambiar contraseña' }));
+
+    expect(
+      await screen.findByText('La contraseña no puede superar 72 bytes.'),
+    ).toBeTruthy();
+    expect(resetPassword).not.toHaveBeenCalled();
+  });
 });

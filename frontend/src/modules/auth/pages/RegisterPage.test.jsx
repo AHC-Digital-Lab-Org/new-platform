@@ -77,6 +77,23 @@ describe('RegisterPage', () => {
     expect(register).not.toHaveBeenCalled();
   });
 
+  it('rechaza contraseñas que superan 72 bytes', async () => {
+    renderPage();
+    fillRequiredFields();
+    fireEvent.change(screen.getByLabelText(/^Contraseña/), {
+      target: { value: 'a'.repeat(73) },
+    });
+    fireEvent.change(screen.getByLabelText(/^Repite la contraseña/), {
+      target: { value: 'a'.repeat(73) },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Crear cuenta' }));
+
+    expect(
+      await screen.findByText('La contraseña no puede superar 72 bytes.'),
+    ).toBeTruthy();
+    expect(register).not.toHaveBeenCalled();
+  });
+
   it('permite mostrar y ocultar la contraseña y bloquea pegar', () => {
     renderPage();
     const password = screen.getByLabelText(/^Contraseña/);

@@ -17,6 +17,8 @@ export function authErrorMessage(error) {
         : 'Demasiados intentos. Espera un momento antes de volver a intentarlo.';
     case 'INVALID_CREDENTIALS':
       return 'Email o contraseña incorrectos.';
+    case 'ACCOUNT_INACTIVE':
+      return 'Tu cuenta no está activa. Contacta con soporte si crees que se trata de un error.';
     case 'EMAIL_NOT_VERIFIED':
       return 'Debes verificar tu email antes de iniciar sesión. Revisa tu correo y pulsa el enlace de verificación.';
     case 'USER_ALREADY_EXISTS':

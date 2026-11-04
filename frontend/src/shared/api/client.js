@@ -5,6 +5,7 @@ export const SESSION_ERROR_CODES = new Set([
   'SESSION_REVOKED',
   'INVALID_TOKEN',
   'UNAUTHORIZED',
+  'ACCOUNT_INACTIVE',
 ]);
 
 export class ApiError extends Error {
