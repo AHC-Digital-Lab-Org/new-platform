@@ -16,9 +16,11 @@ import {
 } from './auth.mail.js';
 
 const { authenticator } = otplib;
-authenticator.options = { window: 1 };
+authenticator.options = { window: 1, step: 30 };
 
 const SALT_ROUNDS = 10;
+const DUMMY_PASSWORD_HASH =
+  '$2b$10$lZM.Px.Um.GCpl5f9kp6j.VrLhsDxez4ios9sQV8s/YExyW50UTMa';
 const VERIFICATION_TTL_MS = 24 * 60 * 60 * 1000;
 const PASSWORD_RESET_TTL_MS = 60 * 60 * 1000;
 const TWO_FACTOR_TOKEN_TTL = '5m';
@@ -46,19 +48,38 @@ const signToken = (user) =>
   );
 
 const signTwoFactorToken = (user) =>
-  jwt.sign({ sub: user.id, purpose: '2fa' }, env.jwtSecret, {
-    expiresIn: TWO_FACTOR_TOKEN_TTL,
-  });
+  jwt.sign(
+    { sub: user.id, purpose: '2fa', v: user.tokenVersion ?? 0 },
+    env.jwtSecret,
+    { expiresIn: TWO_FACTOR_TOKEN_TTL },
+  );
 
 const hashToken = (token) =>
   crypto.createHash('sha256').update(token).digest('hex');
 
-const isValidCode = (code, storedSecret) => {
+const consumeTotpCode = async (user, code) => {
+  let delta;
   try {
-    return authenticator.check(code, decryptSecret(storedSecret));
-  } catch {
+    delta = authenticator.checkDelta(code, decryptSecret(user.totpSecret));
+  } catch (err) {
+    logger.error('No se pudo descifrar o validar el secreto TOTP', err);
     return false;
   }
+
+  if (delta === null) return false;
+
+  const counter = Math.floor(Date.now() / 30_000) + delta;
+  const { count } = await prisma.user.updateMany({
+    where: {
+      id: user.id,
+      OR: [
+        { totpLastCounter: null },
+        { totpLastCounter: { lt: counter } },
+      ],
+    },
+    data: { totpLastCounter: counter },
+  });
+  return count === 1;
 };
 
 const RECOVERY_CODE_COUNT = 10;
@@ -99,7 +120,7 @@ const buildRecoveryCodeOps = (userId) => {
 
 const verifySecondFactor = async (user, code) => {
   if (TOTP_FORMAT.test(code)) {
-    return isValidCode(code, user.totpSecret) ? 'totp' : null;
+    return (await consumeTotpCode(user, code)) ? 'totp' : null;
   }
 
   const { count } = await prisma.recoveryCode.updateMany({
@@ -145,6 +166,14 @@ const findUserOrFail = async (userId) => {
   return user;
 };
 
+const sendMailInBackground = (user, mail, action) => {
+  void Promise.resolve(sendMail({ to: user.email, ...mail })).catch((err) => {
+    logger.error(
+      `No se pudo ${action} al usuario ${user.id}: ${err.message}`,
+    );
+  });
+};
+
 const sendVerification = async (user) => {
   const token = crypto.randomBytes(32).toString('hex');
 
@@ -156,13 +185,7 @@ const sendVerification = async (user) => {
     },
   });
 
-  try {
-    await sendMail({ to: user.email, ...buildVerificationMail(token) });
-  } catch (err) {
-    logger.error(
-      `No se pudo enviar la verificación al usuario ${user.id}: ${err.message}`,
-    );
-  }
+  sendMailInBackground(user, buildVerificationMail(token), 'enviar la verificación');
 };
 
 export const register = async ({
@@ -200,7 +223,13 @@ export const register = async ({
       nombre,
       ciudad,
       pais: pais || undefined,
-      consentimientos,
+      consentimientos: {
+        terminos: true,
+        privacidad: true,
+        comunicaciones: consentimientos.comunicaciones ?? false,
+        fecha: new Date().toISOString(),
+        versionPolitica: env.consentPolicyVersion,
+      },
       tipoUsuario: 'usuario_registrado',
       estado: 'pendiente_verificacion',
     },
@@ -216,10 +245,11 @@ export const login = async ({ email, password }) => {
   const invalid = () =>
     new AppError(401, 'INVALID_CREDENTIALS', 'Email o contraseña incorrectos');
 
-  if (!user || !user.passwordHash) throw invalid();
-
-  const ok = await bcrypt.compare(password, user.passwordHash);
-  if (!ok) throw invalid();
+  const ok = await bcrypt.compare(
+    password,
+    user?.passwordHash ?? DUMMY_PASSWORD_HASH,
+  );
+  if (!user || !user.passwordHash || !ok) throw invalid();
 
   if (!user.emailVerificado) {
     throw new AppError(
@@ -227,6 +257,10 @@ export const login = async ({ email, password }) => {
       'EMAIL_NOT_VERIFIED',
       'Debes verificar tu email antes de iniciar sesión',
     );
+  }
+
+  if (user.estado !== 'activo') {
+    throw new AppError(403, 'ACCOUNT_INACTIVE', 'La cuenta no está activa');
   }
 
   if (user.twoFactorOn) {
@@ -257,13 +291,22 @@ export const loginWithTwoFactor = async ({ twoFactorToken, code }) => {
     typeof payload !== 'object' ||
     payload === null ||
     payload.purpose !== '2fa' ||
-    typeof payload.sub !== 'string'
+    typeof payload.sub !== 'string' ||
+    typeof payload.v !== 'number'
   ) {
     throw invalidSession();
   }
 
   const user = await prisma.user.findUnique({ where: { id: payload.sub } });
-  if (!user || !user.twoFactorOn || !user.totpSecret) throw invalidSession();
+  if (
+    !user ||
+    payload.v !== (user.tokenVersion ?? 0) ||
+    user.estado !== 'activo' ||
+    !user.twoFactorOn ||
+    !user.totpSecret
+  ) {
+    throw invalidSession();
+  }
 
   const method = await verifySecondFactor(user, code);
   if (!method) {
@@ -308,7 +351,7 @@ export const verifyEmail = async (token) => {
     where: { id: user.id },
     data: {
       emailVerificado: true,
-      estado: 'activo',
+      ...(user.estado === 'pendiente_verificacion' && { estado: 'activo' }),
       emailVerificationTokenHash: null,
       emailVerificationExpires: null,
     },
@@ -317,12 +360,18 @@ export const verifyEmail = async (token) => {
   return sanitizeUser(verified);
 };
 
-export const resendVerification = async (email) => {
+const processResendVerification = async (email) => {
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (user && !user.emailVerificado) {
     await sendVerification(user);
   }
+};
+
+export const resendVerification = (email) => {
+  void processResendVerification(email).catch((err) => {
+    logger.error(`No se pudo procesar la solicitud de verificación: ${err.message}`);
+  });
 };
 
 export const setupTwoFactor = async (userId) => {
@@ -340,7 +389,7 @@ export const setupTwoFactor = async (userId) => {
 
   await prisma.user.update({
     where: { id: userId },
-    data: { totpSecret: encryptSecret(secret) },
+    data: { totpSecret: encryptSecret(secret), totpLastCounter: null },
   });
 
   const otpauthUrl = authenticator.keyuri(user.email, TOTP_ISSUER, secret);
@@ -366,7 +415,7 @@ export const enableTwoFactor = async (userId, code) => {
       'Primero inicia la configuración del 2FA',
     );
   }
-  if (!isValidCode(code, user.totpSecret)) {
+  if (!(await consumeTotpCode(user, code))) {
     throw new AppError(400, 'INVALID_TWO_FACTOR_CODE', 'Código incorrecto');
   }
 
@@ -390,7 +439,7 @@ export const disableTwoFactor = async (userId, credentials) => {
   const [updated] = await prisma.$transaction([
     prisma.user.update({
       where: { id: userId },
-      data: { twoFactorOn: false, totpSecret: null },
+      data: { twoFactorOn: false, totpSecret: null, totpLastCounter: null },
     }),
     prisma.recoveryCode.deleteMany({ where: { userId } }),
   ]);
@@ -409,7 +458,7 @@ export const regenerateRecoveryCodes = async (userId, credentials) => {
   return codes;
 };
 
-export const forgotPassword = async (email) => {
+const processForgotPassword = async (email) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return;
 
@@ -423,13 +472,17 @@ export const forgotPassword = async (email) => {
     },
   });
 
-  try {
-    await sendMail({ to: user.email, ...buildPasswordResetMail(token) });
-  } catch (err) {
-    logger.error(
-      `No se pudo enviar el reset de contraseña al usuario ${user.id}: ${err.message}`,
-    );
-  }
+  sendMailInBackground(
+    user,
+    buildPasswordResetMail(token),
+    'enviar el reset de contraseña',
+  );
+};
+
+export const forgotPassword = (email) => {
+  void processForgotPassword(email).catch((err) => {
+    logger.error(`No se pudo procesar la solicitud de restablecimiento: ${err.message}`);
+  });
 };
 
 export const resetPassword = async ({ token, password }) => {
@@ -459,13 +512,11 @@ export const resetPassword = async ({ token, password }) => {
 
   if (count !== 1) throw invalid();
 
-  try {
-    await sendMail({ to: user.email, ...buildPasswordChangedMail() });
-  } catch (err) {
-    logger.error(
-      `No se pudo enviar el aviso de cambio de contraseña al usuario ${user.id}: ${err.message}`,
-    );
-  }
+  sendMailInBackground(
+    user,
+    buildPasswordChangedMail(),
+    'enviar el aviso de cambio de contraseña',
+  );
 };
 
 export const logoutAll = async (userId) => {
@@ -504,13 +555,11 @@ export const changePassword = async (userId, { currentPassword, newPassword }) =
     },
   });
 
-  try {
-    await sendMail({ to: user.email, ...buildPasswordChangedMail() });
-  } catch (err) {
-    logger.error(
-      `No se pudo enviar el aviso de cambio de contraseña al usuario ${user.id}: ${err.message}`,
-    );
-  }
+  sendMailInBackground(
+    user,
+    buildPasswordChangedMail(),
+    'enviar el aviso de cambio de contraseña',
+  );
 
   return { token: signToken(updated), user: sanitizeUser(updated) };
 };

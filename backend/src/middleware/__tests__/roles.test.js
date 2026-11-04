@@ -80,7 +80,11 @@ describe('requireRole — integrado con authenticate', () => {
   });
 
   it('permite el paso a un administrador', async () => {
-    findUnique.mockResolvedValue({ tokenVersion: 0, tipoUsuario: ROLES.ADMIN });
+    findUnique.mockResolvedValue({
+      tokenVersion: 0,
+      tipoUsuario: ROLES.ADMIN,
+      estado: 'activo',
+    });
 
     const response = await request(app)
       .get('/admin-only')
@@ -91,7 +95,11 @@ describe('requireRole — integrado con authenticate', () => {
   });
 
   it('responde 403 a un usuario normal', async () => {
-    findUnique.mockResolvedValue({ tokenVersion: 0, tipoUsuario: ROLES.USER });
+    findUnique.mockResolvedValue({
+      tokenVersion: 0,
+      tipoUsuario: ROLES.USER,
+      estado: 'activo',
+    });
 
     const response = await request(app)
       .get('/admin-only')
@@ -102,7 +110,11 @@ describe('requireRole — integrado con authenticate', () => {
   });
 
   it('usa el rol de la BD aunque el token diga admin', async () => {
-    findUnique.mockResolvedValue({ tokenVersion: 0, tipoUsuario: ROLES.USER });
+    findUnique.mockResolvedValue({
+      tokenVersion: 0,
+      tipoUsuario: ROLES.USER,
+      estado: 'activo',
+    });
 
     const response = await request(app)
       .get('/admin-only')

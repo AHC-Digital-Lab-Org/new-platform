@@ -16,7 +16,7 @@ model User {
   passwordHash    String?  @map("password_hash")
   tipoUsuario     String   @default("usuario_registrado") @map("tipo_usuario")
   ciudad          String?
-  pais            String   @default("España")
+  pais            String?
   fechaAlta       DateTime @default(now()) @map("fecha_alta")
   consentimientos Json
   estado          String   @default("pendiente_verificacion")
@@ -31,6 +31,7 @@ model User {
   // 2FA / TOTP — se utilizará posteriormente
   totpSecret      String?  @map("totp_secret")
   twoFactorOn     Boolean  @default(false) @map("two_factor_on")
+  totpLastCounter Int?     @map("totp_last_counter")
   recoveryCodes   RecoveryCode[]
 
   @@map("users")

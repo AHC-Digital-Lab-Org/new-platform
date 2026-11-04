@@ -7,8 +7,10 @@ import { env } from '#infrastructure/config/env.js';
 const {
   findUnique,
   update,
+  userUpdateMany,
   compare,
   check,
+  checkDelta,
   transaction,
   deleteMany,
   createMany,
@@ -17,8 +19,10 @@ const {
 } = vi.hoisted(() => ({
   findUnique: vi.fn(),
   update: vi.fn(),
+  userUpdateMany: vi.fn(),
   compare: vi.fn(),
   check: vi.fn(),
+  checkDelta: vi.fn(),
   transaction: vi.fn(),
   deleteMany: vi.fn(),
   createMany: vi.fn(),
@@ -28,14 +32,22 @@ const {
 
 vi.mock('#infrastructure/database/prisma.js', () => ({
   prisma: {
-    user: { findUnique, update, findFirst: vi.fn(), create: vi.fn() },
+    user: {
+      findUnique,
+      update,
+      updateMany: userUpdateMany,
+      findFirst: vi.fn(),
+      create: vi.fn(),
+    },
     recoveryCode: { deleteMany, createMany, updateMany, count },
     $transaction: transaction,
   },
 }));
 
 vi.mock('bcrypt', () => ({ default: { compare, hash: vi.fn() } }));
-vi.mock('otplib', () => ({ default: { authenticator: { check } } }));
+vi.mock('otplib', () => ({
+  default: { authenticator: { check, checkDelta } },
+}));
 vi.mock('#infrastructure/mail/mailer.js', () => ({ sendMail: vi.fn() }));
 
 const sha = (value) => createHash('sha256').update(value).digest('hex');
@@ -67,7 +79,7 @@ const sessionToken = () =>
   );
 
 const twoFactorToken = () =>
-  jwt.sign({ sub: 'user-1', purpose: '2fa' }, env.jwtSecret, {
+  jwt.sign({ sub: 'user-1', purpose: '2fa', v: 0 }, env.jwtSecret, {
     expiresIn: '5m',
   });
 
@@ -84,6 +96,8 @@ beforeEach(() => {
   vi.clearAllMocks();
   findUnique.mockResolvedValue(withTwoFactor);
   check.mockReturnValue(true);
+  checkDelta.mockReturnValue(0);
+  userUpdateMany.mockResolvedValue({ count: 1 });
   compare.mockResolvedValue(true);
   transaction.mockImplementation((ops) => Promise.all(ops));
 });
@@ -127,7 +141,7 @@ describe('Auth — recovery codes: login', () => {
       .send({ twoFactorToken: twoFactorToken(), code: 'abcd-efgh-jkmn' });
 
     expect(response.status).toBe(200);
-    expect(check).not.toHaveBeenCalled();
+    expect(checkDelta).not.toHaveBeenCalled();
     expect(updateMany).toHaveBeenCalledWith({
       where: { userId: 'user-1', codeHash: sha('abcdefghjkmn'), usedAt: null },
       data: { usedAt: expect.any(Date) },
@@ -171,7 +185,7 @@ describe('Auth — recovery codes: login', () => {
       .send({ twoFactorToken: twoFactorToken(), code: '123456' });
 
     expect(response.status).toBe(200);
-    expect(check).toHaveBeenCalledWith('123456', 'SECRET123');
+    expect(checkDelta).toHaveBeenCalledWith('123456', 'SECRET123');
     expect(updateMany).not.toHaveBeenCalled();
     expect(response.body).not.toHaveProperty('recoveryCodesRemaining');
   });
@@ -241,10 +255,14 @@ describe('Auth — recovery codes: desactivar 2FA', () => {
       .send({ password: 'password123', code: 'abcd-efgh-jkmn' });
 
     expect(response.status).toBe(200);
-    expect(check).not.toHaveBeenCalled();
+    expect(checkDelta).not.toHaveBeenCalled();
     expect(update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      data: { twoFactorOn: false, totpSecret: null },
+      data: {
+        twoFactorOn: false,
+        totpSecret: null,
+        totpLastCounter: null,
+      },
     });
     expect(deleteMany).toHaveBeenCalledWith({ where: { userId: 'user-1' } });
     expect(response.body.user.twoFactorOn).toBe(false);

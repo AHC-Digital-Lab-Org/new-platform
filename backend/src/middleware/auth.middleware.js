@@ -33,11 +33,15 @@ export const authenticate = async (req, _res, next) => {
 
   const user = await prisma.user.findUnique({
     where: { id: payload.sub },
-    select: { tokenVersion: true, tipoUsuario: true },
+    select: { tokenVersion: true, tipoUsuario: true, estado: true },
   });
 
   if (!user) {
     throw new AppError(401, 'UNAUTHORIZED', 'Usuario no encontrado');
+  }
+
+  if (user.estado !== 'activo') {
+    throw new AppError(403, 'ACCOUNT_INACTIVE', 'La cuenta no está activa');
   }
 
   if ((payload.v ?? 0) !== (user.tokenVersion ?? 0)) {

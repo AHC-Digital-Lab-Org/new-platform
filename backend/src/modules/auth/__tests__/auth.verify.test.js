@@ -111,6 +111,32 @@ describe('Auth endpoint — verify-email', () => {
     expect(response.body.error.code).toBe('VALIDATION_ERROR');
     expect(findUnique).not.toHaveBeenCalled();
   });
+
+  it('no reactiva una cuenta suspendida al verificar el email', async () => {
+    const suspendedUser = { ...pendingUser, estado: 'suspendido' };
+    findUnique.mockResolvedValue(suspendedUser);
+    update.mockResolvedValue({
+      ...suspendedUser,
+      emailVerificado: true,
+      emailVerificationTokenHash: null,
+      emailVerificationExpires: null,
+    });
+
+    const response = await request(app)
+      .post('/api/auth/verify-email')
+      .send({ token: 'token-abc' });
+
+    expect(response.status).toBe(200);
+    expect(update).toHaveBeenCalledWith({
+      where: { id: 'user-1' },
+      data: {
+        emailVerificado: true,
+        emailVerificationTokenHash: null,
+        emailVerificationExpires: null,
+      },
+    });
+    expect(response.body.user.estado).toBe('suspendido');
+  });
 });
 
 describe('Auth endpoint — resend-verification', () => {
@@ -133,8 +159,8 @@ describe('Auth endpoint — resend-verification', () => {
       .send({ email: 'usuario@example.com' });
 
     expect(response.status).toBe(200);
+    await vi.waitFor(() => expect(sendMail).toHaveBeenCalledTimes(1));
     expect(update).toHaveBeenCalledTimes(1);
-    expect(sendMail).toHaveBeenCalledTimes(1);
     expect(sendMail.mock.calls[0][0].to).toBe('usuario@example.com');
   });
 
@@ -146,6 +172,7 @@ describe('Auth endpoint — resend-verification', () => {
       .send({ email: 'nadie@example.com' });
 
     expect(response.status).toBe(200);
+    await vi.waitFor(() => expect(findUnique).toHaveBeenCalledTimes(1));
     expect(sendMail).not.toHaveBeenCalled();
   });
 

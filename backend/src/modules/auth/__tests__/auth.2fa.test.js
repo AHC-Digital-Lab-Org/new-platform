@@ -6,10 +6,12 @@ import { env } from '#infrastructure/config/env.js';
 const {
   findUnique,
   update,
+  userUpdateMany,
   compare,
   generateSecret,
   keyuri,
   check,
+  checkDelta,
   toDataURL,
   transaction,
   deleteMany,
@@ -18,10 +20,12 @@ const {
 } = vi.hoisted(() => ({
   findUnique: vi.fn(),
   update: vi.fn(),
+  userUpdateMany: vi.fn(),
   compare: vi.fn(),
   generateSecret: vi.fn(),
   keyuri: vi.fn(),
   check: vi.fn(),
+  checkDelta: vi.fn(),
   toDataURL: vi.fn(),
   transaction: vi.fn(),
   deleteMany: vi.fn(),
@@ -31,7 +35,13 @@ const {
 
 vi.mock('#infrastructure/database/prisma.js', () => ({
   prisma: {
-    user: { findUnique, update, findFirst: vi.fn(), create: vi.fn() },
+    user: {
+      findUnique,
+      update,
+      updateMany: userUpdateMany,
+      findFirst: vi.fn(),
+      create: vi.fn(),
+    },
     recoveryCode: { deleteMany, createMany, updateMany, count: vi.fn() },
     $transaction: transaction,
   },
@@ -40,7 +50,9 @@ vi.mock('#infrastructure/database/prisma.js', () => ({
 vi.mock('bcrypt', () => ({ default: { compare, hash: vi.fn() } }));
 
 vi.mock('otplib', () => ({
-  default: { authenticator: { generateSecret, keyuri, check } },
+  default: {
+    authenticator: { generateSecret, keyuri, check, checkDelta },
+  },
 }));
 
 vi.mock('qrcode', () => ({ default: { toDataURL } }));
@@ -56,6 +68,8 @@ const baseUser = {
   emailVerificado: true,
   twoFactorOn: false,
   consentimientos: {},
+  tokenVersion: 0,
+  totpLastCounter: null,
 };
 
 const withTwoFactor = {
@@ -72,7 +86,7 @@ const sessionToken = () =>
   );
 
 const twoFactorToken = (options = { expiresIn: '5m' }) =>
-  jwt.sign({ sub: 'user-1', purpose: '2fa' }, env.jwtSecret, options);
+  jwt.sign({ sub: 'user-1', purpose: '2fa', v: 0 }, env.jwtSecret, options);
 
 let app;
 
@@ -85,10 +99,12 @@ beforeEach(() => {
   vi.clearAllMocks();
   findUnique.mockResolvedValue(baseUser);
   check.mockReturnValue(true);
+  checkDelta.mockReturnValue(0);
   compare.mockResolvedValue(true);
   deleteMany.mockResolvedValue({ count: 0 });
   createMany.mockResolvedValue({ count: 10 });
   updateMany.mockResolvedValue({ count: 0 });
+  userUpdateMany.mockResolvedValue({ count: 1 });
   transaction.mockImplementation((ops) => Promise.all(ops));
 });
 
@@ -107,7 +123,10 @@ describe('Auth endpoint — 2FA setup', () => {
     expect(response.status).toBe(200);
     expect(update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      data: { totpSecret: expect.stringMatching(/^v1:/) },
+      data: {
+        totpSecret: expect.stringMatching(/^v1:/),
+        totpLastCounter: null,
+      },
     });
     expect(update.mock.calls[0][0].data.totpSecret).not.toContain('SECRET123');
     expect(keyuri).toHaveBeenCalledWith(
@@ -158,7 +177,7 @@ describe('Auth endpoint — 2FA enable', () => {
       .send({ code: '123456' });
 
     expect(response.status).toBe(200);
-    expect(check).toHaveBeenCalledWith('123456', 'SECRET123');
+    expect(checkDelta).toHaveBeenCalledWith('123456', 'SECRET123');
     expect(transaction).toHaveBeenCalledWith([
       expect.anything(),
       expect.anything(),
@@ -186,7 +205,7 @@ describe('Auth endpoint — 2FA enable', () => {
 
   it('responde 400 con código incorrecto', async () => {
     findUnique.mockResolvedValue({ ...baseUser, totpSecret: 'SECRET123' });
-    check.mockReturnValue(false);
+    checkDelta.mockReturnValue(null);
 
     const response = await request(app)
       .post('/api/auth/2fa/enable')
@@ -223,7 +242,7 @@ describe('Auth endpoint — 2FA enable', () => {
       .send({ code: '123456' });
 
     expect(response.status).toBe(200);
-    expect(check).toHaveBeenCalledWith('123456', 'SECRET123');
+    expect(checkDelta).toHaveBeenCalledWith('123456', 'SECRET123');
   });
 });
 
@@ -246,7 +265,11 @@ describe('Auth endpoint — 2FA disable', () => {
     expect(transaction).toHaveBeenCalledTimes(1);
     expect(update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      data: { twoFactorOn: false, totpSecret: null },
+      data: {
+        twoFactorOn: false,
+        totpSecret: null,
+        totpLastCounter: null,
+      },
     });
     expect(deleteMany).toHaveBeenCalledWith({ where: { userId: 'user-1' } });
     expect(response.body.user.twoFactorOn).toBe(false);
@@ -263,7 +286,7 @@ describe('Auth endpoint — 2FA disable', () => {
 
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('INVALID_PASSWORD');
-    expect(check).not.toHaveBeenCalled();
+    expect(checkDelta).not.toHaveBeenCalled();
     expect(update).not.toHaveBeenCalled();
   });
 
@@ -288,7 +311,7 @@ describe('Auth endpoint — 2FA login', () => {
       .send({ twoFactorToken: twoFactorToken(), code: '123456' });
 
     expect(response.status).toBe(200);
-    expect(check).toHaveBeenCalledWith('123456', 'SECRET123');
+    expect(checkDelta).toHaveBeenCalledWith('123456', 'SECRET123');
 
     const payload = jwt.verify(response.body.token, env.jwtSecret);
     expect(payload.sub).toBe('user-1');
@@ -300,7 +323,7 @@ describe('Auth endpoint — 2FA login', () => {
 
   it('responde 401 con código incorrecto', async () => {
     findUnique.mockResolvedValue(withTwoFactor);
-    check.mockReturnValue(false);
+    checkDelta.mockReturnValue(null);
 
     const response = await request(app)
       .post('/api/auth/2fa/login')
@@ -331,7 +354,22 @@ describe('Auth endpoint — 2FA login', () => {
 
     expect(response.status).toBe(401);
     expect(response.body.error.code).toBe('INVALID_TWO_FACTOR_TOKEN');
-    expect(check).not.toHaveBeenCalled();
+    expect(checkDelta).not.toHaveBeenCalled();
+  });
+
+  it('invalida el token 2FA al incrementar tokenVersion', async () => {
+    findUnique.mockResolvedValue({
+      ...withTwoFactor,
+      tokenVersion: 1,
+    });
+
+    const response = await request(app)
+      .post('/api/auth/2fa/login')
+      .send({ twoFactorToken: twoFactorToken(), code: '123456' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe('INVALID_TWO_FACTOR_TOKEN');
+    expect(checkDelta).not.toHaveBeenCalled();
   });
 
   it('responde 400 si falta el código', async () => {
@@ -342,5 +380,27 @@ describe('Auth endpoint — 2FA login', () => {
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe('VALIDATION_ERROR');
     expect(findUnique).not.toHaveBeenCalled();
+  });
+
+  it('rechaza reutilizar un TOTP ya consumido en el mismo intervalo', async () => {
+    findUnique.mockResolvedValue(withTwoFactor);
+    userUpdateMany.mockResolvedValue({ count: 0 });
+
+    const response = await request(app)
+      .post('/api/auth/2fa/login')
+      .send({ twoFactorToken: twoFactorToken(), code: '123456' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe('INVALID_TWO_FACTOR_CODE');
+    expect(userUpdateMany).toHaveBeenCalledWith({
+      where: {
+        id: 'user-1',
+        OR: [
+          { totpLastCounter: null },
+          { totpLastCounter: { lt: expect.any(Number) } },
+        ],
+      },
+      data: { totpLastCounter: expect.any(Number) },
+    });
   });
 });

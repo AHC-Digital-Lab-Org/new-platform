@@ -51,6 +51,8 @@ describe('Auth endpoint — forgot-password', () => {
       .send({ email: 'usuario@example.com' });
 
     expect(response.status).toBe(200);
+    await vi.waitFor(() => expect(update).toHaveBeenCalledTimes(1));
+    await vi.waitFor(() => expect(sendMail).toHaveBeenCalledTimes(1));
 
     const { where, data } = update.mock.calls[0][0];
     expect(where).toEqual({ id: 'user-1' });
@@ -71,6 +73,7 @@ describe('Auth endpoint — forgot-password', () => {
       .send({ email: 'nadie@example.com' });
 
     expect(response.status).toBe(200);
+    await vi.waitFor(() => expect(findUnique).toHaveBeenCalledTimes(1));
     expect(update).not.toHaveBeenCalled();
     expect(sendMail).not.toHaveBeenCalled();
   });
@@ -84,6 +87,7 @@ describe('Auth endpoint — forgot-password', () => {
       .send({ email: 'usuario@example.com' });
 
     expect(response.status).toBe(200);
+    await vi.waitFor(() => expect(sendMail).toHaveBeenCalledTimes(1));
   });
 
   it('responde 400 con un email inválido', async () => {

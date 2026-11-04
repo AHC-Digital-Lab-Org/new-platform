@@ -34,7 +34,7 @@ export const verifyEmail = async (req, res) => {
 };
 
 export const resendVerification = async (req, res) => {
-  await authService.resendVerification(req.valid.body.email);
+  authService.resendVerification(req.valid.body.email);
 
   return res.status(200).json({
     message: 'Si el email existe y no está verificado, recibirás un nuevo enlace',

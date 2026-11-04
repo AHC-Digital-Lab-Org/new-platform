@@ -9,6 +9,10 @@ const getTransporter = () => {
     host: env.smtp.host,
     port: env.smtp.port,
     secure: env.smtp.port === 465,
+    requireTLS: env.nodeEnv === 'production',
+    connectionTimeout: 10_000,
+    socketTimeout: 10_000,
+    greetingTimeout: 10_000,
     auth: env.smtp.user
       ? { user: env.smtp.user, pass: env.smtp.pass }
       : undefined,

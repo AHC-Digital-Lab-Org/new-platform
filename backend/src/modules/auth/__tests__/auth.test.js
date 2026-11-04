@@ -36,6 +36,11 @@ vi.mock('jsonwebtoken', () => ({
 }));
 
 const { register, login } = await import('../auth.service.js');
+const validConsent = {
+  terminos: true,
+  privacidad: true,
+  comunicaciones: false,
+};
 
 describe('Auth service — register', () => {
   beforeEach(() => {
@@ -58,7 +63,11 @@ describe('Auth service — register', () => {
       emailVerificado: false,
       totpSecret: null,
       twoFactorOn: false,
-      consentimientos: { terminos: true },
+      consentimientos: {
+        ...validConsent,
+        fecha: '2026-01-01T00:00:00.000Z',
+        versionPolitica: 'v1',
+      },
     });
     const user = await register({
       alias: 'usuario',
@@ -67,7 +76,7 @@ describe('Auth service — register', () => {
       nombre: 'Usuario',
       ciudad: 'Bogotá D.C.',
       pais: 'Colombia',
-      consentimientos: { terminos: true },
+      consentimientos: validConsent,
     });
 
     expect(findFirst).toHaveBeenCalledWith({
@@ -77,17 +86,23 @@ describe('Auth service — register', () => {
     });
     expect(hash).toHaveBeenCalledWith('password123', 10);
     expect(create).toHaveBeenCalledWith({
-      data: {
+      data: expect.objectContaining({
         alias: 'usuario',
         email: 'usuario@example.com',
         passwordHash: 'hashed-password',
         nombre: 'Usuario',
         ciudad: 'Bogotá D.C.',
         pais: 'Colombia',
-        consentimientos: { terminos: true },
+        consentimientos: expect.objectContaining({
+          terminos: true,
+          privacidad: true,
+          comunicaciones: false,
+          fecha: expect.any(String),
+          versionPolitica: 'v1',
+        }),
         tipoUsuario: 'usuario_registrado',
         estado: 'pendiente_verificacion',
-      },
+      }),
     });
     expect(user).not.toHaveProperty('passwordHash');
     expect(user).not.toHaveProperty('totpSecret');
@@ -106,7 +121,7 @@ describe('Auth service — register', () => {
         alias: 'usuario',
         email: 'usuario@example.com',
         password: 'password123',
-        consentimientos: { terminos: true },
+        consentimientos: validConsent,
       }),
     ).rejects.toMatchObject({
       status: 409,
@@ -130,7 +145,7 @@ describe('Auth service — register', () => {
         alias: 'usuario',
         email: 'usuario@example.com',
         password: 'password123',
-        consentimientos: { terminos: true },
+        consentimientos: validConsent,
       }),
     ).rejects.toMatchObject({
       status: 409,
@@ -149,13 +164,13 @@ describe('Auth service — register', () => {
       email: 'usuario@example.com',
       passwordHash: 'hashed-password',
       totpSecret: 'secret',
-      consentimientos: {},
+      consentimientos: validConsent,
     });
     const user = await register({
       alias: 'usuario',
       email: 'usuario@example.com',
       password: 'password123',
-      consentimientos: {},
+      consentimientos: validConsent,
     });
 
     expect(user).not.toHaveProperty('passwordHash');
@@ -174,7 +189,7 @@ describe('Auth service — register', () => {
       alias: 'usuario',
       email: 'usuario@example.com',
       password: 'password123',
-      consentimientos: {},
+      consentimientos: validConsent,
     });
 
     const { where, data } = update.mock.calls[0][0];
@@ -202,7 +217,7 @@ describe('Auth service — register', () => {
         alias: 'usuario',
         email: 'usuario@example.com',
         password: 'password123',
-        consentimientos: {},
+        consentimientos: validConsent,
       }),
     ).resolves.toHaveProperty('id', 'user-1');
   });
@@ -254,7 +269,11 @@ describe('Auth endpoint — register', () => {
       emailVerificado: false,
       totpSecret: null,
       twoFactorOn: false,
-      consentimientos: { terminos: true },
+      consentimientos: {
+        ...validConsent,
+        fecha: '2026-01-01T00:00:00.000Z',
+        versionPolitica: 'v1',
+      },
     });
     const response = await request(app)
       .post('/api/auth/register')
@@ -265,7 +284,7 @@ describe('Auth endpoint — register', () => {
         nombre: 'Usuario',
         ciudad: 'Bogotá D.C.',
         pais: 'Colombia',
-        consentimientos: { terminos: true },
+        consentimientos: validConsent,
       });
 
     expect(response.status).toBe(201);
@@ -280,7 +299,11 @@ describe('Auth endpoint — register', () => {
       estado: 'pendiente_verificacion',
       emailVerificado: false,
       twoFactorOn: false,
-      consentimientos: { terminos: true },
+      consentimientos: {
+        ...validConsent,
+        fecha: '2026-01-01T00:00:00.000Z',
+        versionPolitica: 'v1',
+      },
     });
     expect(response.body.user).not.toHaveProperty('passwordHash');
     expect(response.body.user).not.toHaveProperty('totpSecret');
@@ -309,6 +332,27 @@ describe('Auth endpoint — register', () => {
     expect(findFirst).not.toHaveBeenCalled();
     expect(hash).not.toHaveBeenCalled();
     expect(create).not.toHaveBeenCalled();
+  });
+
+  it('exige aceptar términos y privacidad y no admite fechas del cliente', async () => {
+    for (const consentimientos of [
+      { terminos: true },
+      { ...validConsent, fecha: '2000-01-01T00:00:00.000Z' },
+    ]) {
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send({
+          alias: 'usuario',
+          email: 'usuario@example.com',
+          password: 'password123',
+          consentimientos,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    }
+
+    expect(findFirst).not.toHaveBeenCalled();
   });
 
   it('rechaza alias con vulgaridades antes de crear la cuenta', async () => {
@@ -358,7 +402,7 @@ describe('Auth endpoint — register', () => {
         alias: 'usuario',
         email: 'usuario@example.com',
         password: 'password123',
-        consentimientos: {},
+        consentimientos: validConsent,
       });
 
     expect(response.status).toBe(409);
@@ -366,6 +410,25 @@ describe('Auth endpoint — register', () => {
     expect(response.body.error.message).toBe('El email ya está en uso');
     expect(hash).not.toHaveBeenCalled();
     expect(create).not.toHaveBeenCalled();
+  });
+
+  it('devuelve 409 si hay una carrera de unicidad en la base de datos', async () => {
+    create.mockRejectedValue({ code: 'P2002' });
+
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: validConsent,
+      });
+
+    expect(response.status).toBe(409);
+    expect(response.body.error).toEqual({
+      code: 'CONFLICT',
+      message: 'El recurso ya existe',
+    });
   });
 });
 
@@ -417,7 +480,10 @@ describe('Auth service — login', () => {
       login({ email: 'nadie@example.com', password: 'password123' }),
     ).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' });
 
-    expect(compare).not.toHaveBeenCalled();
+    expect(compare).toHaveBeenCalledWith(
+      'password123',
+      expect.stringMatching(/^\$2b\$10\$/),
+    );
     expect(sign).not.toHaveBeenCalled();
   });
 
@@ -455,6 +521,16 @@ describe('Auth service — login', () => {
     expect(sign).not.toHaveBeenCalled();
   });
 
+  it('rechaza si la cuenta está suspendida', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, estado: 'suspendido' });
+
+    await expect(
+      login({ email: 'usuario@example.com', password: 'password123' }),
+    ).rejects.toMatchObject({ status: 403, code: 'ACCOUNT_INACTIVE' });
+
+    expect(sign).not.toHaveBeenCalled();
+  });
+
   it('pide el segundo factor si el usuario tiene 2FA activado', async () => {
     findUnique.mockResolvedValue({ ...storedUser, twoFactorOn: true });
 
@@ -464,7 +540,7 @@ describe('Auth service — login', () => {
     });
 
     expect(sign).toHaveBeenCalledWith(
-      { sub: 'user-1', purpose: '2fa' },
+      { sub: 'user-1', purpose: '2fa', v: 0 },
       expect.any(String),
       { expiresIn: '5m' },
     );

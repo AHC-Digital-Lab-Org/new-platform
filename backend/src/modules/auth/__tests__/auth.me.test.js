@@ -16,8 +16,8 @@ const storedUser = {
   passwordHash: 'hashed-password',
   totpSecret: 'secret',
   tipoUsuario: 'usuario_registrado',
-  estado: 'pendiente_verificacion',
-  emailVerificado: false,
+  estado: 'activo',
+  emailVerificado: true,
   twoFactorOn: false,
   consentimientos: {},
 };
@@ -46,7 +46,7 @@ describe('Auth endpoint — GET /me', () => {
     expect(response.status).toBe(200);
     expect(findUnique).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      select: { tokenVersion: true, tipoUsuario: true },
+      select: { tokenVersion: true, tipoUsuario: true, estado: true },
     });
     expect(response.body.user.email).toBe('usuario@example.com');
     expect(response.body.user).not.toHaveProperty('passwordHash');
@@ -110,6 +110,17 @@ describe('Auth endpoint — GET /me', () => {
 
     expect(response.status).toBe(401);
     expect(response.body.error.code).toBe('UNAUTHORIZED');
+  });
+
+  it('rechaza una cuenta que dejó de estar activa', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, estado: 'suspendido' });
+
+    const response = await request(app)
+      .get('/api/auth/me')
+      .set('Authorization', `Bearer ${makeToken()}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body.error.code).toBe('ACCOUNT_INACTIVE');
   });
 
   it('responde 401 si el token es de segundo factor', async () => {

@@ -3,14 +3,19 @@ import { validate } from '#middleware/validate.middleware.js';
 import { authenticate } from '#middleware/auth.middleware.js';
 import {
   registerLimiter,
+  registerEmailLimiter,
   loginLimiter,
+  loginEmailLimiter,
   resendVerificationLimiter,
+  resendVerificationEmailLimiter,
   twoFactorLoginIpLimiter,
-  twoFactorLoginTokenLimiter,
+  twoFactorLoginUserLimiter,
   twoFactorManageLimiter,
   forgotPasswordLimiter,
+  forgotPasswordEmailLimiter,
   resetPasswordLimiter,
   changePasswordLimiter,
+  locationsLimiter,
 } from '#middleware/rate-limit.middleware.js';
 import * as authController from './auth.controller.js';
 import {
@@ -41,7 +46,11 @@ export const router = Router();
  *       200:
  *         description: Países con código ISO y nombre localizado
  */
-router.get('/locations/countries', authController.locationsCountries);
+router.get(
+  '/locations/countries',
+  locationsLimiter,
+  authController.locationsCountries,
+);
 
 /**
  * @openapi
@@ -71,6 +80,7 @@ router.get('/locations/countries', authController.locationsCountries);
  */
 router.get(
   '/locations/cities',
+  locationsLimiter,
   validate({ query: citiesQuerySchema }),
   authController.locationsCities,
 );
@@ -124,6 +134,7 @@ router.post(
   '/register',
   registerLimiter,
   validate({ body: registerSchema }),
+  registerEmailLimiter,
   authController.register,
 );
 
@@ -166,6 +177,7 @@ router.post(
   '/login',
   loginLimiter,
   validate({ body: loginSchema }),
+  loginEmailLimiter,
   authController.login,
 );
 
@@ -247,6 +259,7 @@ router.post(
   '/resend-verification',
   resendVerificationLimiter,
   validate({ body: resendVerificationSchema }),
+  resendVerificationEmailLimiter,
   authController.resendVerification,
 );
 
@@ -390,7 +403,7 @@ router.post(
   '/2fa/login',
   validate({ body: twoFactorLoginSchema }),
   twoFactorLoginIpLimiter,
-  twoFactorLoginTokenLimiter,
+  twoFactorLoginUserLimiter,
   authController.twoFactorLogin,
 );
 
@@ -468,6 +481,7 @@ router.post(
   '/forgot-password',
   forgotPasswordLimiter,
   validate({ body: forgotPasswordSchema }),
+  forgotPasswordEmailLimiter,
   authController.forgotPassword,
 );
 

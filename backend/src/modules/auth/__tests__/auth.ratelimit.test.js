@@ -5,19 +5,30 @@ import { env } from '#infrastructure/config/env.js';
 
 process.env.RATE_LIMIT_IN_TEST = 'true';
 
-const { findUnique, findFirst, compare, check } = vi.hoisted(() => ({
+const { findUnique, findFirst, compare, checkDelta, userUpdateMany } = vi.hoisted(() => ({
   findUnique: vi.fn(),
   findFirst: vi.fn(),
   compare: vi.fn(),
-  check: vi.fn(),
+  checkDelta: vi.fn(),
+  userUpdateMany: vi.fn(),
 }));
 
 vi.mock('#infrastructure/database/prisma.js', () => ({
-  prisma: { user: { findUnique, findFirst, create: vi.fn(), update: vi.fn() } },
+  prisma: {
+    user: {
+      findUnique,
+      findFirst,
+      create: vi.fn(),
+      update: vi.fn(),
+      updateMany: userUpdateMany,
+    },
+  },
 }));
 
 vi.mock('bcrypt', () => ({ default: { compare, hash: vi.fn() } }));
-vi.mock('otplib', () => ({ default: { authenticator: { check } } }));
+vi.mock('otplib', () => ({
+  default: { authenticator: { checkDelta } },
+}));
 vi.mock('#infrastructure/mail/mailer.js', () => ({ sendMail: vi.fn() }));
 
 const email = 'usuario@example.com';
@@ -41,7 +52,7 @@ const sessionToken = (sub) =>
   });
 
 const twoFactorToken = (jwtid) =>
-  jwt.sign({ sub: 'user-1', purpose: '2fa' }, env.jwtSecret, {
+  jwt.sign({ sub: 'user-1', purpose: '2fa', v: 0 }, env.jwtSecret, {
     expiresIn: '5m',
     jwtid,
   });
@@ -52,6 +63,7 @@ describe('Auth — rate limiting', () => {
   beforeAll(async () => {
     const { createApp } = await import('../../../app.js');
     app = createApp();
+    app.set('trust proxy', true);
   });
 
   beforeEach(() => {
@@ -90,13 +102,38 @@ describe('Auth — rate limiting', () => {
     expect(findUnique).toHaveBeenCalledTimes(10);
   });
 
+  it('login: limita una cuenta aunque los intentos vengan de distintas IP', async () => {
+    findUnique.mockResolvedValue(null);
+    const targetEmail = 'objetivo@example.com';
+
+    for (let attempt = 1; attempt <= 10; attempt++) {
+      const response = await request(app)
+        .post('/api/auth/login')
+        .set('X-Forwarded-For', `198.51.100.${attempt}`)
+        .send({ email: targetEmail, password: 'mala' });
+      expect(response.status).toBe(401);
+    }
+
+    const blocked = await request(app)
+      .post('/api/auth/login')
+      .set('X-Forwarded-For', '198.51.100.11')
+      .send({ email: targetEmail, password: 'mala' });
+
+    expect(blocked.status).toBe(429);
+    expect(findUnique).toHaveBeenCalledTimes(10);
+  });
+
   it('register: bloquea con 429 tras 5 peticiones', async () => {
     findFirst.mockResolvedValue({ id: 'x', email, alias: 'otro' });
     const body = {
       alias: 'usuario',
       email,
       password: 'password123',
-      consentimientos: {},
+      consentimientos: {
+        terminos: true,
+        privacidad: true,
+        comunicaciones: false,
+      },
     };
 
     for (let i = 0; i < 5; i++) {
@@ -108,6 +145,40 @@ describe('Auth — rate limiting', () => {
 
     expect(blocked.status).toBe(429);
     expect(blocked.body.error.code).toBe('TOO_MANY_REQUESTS');
+    expect(findFirst).toHaveBeenCalledTimes(5);
+  });
+
+  it('register: limita el email incluso desde distintas IP', async () => {
+    findFirst.mockResolvedValue({
+      id: 'x',
+      email: 'objetivo@example.com',
+      alias: 'otro',
+    });
+    const body = {
+      alias: 'usuario',
+      email: 'objetivo@example.com',
+      password: 'password123',
+      consentimientos: {
+        terminos: true,
+        privacidad: true,
+        comunicaciones: false,
+      },
+    };
+
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      const response = await request(app)
+        .post('/api/auth/register')
+        .set('X-Forwarded-For', `198.51.100.${attempt}`)
+        .send(body);
+      expect(response.status).toBe(409);
+    }
+
+    const blocked = await request(app)
+      .post('/api/auth/register')
+      .set('X-Forwarded-For', '198.51.100.6')
+      .send(body);
+
+    expect(blocked.status).toBe(429);
     expect(findFirst).toHaveBeenCalledTimes(5);
   });
 
@@ -129,13 +200,36 @@ describe('Auth — rate limiting', () => {
     expect(blocked.body.error.code).toBe('TOO_MANY_REQUESTS');
   });
 
-  it('2fa/login: cada twoFactorToken permite solo 5 intentos de código', async () => {
+  it.each([
+    '/api/auth/forgot-password',
+    '/api/auth/resend-verification',
+  ])('%s: limita el email incluso desde distintas IP', async (path) => {
+    findUnique.mockResolvedValue(null);
+
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      const response = await request(app)
+        .post(path)
+        .set('X-Forwarded-For', `198.51.100.${attempt}`)
+        .send({ email: 'bombing-target@example.com' });
+      expect(response.status).toBe(200);
+    }
+
+    const blocked = await request(app)
+      .post(path)
+      .set('X-Forwarded-For', '198.51.100.6')
+      .send({ email: 'bombing-target@example.com' });
+
+    expect(blocked.status).toBe(429);
+    expect(blocked.body.error.code).toBe('TOO_MANY_REQUESTS');
+  });
+
+  it('2fa/login: el límite de intentos se comparte entre tokens del mismo usuario', async () => {
     findUnique.mockResolvedValue({
       ...baseUser,
       totpSecret: 'SECRET123',
       twoFactorOn: true,
     });
-    check.mockReturnValue(false);
+    checkDelta.mockReturnValue(null);
 
     const tokenA = twoFactorToken('a');
 
@@ -153,19 +247,43 @@ describe('Auth — rate limiting', () => {
 
     expect(blocked.status).toBe(429);
     expect(blocked.body.error.code).toBe('TOO_MANY_REQUESTS');
-    expect(check).toHaveBeenCalledTimes(5);
+    expect(checkDelta).toHaveBeenCalledTimes(5);
 
-    const other = await request(app)
+    const rotatedToken = await request(app)
       .post('/api/auth/2fa/login')
       .send({ twoFactorToken: twoFactorToken('b'), code: '000000' });
 
-    expect(other.status).toBe(401);
-    expect(other.body.error.code).toBe('INVALID_TWO_FACTOR_CODE');
+    expect(rotatedToken.status).toBe(429);
+    expect(rotatedToken.body.error.code).toBe('TOO_MANY_REQUESTS');
+  });
+
+  it('2fa/login: tokens sin firma válida caen al límite por IP', async () => {
+    const forgedToken = jwt.sign(
+      { sub: 'user-1', purpose: '2fa', v: 0 },
+      'not-the-server-secret',
+      { expiresIn: '5m' },
+    );
+
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const response = await request(app)
+        .post('/api/auth/2fa/login')
+        .set('X-Forwarded-For', '198.51.100.91')
+        .send({ twoFactorToken: forgedToken, code: '000000' });
+      expect(response.status).toBe(401);
+    }
+
+    const blocked = await request(app)
+      .post('/api/auth/2fa/login')
+      .set('X-Forwarded-For', '198.51.100.91')
+      .send({ twoFactorToken: forgedToken, code: '000000' });
+
+    expect(blocked.status).toBe(429);
+    expect(findUnique).not.toHaveBeenCalled();
   });
 
   it('2fa/enable: el límite es por usuario', async () => {
     findUnique.mockResolvedValue({ ...baseUser, totpSecret: 'SECRET123' });
-    check.mockReturnValue(false);
+    checkDelta.mockReturnValue(null);
 
     const send = (sub) =>
       request(app)

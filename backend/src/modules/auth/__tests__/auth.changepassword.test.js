@@ -56,7 +56,11 @@ beforeEach(() => {
   currentUser = baseUser;
   findUnique.mockImplementation(async (args) =>
     args.select
-      ? { tokenVersion: currentUser.tokenVersion, tipoUsuario: currentUser.tipoUsuario }
+      ? {
+          tokenVersion: currentUser.tokenVersion,
+          tipoUsuario: currentUser.tipoUsuario,
+          estado: currentUser.estado,
+        }
       : currentUser,
   );
   compare.mockResolvedValue(true);
