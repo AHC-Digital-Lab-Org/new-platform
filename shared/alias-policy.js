@@ -4,7 +4,7 @@ const PROHIBITED_WORDS = new Set([
   'bitch',
   'cabron',
   'cabrona',
-  'coño',
+  'cono',
   'cunt',
   'damn',
   'dick',
@@ -36,14 +36,29 @@ const normalize = (value) =>
 
 export const isAliasAllowed = (alias) => {
   const normalized = normalize(alias);
-  const words = normalized.split(/\s+/);
 
   return ![...PROHIBITED_WORDS].some((word) => {
-    if (words.includes(word)) return true;
     const separatedLetters = word.split('').join('\\s*');
-    return new RegExp(`(?:^|\\s)${separatedLetters}(?:$|\\s)`).test(
-      normalized,
-    );
+    if (new RegExp(`(?:^|\\s)${separatedLetters}(?:$|\\s)`).test(normalized)) {
+      return true;
+    }
+    if (word === 'cono') return false;
+
+    let index = normalized.indexOf(word);
+    while (index !== -1) {
+      const prefix = normalized.slice(0, index);
+      const suffix = normalized.slice(index + word.length);
+      if (
+        prefix.length <= 1 ||
+        suffix.length <= 1 ||
+        /\d/.test(prefix.at(-1) ?? '') ||
+        /\d/.test(suffix[0] ?? '')
+      ) {
+        return true;
+      }
+      index = normalized.indexOf(word, index + 1);
+    }
+    return false;
   });
 };
 

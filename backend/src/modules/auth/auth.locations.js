@@ -1,10 +1,16 @@
 import {
   countries,
-  getCityNames,
+  getNormalizedCitySearchIndex,
   normalizeLocation,
-} from '../../../../shared/location-catalog.js';
+} from '@web-platform/shared/location-catalog.js';
 
 const CITY_RESULTS_LIMIT = 25;
+
+setImmediate(() => {
+  for (const countryCode of ['ES', 'US', 'IN', 'CO', 'MX', 'AR']) {
+    getNormalizedCitySearchIndex(countryCode);
+  }
+});
 
 export const listCountries = () => countries;
 
@@ -16,8 +22,7 @@ export const searchCities = (countryCode, query) => {
   const results = [];
   const seen = new Set();
 
-  for (const name of getCityNames(countryCode)) {
-    const normalizedName = normalizeLocation(name);
+  for (const [normalizedName, name] of getNormalizedCitySearchIndex(countryCode)) {
     if (!normalizedName.includes(normalizedQuery) || seen.has(normalizedName)) {
       continue;
     }

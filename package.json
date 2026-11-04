@@ -4,7 +4,8 @@
   "type": "module",
   "workspaces": [
     "backend",
-    "frontend"
+    "frontend",
+    "shared"
   ],
   "engines": {
     "node": ">=22.12.0"

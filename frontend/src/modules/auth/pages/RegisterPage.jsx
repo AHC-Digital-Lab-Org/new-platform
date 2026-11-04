@@ -6,7 +6,7 @@ import { useSubmit } from '@/shared/hooks/useSubmit.js';
 import {
   ALIAS_POLICY_MESSAGE,
   isAliasAllowed,
-} from '../../../../../shared/alias-policy.js';
+} from '@web-platform/shared/alias-policy.js';
 import { useAuth } from '../AuthContext.jsx';
 import {
   listRegistrationCountries,
@@ -15,6 +15,7 @@ import {
 } from '../api.js';
 import { authErrorMessage, formatWait } from '../errors.js';
 import SearchableSelect from '../components/SearchableSelect.jsx';
+import { MAX_PASSWORD_BYTES, passwordByteLength } from '../validation.js';
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
@@ -42,6 +43,8 @@ function validate(form, countryCode, citySelected) {
   if (!EMAIL_RE.test(form.email.trim())) errors.email = 'Introduce un email válido.';
   if (form.password.length < 8) {
     errors.password = 'La contraseña debe tener al menos 8 caracteres.';
+  } else if (passwordByteLength(form.password) > MAX_PASSWORD_BYTES) {
+    errors.password = 'La contraseña no puede superar 72 bytes.';
   }
   if (form.confirm !== form.password) errors.confirm = 'Las contraseñas no coinciden.';
   if (!form.terminos) errors.terminos = 'Debes aceptar los términos de uso.';
@@ -185,13 +188,12 @@ export default function RegisterPage() {
 
     const body = {
       alias: form.alias.trim(),
-      email: form.email.trim(),
+      email: form.email.trim().toLowerCase(),
       password: form.password,
       consentimientos: {
         terminos: true,
         privacidad: true,
         comunicaciones: form.comunicaciones,
-        fecha: new Date().toISOString(),
       },
     };
     for (const key of ['nombre', 'ciudad', 'pais']) {
@@ -274,7 +276,8 @@ export default function RegisterPage() {
             autoComplete: 'new-password',
             onPaste: (event) => event.preventDefault(),
             className: 'pr-20',
-            hint: 'Mínimo 8 caracteres.',
+            maxLength: MAX_PASSWORD_BYTES,
+            hint: 'Mínimo 8 caracteres y máximo 72 bytes.',
           })}
           <button
             type="button"

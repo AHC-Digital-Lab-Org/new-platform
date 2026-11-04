@@ -2,11 +2,21 @@ import { z } from 'zod';
 import {
   ALIAS_POLICY_MESSAGE,
   isAliasAllowed,
-} from '../../../../shared/alias-policy.js';
+} from '@web-platform/shared/alias-policy.js';
 import {
   getCountryCode,
   isValidCity,
-} from '../../../../shared/location-catalog.js';
+} from '@web-platform/shared/location-catalog.js';
+
+const emailSchema = z.string().trim().toLowerCase().email();
+const passwordSchema = z
+  .string()
+  .min(8)
+  .max(72, 'La contraseña no puede superar 72 bytes.')
+  .refine(
+    (password) => Buffer.byteLength(password, 'utf8') <= 72,
+    'La contraseña no puede superar 72 bytes.',
+  );
 
 export const registerSchema = z
   .object({
@@ -16,12 +26,18 @@ export const registerSchema = z
       .min(3)
       .max(30)
       .refine(isAliasAllowed, ALIAS_POLICY_MESSAGE),
-    email: z.string().email(),
-    password: z.string().min(8),
+    email: emailSchema,
+    password: passwordSchema,
     nombre: z.string().trim().optional(),
     ciudad: z.string().trim().optional(),
     pais: z.string().trim().optional(),
-    consentimientos: z.record(z.any()),
+    consentimientos: z
+      .object({
+        terminos: z.literal(true),
+        privacidad: z.literal(true),
+        comunicaciones: z.boolean().optional(),
+      })
+      .strict(),
   })
   .superRefine(({ ciudad, pais }, context) => {
     const countryCode = pais ? getCountryCode(pais) : undefined;
@@ -54,7 +70,7 @@ export const citiesQuerySchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  email: emailSchema,
   password: z.string().min(1),
 });
 
@@ -63,7 +79,7 @@ export const verifyEmailSchema = z.object({
 });
 
 export const resendVerificationSchema = z.object({
-  email: z.string().email(),
+  email: emailSchema,
 });
 
 const codeSchema = z.string().regex(/^\d{6}$/, 'El código debe tener 6 dígitos');
@@ -90,15 +106,15 @@ export const twoFactorRegenerateSchema = z.object({
 });
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().email(),
+  email: emailSchema,
 });
 
 export const resetPasswordSchema = z.object({
   token: z.string().min(1),
-  password: z.string().min(8),
+  password: passwordSchema,
 });
 
 export const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
-  newPassword: z.string().min(8),
+  newPassword: passwordSchema,
 });

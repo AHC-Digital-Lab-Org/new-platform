@@ -21,6 +21,7 @@ const countryByName = new Map(
 );
 const cityNamesByCountry = new Map();
 const cityNameSetsByCountry = new Map();
+const citySearchIndexesByCountry = new Map();
 
 export const getCountryCode = (name) =>
   countryByName.get(normalizeLocation(name));
@@ -39,6 +40,20 @@ export const getCityNames = (countryCode) => {
     );
   }
   return cityNamesByCountry.get(countryCode);
+};
+
+export const getNormalizedCitySearchIndex = (countryCode) => {
+  if (!citySearchIndexesByCountry.has(countryCode)) {
+    const seen = new Set();
+    const index = getCityNames(countryCode).flatMap((name) => {
+      const normalizedName = normalizeLocation(name);
+      if (seen.has(normalizedName)) return [];
+      seen.add(normalizedName);
+      return [[normalizedName, name]];
+    });
+    citySearchIndexesByCountry.set(countryCode, index);
+  }
+  return citySearchIndexesByCountry.get(countryCode);
 };
 
 export const isValidCity = (countryCode, cityName) => {

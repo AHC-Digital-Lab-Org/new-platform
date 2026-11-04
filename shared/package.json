@@ -1,0 +1,11 @@
+{
+  "name": "@web-platform/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./*"
+  },
+  "dependencies": {
+    "country-state-city": "^3.2.1"
+  }
+}
