@@ -13,6 +13,16 @@ export const errorHandler = (err, _req, res, _next) => {
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ error: { code: 'INVALID_JSON', message: 'JSON mal formado' } });
   }
+  if (err.code === 'P2002') {
+    return res.status(409).json({
+      error: { code: 'CONFLICT', message: 'El recurso ya existe' },
+    });
+  }
+  if (err.status >= 400 && err.status < 500 && err.expose) {
+    return res.status(err.status).json({
+      error: { code: 'BAD_REQUEST', message: err.message },
+    });
+  }
   // Prisma: registro no encontrado en update/delete
   if (err.code === 'P2025') {
     return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Recurso no encontrado' } });

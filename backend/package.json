@@ -18,16 +18,26 @@
     "db:migrate": "prisma migrate dev --schema prisma/schema",
     "db:deploy": "prisma migrate deploy --schema prisma/schema",
     "db:seed": "node --env-file-if-exists=.env prisma/seed.js",
+    "db:set-role": "node --env-file-if-exists=.env prisma/set-role.js",
     "db:studio": "prisma studio --schema prisma/schema"
   },
   "devDependencies": {
-    "prisma": "^6.19.3",
+    "supertest": "^7.3.0",
     "vitest": "^5.0.1"
   },
   "dependencies": {
+    "@web-platform/shared": "*",
     "@prisma/client": "^6.19.3",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.2.1",
+    "otplib": "^12.0.1",
+    "prisma": "^6.19.3",
+    "qrcode": "^1.5.4",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
     "zod": "^4.6.5"

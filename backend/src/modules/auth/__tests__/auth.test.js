@@ -1,0 +1,603 @@
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import request from 'supertest';
+
+const {
+  findFirst,
+  findUnique,
+  create,
+  update,
+  hash,
+  compare,
+  sign,
+  sendMail,
+} = vi.hoisted(() => ({
+  findFirst: vi.fn(),
+  findUnique: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  hash: vi.fn(),
+  compare: vi.fn(),
+  sign: vi.fn(),
+  sendMail: vi.fn(),
+}));
+
+vi.mock('#infrastructure/database/prisma.js', () => ({
+  prisma: { user: { findFirst, findUnique, create, update } },
+}));
+
+vi.mock('#infrastructure/mail/mailer.js', () => ({ sendMail }));
+
+vi.mock('bcrypt', () => ({
+  default: { hash, compare },
+}));
+
+vi.mock('jsonwebtoken', () => ({
+  default: { sign },
+}));
+
+const { register, login } = await import('../auth.service.js');
+const validConsent = {
+  terminos: true,
+  privacidad: true,
+  comunicaciones: false,
+};
+
+describe('Auth service — register', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    findFirst.mockResolvedValue(null);
+    hash.mockResolvedValue('hashed-password');
+  });
+
+  it('registra usuario correctamente', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      nombre: 'Usuario',
+      ciudad: 'Bogotá D.C.',
+      pais: 'Colombia',
+      passwordHash: 'hashed-password',
+      tipoUsuario: 'usuario_registrado',
+      estado: 'pendiente_verificacion',
+      emailVerificado: false,
+      totpSecret: null,
+      twoFactorOn: false,
+      consentimientos: {
+        ...validConsent,
+        fecha: '2026-01-01T00:00:00.000Z',
+        versionPolitica: 'v1',
+      },
+    });
+    const user = await register({
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      password: 'password123',
+      nombre: 'Usuario',
+      ciudad: 'Bogotá D.C.',
+      pais: 'Colombia',
+      consentimientos: validConsent,
+    });
+
+    expect(findFirst).toHaveBeenCalledWith({
+      where: {
+        OR: [{ email: 'usuario@example.com' }, { alias: 'usuario' }],
+      },
+    });
+    expect(hash).toHaveBeenCalledWith('password123', 10);
+    expect(create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        passwordHash: 'hashed-password',
+        nombre: 'Usuario',
+        ciudad: 'Bogotá D.C.',
+        pais: 'Colombia',
+        consentimientos: expect.objectContaining({
+          terminos: true,
+          privacidad: true,
+          comunicaciones: false,
+          fecha: expect.any(String),
+          versionPolitica: 'v1',
+        }),
+        tipoUsuario: 'usuario_registrado',
+        estado: 'pendiente_verificacion',
+      }),
+    });
+    expect(user).not.toHaveProperty('passwordHash');
+    expect(user).not.toHaveProperty('totpSecret');
+    expect(user.alias).toBe('usuario');
+  });
+
+  it('rechaza email duplicado', async () => {
+    findFirst.mockResolvedValue({
+      id: 'existing-user',
+      email: 'usuario@example.com',
+      alias: 'otro-alias',
+    });
+
+    await expect(
+      register({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: validConsent,
+      }),
+    ).rejects.toMatchObject({
+      status: 409,
+      code: 'USER_ALREADY_EXISTS',
+      message: 'El email ya está en uso',
+    });
+
+    expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('rechaza alias duplicado', async () => {
+    findFirst.mockResolvedValue({
+      id: 'existing-user',
+      email: 'otro@example.com',
+      alias: 'usuario',
+    });
+
+    await expect(
+      register({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: validConsent,
+      }),
+    ).rejects.toMatchObject({
+      status: 409,
+      code: 'USER_ALREADY_EXISTS',
+      message: 'El alias ya está en uso',
+    });
+
+    expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('nunca devuelve passwordHash ni totpSecret', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      passwordHash: 'hashed-password',
+      totpSecret: 'secret',
+      consentimientos: validConsent,
+    });
+    const user = await register({
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      password: 'password123',
+      consentimientos: validConsent,
+    });
+
+    expect(user).not.toHaveProperty('passwordHash');
+    expect(user).not.toHaveProperty('totpSecret');
+  });
+
+  it('guarda solo el hash del token y envía el correo de verificación', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      consentimientos: {},
+    });
+
+    await register({
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      password: 'password123',
+      consentimientos: validConsent,
+    });
+
+    const { where, data } = update.mock.calls[0][0];
+    expect(where).toEqual({ id: 'user-1' });
+    expect(data.emailVerificationTokenHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(data.emailVerificationExpires).toBeInstanceOf(Date);
+
+    const mail = sendMail.mock.calls[0][0];
+    expect(mail.to).toBe('usuario@example.com');
+    expect(mail.text).toContain('verify-email?token=');
+    expect(mail.text).not.toContain(data.emailVerificationTokenHash);
+  });
+
+  it('no falla el registro si el correo no se puede enviar', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      consentimientos: {},
+    });
+    sendMail.mockRejectedValueOnce(new Error('SMTP caído'));
+
+    await expect(
+      register({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: validConsent,
+      }),
+    ).resolves.toHaveProperty('id', 'user-1');
+  });
+});
+
+describe('Auth endpoint — register', () => {
+  let app;
+
+  beforeAll(async () => {
+    const { createApp } = await import('../../../app.js');
+    app = createApp();
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    findFirst.mockResolvedValue(null);
+    hash.mockResolvedValue('hashed-password');
+  });
+
+  it('lista países y devuelve ciudades filtradas por país y búsqueda', async () => {
+    const countriesResponse = await request(app).get(
+      '/api/auth/locations/countries',
+    );
+    const citiesResponse = await request(app).get(
+      '/api/auth/locations/cities?country=ES&q=madrid',
+    );
+
+    expect(countriesResponse.status).toBe(200);
+    expect(countriesResponse.body.countries).toContainEqual({
+      code: 'ES',
+      name: 'España',
+    });
+    expect(citiesResponse.status).toBe(200);
+    expect(citiesResponse.body.cities).toContain('Madrid');
+    expect(citiesResponse.body.cities.length).toBeLessThanOrEqual(25);
+  });
+
+  it('registra usuario correctamente y responde 201', async () => {
+    create.mockResolvedValue({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      nombre: 'Usuario',
+      ciudad: 'Bogotá D.C.',
+      pais: 'Colombia',
+      passwordHash: 'hashed-password',
+      tipoUsuario: 'usuario_registrado',
+      estado: 'pendiente_verificacion',
+      emailVerificado: false,
+      totpSecret: null,
+      twoFactorOn: false,
+      consentimientos: {
+        ...validConsent,
+        fecha: '2026-01-01T00:00:00.000Z',
+        versionPolitica: 'v1',
+      },
+    });
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        nombre: 'Usuario',
+        ciudad: 'Bogotá D.C.',
+        pais: 'Colombia',
+        consentimientos: validConsent,
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body.user).toEqual({
+      id: 'user-1',
+      alias: 'usuario',
+      email: 'usuario@example.com',
+      nombre: 'Usuario',
+      ciudad: 'Bogotá D.C.',
+      pais: 'Colombia',
+      tipoUsuario: 'usuario_registrado',
+      estado: 'pendiente_verificacion',
+      emailVerificado: false,
+      twoFactorOn: false,
+      consentimientos: {
+        ...validConsent,
+        fecha: '2026-01-01T00:00:00.000Z',
+        versionPolitica: 'v1',
+      },
+    });
+    expect(response.body.user).not.toHaveProperty('passwordHash');
+    expect(response.body.user).not.toHaveProperty('totpSecret');
+    expect(findFirst).toHaveBeenCalledWith({
+      where: {
+        OR: [{ email: 'usuario@example.com' }, { alias: 'usuario' }],
+      },
+    });
+    expect(hash).toHaveBeenCalledWith('password123', 10);
+    expect(create).toHaveBeenCalled();
+  });
+
+  it('rechaza datos inválidos con 400', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'ab',
+        email: 'email-invalido',
+        password: '123',
+        consentimientos: {},
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(response.body.error.details).toBeDefined();
+    expect(findFirst).not.toHaveBeenCalled();
+    expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('exige aceptar términos y privacidad y no admite fechas del cliente', async () => {
+    for (const consentimientos of [
+      { terminos: true },
+      { ...validConsent, fecha: '2000-01-01T00:00:00.000Z' },
+    ]) {
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send({
+          alias: 'usuario',
+          email: 'usuario@example.com',
+          password: 'password123',
+          consentimientos,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    }
+
+    expect(findFirst).not.toHaveBeenCalled();
+  });
+
+  it('rechaza alias con vulgaridades antes de crear la cuenta', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'Púta!!!',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: {},
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(findFirst).not.toHaveBeenCalled();
+    expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('rechaza una ciudad que no pertenece al país seleccionado', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        pais: 'España',
+        ciudad: 'Bogotá D.C.',
+        consentimientos: {},
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(findFirst).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('rechaza email duplicado con 409', async () => {
+    findFirst.mockResolvedValue({
+      id: 'existing-user',
+      email: 'usuario@example.com',
+      alias: 'otro-alias',
+    });
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: validConsent,
+      });
+
+    expect(response.status).toBe(409);
+    expect(response.body.error.code).toBe('USER_ALREADY_EXISTS');
+    expect(response.body.error.message).toBe('El email ya está en uso');
+    expect(hash).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('devuelve 409 si hay una carrera de unicidad en la base de datos', async () => {
+    create.mockRejectedValue({ code: 'P2002' });
+
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({
+        alias: 'usuario',
+        email: 'usuario@example.com',
+        password: 'password123',
+        consentimientos: validConsent,
+      });
+
+    expect(response.status).toBe(409);
+    expect(response.body.error).toEqual({
+      code: 'CONFLICT',
+      message: 'El recurso ya existe',
+    });
+  });
+});
+
+const storedUser = {
+  id: 'user-1',
+  alias: 'usuario',
+  email: 'usuario@example.com',
+  passwordHash: 'hashed-password',
+  totpSecret: 'secret',
+  tipoUsuario: 'usuario_registrado',
+  estado: 'activo',
+  emailVerificado: true,
+  twoFactorOn: false,
+  consentimientos: {},
+};
+
+describe('Auth service — login', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    findUnique.mockResolvedValue(storedUser);
+    compare.mockResolvedValue(true);
+    sign.mockReturnValue('jwt-token');
+  });
+
+  it('devuelve token y usuario sin datos sensibles', async () => {
+    const result = await login({
+      email: 'usuario@example.com',
+      password: 'password123',
+    });
+
+    expect(findUnique).toHaveBeenCalledWith({
+      where: { email: 'usuario@example.com' },
+    });
+    expect(compare).toHaveBeenCalledWith('password123', 'hashed-password');
+    expect(sign).toHaveBeenCalledWith(
+      { sub: 'user-1', tipo: 'usuario_registrado', v: 0 },
+      expect.any(String),
+      expect.objectContaining({ expiresIn: expect.anything() }),
+    );
+    expect(result.token).toBe('jwt-token');
+    expect(result.user).not.toHaveProperty('passwordHash');
+    expect(result.user).not.toHaveProperty('totpSecret');
+  });
+
+  it('rechaza si el usuario no existe', async () => {
+    findUnique.mockResolvedValue(null);
+
+    await expect(
+      login({ email: 'nadie@example.com', password: 'password123' }),
+    ).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' });
+
+    expect(compare).toHaveBeenCalledWith(
+      'password123',
+      expect.stringMatching(/^\$2b\$10\$/),
+    );
+    expect(sign).not.toHaveBeenCalled();
+  });
+
+  it('rechaza si el usuario no tiene contraseña', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, passwordHash: null });
+
+    await expect(
+      login({ email: 'usuario@example.com', password: 'password123' }),
+    ).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' });
+
+    expect(sign).not.toHaveBeenCalled();
+  });
+
+  it('rechaza contraseña incorrecta con el mismo error', async () => {
+    compare.mockResolvedValue(false);
+
+    await expect(
+      login({ email: 'usuario@example.com', password: 'mala' }),
+    ).rejects.toMatchObject({
+      status: 401,
+      code: 'INVALID_CREDENTIALS',
+      message: 'Email o contraseña incorrectos',
+    });
+
+    expect(sign).not.toHaveBeenCalled();
+  });
+
+  it('rechaza si el email no está verificado', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, emailVerificado: false });
+
+    await expect(
+      login({ email: 'usuario@example.com', password: 'password123' }),
+    ).rejects.toMatchObject({ status: 403, code: 'EMAIL_NOT_VERIFIED' });
+
+    expect(sign).not.toHaveBeenCalled();
+  });
+
+  it('rechaza si la cuenta está suspendida', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, estado: 'suspendido' });
+
+    await expect(
+      login({ email: 'usuario@example.com', password: 'password123' }),
+    ).rejects.toMatchObject({ status: 403, code: 'ACCOUNT_INACTIVE' });
+
+    expect(sign).not.toHaveBeenCalled();
+  });
+
+  it('pide el segundo factor si el usuario tiene 2FA activado', async () => {
+    findUnique.mockResolvedValue({ ...storedUser, twoFactorOn: true });
+
+    const result = await login({
+      email: 'usuario@example.com',
+      password: 'password123',
+    });
+
+    expect(sign).toHaveBeenCalledWith(
+      { sub: 'user-1', purpose: '2fa', v: 0 },
+      expect.any(String),
+      { expiresIn: '5m' },
+    );
+    expect(result).toEqual({
+      twoFactorRequired: true,
+      twoFactorToken: 'jwt-token',
+    });
+    expect(result).not.toHaveProperty('token');
+    expect(result).not.toHaveProperty('user');
+  });
+});
+
+describe('Auth endpoint — login', () => {
+  let app;
+
+  beforeAll(async () => {
+    const { createApp } = await import('../../../app.js');
+    app = createApp();
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    findUnique.mockResolvedValue(storedUser);
+    compare.mockResolvedValue(true);
+    sign.mockReturnValue('jwt-token');
+  });
+
+  it('responde 200 con token y user', async () => {
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'usuario@example.com', password: 'password123' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBe('jwt-token');
+    expect(response.body.user.email).toBe('usuario@example.com');
+    expect(response.body.user).not.toHaveProperty('passwordHash');
+    expect(response.body.user).not.toHaveProperty('totpSecret');
+  });
+
+  it('responde 401 con credenciales incorrectas', async () => {
+    compare.mockResolvedValue(false);
+
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'usuario@example.com', password: 'mala' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.error.code).toBe('INVALID_CREDENTIALS');
+  });
+
+  it('responde 400 con datos inválidos', async () => {
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'no-es-email' });
+
+    expect(response.status).toBe(400);
+    expect(response.body.error.code).toBe('VALIDATION_ERROR');
+    expect(findUnique).not.toHaveBeenCalled();
+  });
+});

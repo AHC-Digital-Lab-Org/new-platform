@@ -17,6 +17,19 @@ test('GET /api/health responde ok', async () => {
   const res = await fetch(`${base}/health`);
   expect(res.status).toBe(200);
   expect(await res.json()).toEqual({ status: 'ok' });
+  expect(res.headers.get('x-powered-by')).toBeNull();
+  expect(res.headers.get('x-content-type-options')).toBe('nosniff');
+});
+
+test('body-parser conserva la respuesta 413 para JSON demasiado grande', async () => {
+  const res = await fetch(`${base}/nonexistent`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ value: 'x'.repeat(1024 * 1024) }),
+  });
+
+  expect(res.status).toBe(413);
+  expect((await res.json()).error).toMatchObject({ code: 'BAD_REQUEST' });
 });
 
 test('la especificación OpenAPI incluye las rutas de los módulos', async () => {

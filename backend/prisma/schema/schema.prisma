@@ -8,3 +8,44 @@ datasource db {
   provider = "mysql" // MariaDB
   url      = env("DATABASE_URL")
 }
+model User {
+  id              String   @id @default(cuid())
+  alias           String   @unique
+  email           String   @unique
+  nombre          String?
+  passwordHash    String?  @map("password_hash")
+  tipoUsuario     String   @default("usuario_registrado") @map("tipo_usuario")
+  ciudad          String?
+  pais            String?
+  fechaAlta       DateTime @default(now()) @map("fecha_alta")
+  consentimientos Json
+  estado          String   @default("pendiente_verificacion")
+
+  emailVerificado                 Boolean   @default(false) @map("email_verificado")
+  emailVerificationTokenHash      String?   @unique @map("email_verification_token_hash")
+  emailVerificationExpires        DateTime? @map("email_verification_expires")
+  passwordResetTokenHash          String?   @unique @map("password_reset_token_hash")
+  passwordResetExpires            DateTime? @map("password_reset_expires")
+  tokenVersion                    Int       @default(0) @map("token_version")
+
+  // 2FA / TOTP — se utilizará posteriormente
+  totpSecret      String?  @map("totp_secret")
+  twoFactorOn     Boolean  @default(false) @map("two_factor_on")
+  totpLastCounter Int?     @map("totp_last_counter")
+  recoveryCodes   RecoveryCode[]
+
+  @@map("users")
+}
+
+model RecoveryCode {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  codeHash  String    @map("code_hash")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("recovery_codes")
+}
