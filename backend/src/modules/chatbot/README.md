@@ -1,59 +1,78 @@
-# Plan de commits — chatbot (backend)
+# Chatbot — backend
 
-Rama: `feature/chatbot-module`. Un commit = una idea, con sus pruebas, y `npm test --workspace backend` en verde.
-Antes de cada commit: `git diff --staged` (ni `.env` ni claves).
+Rama de trabajo: `feature/chatbot-module`.
 
-## Contrato
+## Estado
 
-- `POST /api/chatbot/ask` → `{ question, history? }` → `{ answer, sources: [] }`
-- `history`: máx. 10 turnos de `{ role: 'user' | 'assistant', text }`, 2000 caracteres por turno
-- Errores: 429 `CHATBOT_BUSY` · 503 `CHATBOT_UNAVAILABLE` · 502 `CHATBOT_BAD_RESPONSE`
+Los commits B1–B5 están implementados. El backend valida las consultas, mantiene el historial, llama a Gemini, normaliza los errores del proveedor y limita las peticiones por IP. Las pruebas usan un proveedor simulado; no hacen llamadas reales a Gemini.
 
-## B1 — `chore(chatbot): añade @google/genai y variables GEMINI_* al entorno`
+## Contrato de la API
 
-- [ ] `package.json` y lockfile (+ `@google/genai`)
-- [ ] `env.js`: `gemini.apiKey` y `gemini.model` (con valor por defecto), **sin** exigirlos al arrancar
-- [ ] `.env.example` con `GEMINI_API_KEY` y `GEMINI_MODEL`
-- Listo si: el backend arranca sin clave y `npm test` sigue verde
+`POST /api/chatbot/ask`
 
-## B2 — `feat(chatbot): valida pregunta e historial con Zod`
+```json
+{
+  "question": "¿Qué es un EcoGesto?",
+  "history": [
+    { "role": "user", "text": "Hola" },
+    { "role": "assistant", "text": "¡Hola! ¿En qué te ayudo?" }
+  ],
+  "locale": "es"
+}
+```
 
-- [ ] `chatbot.schema.js`: `question` (trim, 1–2000), `history` opcional (≤10, roles cerrados), `.strict()`
-- [ ] `chatbot.schema.test.js`: vacío, solo espacios, demasiado largo, rol inválido, campo extra, historial largo
-- Listo si: el contrato anterior se aplica y el controlador pasa `history` al servicio
+- `question`: texto obligatorio, recortado y de 1 a 2000 caracteres.
+- `history`: opcional; hasta 10 turnos, cada uno de hasta 2000 caracteres. Los únicos roles permitidos son `user` y `assistant`. Si se omite, el backend usa `[]`.
+- `locale`: opcional; `es`, `ca` o `en`. Se usa como indicación para los mensajes breves o ambiguos.
+- Los objetos de entrada rechazan propiedades adicionales.
+- Respuesta correcta: `{ "answer": "...", "sources": [] }`. Las fuentes reales y RAG están fuera del alcance actual.
 
-## B3 — `feat(chatbot): responde con Gemini y el system prompt de la AHC`
+### Errores
 
-- [ ] `system-prompt.md` (con línea de "última revisión")
-- [ ] `chatbot.provider.js`: crea el cliente, temperatura 0.2, máx. 1024 tokens; es el único archivo que importa el SDK
-- [ ] `chatbot.service.js`: `history` + `question` → contenido; `assistant` → `model`
-- [ ] `chatbot.service.test.js` con el proveedor simulado
-- Listo si: responde `{ answer, sources: [] }` y ningún test llama a Gemini de verdad
+| HTTP | Código | Significado |
+|---|---|---|
+| 400 | `VALIDATION_ERROR` | La pregunta, el historial o el idioma no cumplen el contrato |
+| 429 | `TOO_MANY_REQUESTS` | Se alcanzó el límite local de 30 solicitudes por IP cada 15 minutos |
+| 429 | `CHATBOT_BUSY` | Gemini indica límite o cuota excedidos |
+| 502 | `CHATBOT_BAD_RESPONSE` | Gemini devolvió una respuesta vacía |
+| 503 | `CHATBOT_UNAVAILABLE` | Falta la clave o Gemini/el modelo no está disponible |
 
-## B4 — `feat(chatbot): traduce errores del proveedor al contrato de la API`
+Los detalles del proveedor no se exponen al cliente. El prompt del sistema está en [`system-prompt.md`](./system-prompt.md); la AHC debe confirmar sus datos de contacto y contenido antes del despliegue.
 
-- [ ] Sin clave configurada → 503 `CHATBOT_UNAVAILABLE`
-- [ ] Gemini 429 → 429 `CHATBOT_BUSY`
-- [ ] Gemini 401/403/404 → log de error + 503 genérico
-- [ ] Gemini 5xx → 503; respuesta vacía → 502 `CHATBOT_BAD_RESPONSE`
-- [ ] Verifica en el SDK dónde viene el código HTTP (`status` o `code`)
-- Listo si: ningún mensaje al cliente incluye detalles del SDK
+## Configuración
 
-## B5 — `feat(chatbot): limita las consultas por IP`
+El backend lee las variables del archivo `backend/.env` en desarrollo. Parte de [`backend/.env.example`](../../../.env.example):
 
-- [ ] `chatbotLimiter` en `rate-limit.middleware.js`
-- [ ] `chatbot.routes.js`: limiter antes de `validate`, OpenAPI con `history` y errores
-- [ ] `chatbot.api.test.js` (supertest): 200, 400, 429, 503
-- Listo si: `RATE_LIMIT_IN_TEST=true npm test --workspace backend -- chatbot.api` pasa
+```dotenv
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-3.1-flash-lite
+```
 
-## B9 — `docs(chatbot): añade casos de prueba manuales`
+`GEMINI_API_KEY` es opcional para iniciar la API; si no está configurada, el endpoint devuelve `503 CHATBOT_UNAVAILABLE`. No guardes ni compartas claves en el repositorio o en el chat. `GEMINI_MODEL` tiene un valor predeterminado en la configuración del backend.
 
-- [ ] `casos-de-prueba.md` (casos manuales del chatbot e historial)
+## Implementación
 
-## B10 — `docs(chatbot): añade README de backend y frontend`
+- `chatbot.schema.js`: validación Zod del cuerpo.
+- `chatbot.controller.js` y `chatbot.routes.js`: endpoint, validación y OpenAPI.
+- `chatbot.service.js`: prompt, traducción de roles y mapeo de errores.
+- `chatbot.provider.js`: único módulo que importa `@google/genai`; configura temperatura `0.2` y máximo `1024` tokens.
+- `system-prompt.md`: instrucciones y base de conocimiento.
+- `__tests__/`: pruebas de esquema, servicio y API, incluyendo límite por IP.
 
-- [ ] `README.md` del módulo, con estructura, contrato, variables de entorno y cómo probar
+## Verificación
 
-## Fuera de este PR
+Desde la raíz del monorepo:
 
-RAG y `sources` reales · streaming · guardar conversaciones · evals automáticos · idiomas
+```powershell
+npm test --workspace backend
+npm run dev --workspace backend
+```
+
+Para comprobar la validación con el backend activo, envía un cuerpo con un rol `system` en `history`; debe responder 400. Sin una clave Gemini configurada, una consulta válida debe responder 503. Las pruebas automatizadas simulan Gemini y no necesitan una clave.
+
+## Pendiente
+
+- Revisar con la AHC la exactitud y vigencia de los datos del prompt, incluidos teléfonos, correos y la referencia MITECO.
+- Añadir y ejecutar los casos de prueba manuales en [`casos-de-prueba.md`](./casos-de-prueba.md).
+- Probar una consulta real con una clave local, sin incluirla en commits ni logs.
+- RAG y fuentes reales, streaming, persistencia de conversaciones e idiomas adicionales quedan fuera de alcance.
