@@ -19,7 +19,21 @@ export const router = Router();
  *             type: object
  *             required: [question]
  *             properties:
- *               question: { type: string }
+ *               question: { type: string, minLength: 1, maxLength: 2000 }
+ *               history:
+ *                 type: array
+ *                 maxItems: 10
+ *                 description: Turnos anteriores, del más antiguo al más reciente
+ *                 items:
+ *                   type: object
+ *                   required: [role, text]
+ *                   properties:
+ *                     role: { type: string, enum: [user, assistant] }
+ *                     text: { type: string, minLength: 1, maxLength: 2000 }
+ *               locale:
+ *                 type: string
+ *                 enum: [es, ca, en]
+ *                 description: Idioma de la interfaz
  *     responses:
  *       200:
  *         description: Respuesta del asistente
@@ -30,5 +44,7 @@ export const router = Router();
  *               properties:
  *                 answer: { type: string }
  *                 sources: { type: array, items: { type: string } }
+ *       400:
+ *         description: Datos de entrada no válidos
  */
 router.post('/ask', validate({ body: askBody }), controller.ask);
