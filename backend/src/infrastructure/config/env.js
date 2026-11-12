@@ -77,6 +77,12 @@ export const env = {
     pass: process.env.SMTP_PASS,
     from: process.env.MAIL_FROM ?? 'no-reply@localhost',
   },
+  // Chatbot. La clave es opcional: sin ella el chatbot responde 503 y el resto de la API sigue funcionando.
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY,
+    // Confirma el identificador vigente en https://ai.google.dev/gemini-api/docs/models
+    model: process.env.GEMINI_MODEL ?? 'gemini-3.1-flash-lite',
+  },
   trustProxy,
   get databaseUrl() {
     return required('DATABASE_URL');

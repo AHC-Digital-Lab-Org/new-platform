@@ -1,5 +1,6 @@
 import * as service from './chatbot.service.js';
 
 export const ask = async (req, res) => {
-  res.json(await service.ask(req.valid.body.question));
+  const { question, history, locale } = req.valid.body;
+  res.json(await service.ask(question, { history, locale }));
 };

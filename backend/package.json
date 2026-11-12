@@ -26,8 +26,9 @@
     "vitest": "^5.0.1"
   },
   "dependencies": {
-    "@web-platform/shared": "*",
+    "@google/genai": "^3.2.0",
     "@prisma/client": "^6.19.3",
+    "@web-platform/shared": "*",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
