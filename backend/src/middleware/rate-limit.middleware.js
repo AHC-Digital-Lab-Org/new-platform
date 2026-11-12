@@ -132,3 +132,8 @@ export const changePasswordLimiter = create({
   skipSuccessfulRequests: true,
   keyGenerator: (req) => `user:${req.auth.userId}`,
 });
+
+export const chatbotLimiter = create({
+  windowMs: 15 * MINUTE,
+  limit: 30,
+});
