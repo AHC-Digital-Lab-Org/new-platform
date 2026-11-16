@@ -4,5 +4,6 @@
 import ecogestos from './ecogestos/index.js';
 import chatbot from './chatbot/index.js';
 import auth from './auth/index.js';
+import calculadora from './calculadora/index.js';
 
-export const modules = [ecogestos, chatbot, auth];
+export const modules = [ecogestos, chatbot, auth, calculadora];

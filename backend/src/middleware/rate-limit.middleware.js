@@ -120,6 +120,12 @@ export const locationsLimiter = create({
   limit: 60,
 });
 
+// La calculadora recalcula en vivo mientras se escribe, por eso el límite es más holgado.
+export const calculadoraLimiter = create({
+  windowMs: MINUTE,
+  limit: 120,
+});
+
 export const resetPasswordLimiter = create({
   windowMs: 15 * MINUTE,
   limit: 10,

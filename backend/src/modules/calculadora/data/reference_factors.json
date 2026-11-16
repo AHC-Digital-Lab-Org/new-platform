@@ -1,0 +1,2349 @@
+{
+  "metadata": {
+    "schema_version": "0.1",
+    "estado": "provisional",
+    "descripcion": "Fichero central inicial de factores, parámetros, proxies, moduladores e incertidumbres para la calculadora global de huella de carbono personal.",
+    "base_temporal": "anual",
+    "unidad_interna": "kgCO2e_anual",
+    "uso": "Fichero central de factores, parámetros, proxies, moduladores e incertidumbres. Desde B4 los módulos leen factores desde este fichero; desde B5.1 se documenta también la estructura estándar de incertidumbre.",
+    "fecha_creacion": "2026-04-29",
+    "ultima_actualizacion": "2026-05-14",
+    "nota_actualizacion_C3": "Subfase C3: se amplía el bloque Vivienda con unidades de entrada, unidades internas de actividad y conversiones de unidades. Los factores provisionales de emisión fueron sustituidos en C5.",
+    "nota_actualizacion_C5": "Subfase C5: se sustituyen los factores provisionales de Vivienda por factores documentados y trazables. No se activa todavía la lógica de conversiones en JS; las unidades operativas siguen siendo compatibles con el formulario actual hasta C6.",
+    "nota_actualizacion_C6": "Subfase C6: se activa en js/vivienda.js la conversión de unidades alternativas de Vivienda y la propagación de la incertidumbre relativa de conversión.",
+    "nota_actualizacion_C10": "Subfase C10: se incorpora en Vivienda una compensación fotovoltaica estimada por excedentes vertidos a red. Se mantiene separada de la huella estándar y permite calcular una huella neta orientativa truncada a cero.",
+    "nota_actualizacion_D3": "Fase D, subfase D3: se documentan factores operativos para el módulo Coche (gasolina E5, gasóleo B7, GLP y electricidad) y se añaden conversiones exactas desde consumo por 100 km a consumo anual. No se modifica todavía la lógica JS.",
+    "nota_actualizacion_D5_D6": "Fase D, subfases D5-D6: se sustituye el factor genérico provisional de Moto por factores documentados por tipo de moto; el HTML deja de contener valores numéricos de emisión y js/moto.js carga los factores desde reference_factors.json.",
+    "nota_actualizacion_D7_D8": "Fase D, subfase D7-D8: se sustituyen los factores provisionales de Bus/tren/taxi por factores documentados por pasajero-kilómetro y se explicita el tratamiento de Taxi/VTC para evitar doble conteo con Coche.",
+    "nota_actualizacion_D7_D8b": "Fase D, subfase D7-D8b: se añade documentación explícita sobre el tratamiento de la ocupación media en Bus/tren/taxi. Los factores operativos ya están expresados por pasajero-km; la ocupación queda implícita en el factor y no se aplica divisor adicional.",
+    "nota_actualizacion_E2": "Fase E, subfase E2: se sustituyen los factores provisionales de vuelos por factores documentados derivados de UK Government GHG Conversion Factors 2025, se documentan bins de distancia, multiplicadores de clase, multiplicador no-CO2, distancias con uplift incorporado en el factor e incertidumbres. No se cambia la lógica JS.",
+    "nota_actualizacion_F3": "Fase F, subfase F3: se documentan y ajustan las vidas útiles por defecto de productos duraderos, se fija frecuencia mensual como selección inicial para gastos recurrentes y se refinan las incertidumbres del dato de usuario por frecuencia de gasto y por vida útil.",
+    "nota_actualizacion_F6": "Fase F, subfase F6: se realizan pruebas funcionales del módulo Productos y se valida su integración en Resultados. No se modifican factores monetarios F2, frecuencias, vidas útiles F3, incertidumbres, validaciones F4 ni fórmulas.",
+    "ultima_subfase": "P2_auditoria_productos",
+    "nota_I3": "Alimentación en Productos incorpora moduladores prudentes por perfil alimentario aproximado.",
+    "nota_I4c_I4d": "Desde I4c/I4d, el factor eléctrico base de Vivienda y Coche eléctrico queda como fallback operativo. La electricidad de red de Vivienda, los excedentes fotovoltaicos y el coche eléctrico no incluido en Vivienda usan data/electricity_country_factors.json cuando hay dato nacional para el país seleccionado.",
+    "nota_L6": "Subfase L6: se mantiene la categoría de servicios bancarios y financieros en Productos, pero se acota como comisiones y servicios personales. No se formula como intereses hipotecarios/préstamos, porque esos pagos pueden distorsionar el módulo y son poco comparables entre países.",
+    "nota_L1_productos_moneda": "Subfase L1: Productos permite seleccionar EUR o USD como moneda de entrada. El cálculo interno sigue usando EUR y factores kgCO2e/EUR; los importes en USD se convierten mediante una tasa fija documentada.",
+    "nota_M1_productos": "Subfase M1: el módulo Productos mantiene ADEME Base Empreinte / ratios monétaires como fuente operativa principal, aplica un coeficiente precio-base para aproximar importes finales declarados por el usuario a la base kgCO2e/k€ HT de la fuente, reduce la incertidumbre de los factores monetarios desde un valor genérico de 0,80 a una escala por categoría y recalibra prudentemente los moduladores de dieta alimentaria.",
+    "nota_actualizacion_M2": "Módulo Vuelos: se calcula siempre doble lectura directa/ampliada; el selector de criterio decide el resultado principal, la clase pasa a definirse por viaje y se añade número de repeticiones anuales por viaje.",
+    "nota_M3_vuelos": "Subfase M3: el módulo Vuelos incorpora data/vuelos.json como base inicial de aeropuertos IATA con coordenadas, usa aeropuerto-aeropuerto como método preferente, mantiene ciudades/km/horas como respaldo, añade premium economy y sustituye el multiplicador único de clase por una matriz orientativa por clase y bin de distancia.",
+    "nota_V1_vivienda": "Fase V1: el módulo Vivienda refuerza que la electricidad se calcula con un factor nacional medio de red (enfoque location-based) y migra Propano a kg/año como unidad principal, usando litros/año solo como unidad alternativa convertida a kg. Se retira bombonas/año del formulario para evitar el supuesto fijo de tamaño de bombona.",
+    "nota_C1_coche": "Fase Coche C1: el módulo Coche eléctrico distingue si el consumo kWh/100 km procede de contador/punto de carga (kWh de red) o de ordenador del vehículo/ficha técnica/no se sabe. Cuando el dato no es claramente de red, se aplica un ajuste prudente de pérdidas de carga para estimar kWh tomados de la red antes de aplicar el factor eléctrico nacional/fallback.",
+    "nota_T1_transporte_terrestre": "Fase T1: Bus/tren/taxi mantiene sin cambios los factores operativos por pasajero-km, pero se explicitan como proxies orientativos no locales. Se refuerzan textos y documentación sobre variabilidad por país, red, operador, ocupación, flota, tecnología y mix eléctrico. No se aplica todavía ajuste automático por país.",
+    "nota_FV1_cierre": "Fase final FV1: se consolida la revisión posterior a R1/V1/C1/T1. Propano y pérdidas de carga del coche eléctrico ya fueron incorporados en V1 y C1; en esta fase se eleva la incertidumbre relativa del factor de compensación fotovoltaica al 50% para reflejar que los excedentes vertidos representan emisiones evitadas estimadas, no consumo eléctrico directo ni crédito oficial de carbono.",
+    "nota_H1_coche": "Subfase H1: Coche incorpora opciones explícitas para híbrido gasolina, híbrido diésel e híbrido enchufable. Los híbridos convencionales usan la misma fórmula que gasolina/diésel con consumo real. El híbrido enchufable se calcula como suma de parte térmica (L/100 km y factor gasolina/diésel) y parte eléctrica (kWh/100 km, ajuste de pérdidas de carga, factor eléctrico nacional/fallback y control de doble conteo con Vivienda).",
+    "nota_E1_factor_electrico_personalizado": "Subfase E1 de la versión 1.2: se incorpora un factor eléctrico personalizado opcional, introducido por el usuario en kgCO2e/kWh. Cuando está activo, sustituye al factor nacional medio para electricidad importada de Vivienda y para la parte eléctrica de Coche o híbrido enchufable no incluida en Vivienda. Los excedentes fotovoltaicos mantienen el factor medio de red como proxy de emisiones evitadas.",
+    "nota_P2_auditoria_productos": "Subfase P2: auditoría metodológica conservadora del módulo Productos. Se mantienen los factores monetarios centrales ADEME/Base Empreinte y el coeficiente precio-base; se refuerzan textos sobre límites del proxy monetario, se aclaran categorías sensibles, se renombra papel/publicaciones para evitar malentendidos y se ajusta la incertidumbre de vehículos de motor de 0,60 a 0,50.",
+    "nota_P2b_productos_ampliado": "P2b: se desagrega hostelería/restauración en tres categorías, se añade Servicios del hogar y se refuerzan aclaraciones de Seguros y reparto personal de gastos compartidos."
+  },
+  "convenciones": {
+    "unidad_resultado_interna": "kgCO2e/año",
+    "unidad_resultado_mostrada": "tCO2e/año cuando proceda",
+    "incertidumbre": {
+      "tipo": "sigma_relativa",
+      "descripcion": "Incertidumbre relativa expresada como fracción. Por ejemplo, 0.25 equivale a ±25%.",
+      "propagacion_producto": "Para E = A * FE: sigma_rel_E = sqrt(sigma_rel_A^2 + sigma_rel_FE^2).",
+      "propagacion_suma": "Para T = sum(Ei): sigma_T = sqrt(sum(sigma_Ei^2)), salvo correlaciones explícitas.",
+      "estructura_resultado_modulo": {
+        "totalKgCO2eAnual": "Resultado central anual del módulo en kg CO2e/año.",
+        "incertidumbreKgCO2eAnual": "Incertidumbre absoluta anual del módulo en kg CO2e/año.",
+        "incertidumbreRelativa": "Incertidumbre absoluta dividida entre resultado central. Fracción: 0.25 = 25%.",
+        "intervaloMinKgCO2eAnual": "Límite inferior orientativo: total - incertidumbre, truncado a cero.",
+        "intervaloMaxKgCO2eAnual": "Límite superior orientativo: total + incertidumbre.",
+        "metodoIncertidumbre": "Método usado para combinar las contribuciones del módulo.",
+        "contribuciones": "Lista de contribuciones elementales usadas para calcular el módulo."
+      },
+      "estructura_contribucion": {
+        "valorCentralKgCO2eAnual": "Resultado central anual de la contribución en kg CO2e/año.",
+        "incertidumbreKgCO2eAnual": "Incertidumbre absoluta anual de la contribución.",
+        "incertidumbreRelativa": "Incertidumbre relativa combinada de la contribución.",
+        "datoActividad": "Dato introducido o estimado, con unidad e incertidumbre relativa propia.",
+        "factorEmision": "Factor, proxy o modulador aplicado, con valor, unidad, fuente e incertidumbre relativa.",
+        "metodoCalculo": "Forma matemática usada para obtener la contribución.",
+        "formula": "Expresión resumida de la fórmula usada."
+      },
+      "convencion_visualizacion": "Las incertidumbres se guardan en todos los módulos, pero se mostrarán al usuario solamente en la pantalla final de resultados."
+    }
+  },
+  "vivienda": {
+    "descripcion": "Factores documentados y estructura metodológica del módulo Vivienda. En C5 se sustituyen los factores provisionales por valores trazables; las conversiones de unidades quedan preparadas pero su aplicación en JS se activa en C6.",
+    "factores": {
+      "electricidad": {
+        "valor": 0.26,
+        "unidad": "kgCO2e/kWh",
+        "descripcion": "Electricidad de red para vivienda. Desde I4c se sustituye por el factor nacional medio de red del país seleccionado cuando está disponible; este valor se conserva como fallback. Es un enfoque location-based y no representa contratos eléctricos, garantías de origen, comercializadora ni variación horaria.",
+        "fuente": "MITECO_GUIA_HUELLA_CARBONO; caso práctico con electricidad 0,260 kgCO2e/kWh para 2023.",
+        "incertidumbre_relativa_factor": 0.3,
+        "provisional": false,
+        "fuente_id": "MITECO_GUIA_HUELLA_CARBONO",
+        "nota_metodologica": "Factor medio anual de red usado como proxy educativo. En países con dato nacional se aplica el factor de data/electricity_country_factors.json. No debe interpretarse como factor market-based ni como factor de una tarifa o GdO.",
+        "estado": "fallback_I4c_factor_nacional_si_disponible",
+        "nota_I4c": "Este factor se conserva como base/fallback. El cálculo operativo de electricidad de Vivienda usa data/electricity_country_factors.json cuando hay país seleccionado y dato nacional disponible."
+      },
+      "gas": {
+        "valor": 0.182,
+        "unidad": "kgCO2e/kWh",
+        "descripcion": "Gas natural para instalaciones fijas/vivienda, expresado por kWh PCS.",
+        "fuente": "MITECO_GUIA_HUELLA_CARBONO; ejemplo metodológico 2023: Gas Natural (kWh PCS) para instalaciones fijas = 0,182 kgCO2e/kWh.",
+        "incertidumbre_relativa_factor": 0.08,
+        "provisional": false,
+        "fuente_id": "MITECO_GUIA_HUELLA_CARBONO",
+        "nota_metodologica": "El dato de actividad debe interpretarse como kWh PCS. La entrada alternativa m3/año se convertirá a kWh en C6.",
+        "estado": "documentado_C5"
+      },
+      "gasoleo": {
+        "valor": 2.868,
+        "unidad": "kgCO2e/litro",
+        "descripcion": "Gasóleo C para calefacción en instalaciones fijas.",
+        "fuente": "MITECO/OECC vía metodología Red Española de Ciudades por el Clima: Gasóleo C = 2,868 kgCO2/l.",
+        "incertidumbre_relativa_factor": 0.08,
+        "provisional": false,
+        "fuente_id": "RED_CIUDADES_CLIMA_METODOLOGIA_MITECO_OECC",
+        "nota_metodologica": "Factor usado como proxy para gasóleo de calefacción doméstico. Mantiene la unidad litros/año ya usada por el formulario.",
+        "estado": "documentado_C5"
+      },
+      "carbon": {
+        "valor": 2.444,
+        "unidad": "kgCO2e/kg",
+        "descripcion": "Carbón doméstico genérico. Proxy conservador basado en carbón de importación.",
+        "fuente": "MITECO/OECC vía metodología Red Española de Ciudades por el Clima: carbón de importación = 2,444 kgCO2/kg; carbón nacional = 2,227 kgCO2/kg.",
+        "incertidumbre_relativa_factor": 0.15,
+        "provisional": false,
+        "fuente_id": "RED_CIUDADES_CLIMA_METODOLOGIA_MITECO_OECC",
+        "nota_metodologica": "La interfaz actual no distingue tipo de carbón. Se adopta carbón de importación como proxy conservador; la incertidumbre cubre variabilidad entre tipos.",
+        "estado": "documentado_C5"
+      },
+      "glp": {
+        "valor": 1.671,
+        "unidad": "kgCO2e/litro",
+        "descripcion": "GLP genérico para uso doméstico o instalaciones fijas, expresado por litro.",
+        "fuente": "MITECO/OECC vía metodología Red Española de Ciudades por el Clima: GLP genérico = 1,671 kgCO2/l.",
+        "incertidumbre_relativa_factor": 0.1,
+        "provisional": false,
+        "fuente_id": "RED_CIUDADES_CLIMA_METODOLOGIA_MITECO_OECC",
+        "nota_metodologica": "Se conserva litros/año como unidad operativa para no romper la lógica actual antes de C6. La entrada alternativa kg/año requerirá conversión.",
+        "estado": "documentado_C5"
+      },
+      "propano": {
+        "valor": 2.938,
+        "unidad": "kgCO2e/kg",
+        "descripcion": "Propano para uso doméstico. Desde V1 se usa como factor operativo por kg, para evitar depender de un tamaño fijo de bombona.",
+        "fuente": "MITECO/OECC vía metodología Red Española de Ciudades por el Clima: gas propano = 2,938 kgCO2/kg.",
+        "incertidumbre_relativa_factor": 0.12,
+        "provisional": false,
+        "fuente_id": "RED_CIUDADES_CLIMA_METODOLOGIA_MITECO_OECC",
+        "nota_metodologica": "La unidad principal del formulario pasa a kg/año. Si el usuario introduce litros/año, la calculadora convierte litros a kg mediante vivienda.conversiones.propano_litro_a_kg antes de aplicar este factor. La opción bombonas/año se retira del formulario; si el usuario dispone de bombonas, debe sumar los kg indicados en las bombonas o facturas.",
+        "estado": "documentado_V1_factor_por_masa"
+      },
+      "pellets": {
+        "valor": 0.0552,
+        "unidad": "kgCO2e/kg",
+        "descripcion": "Pellets de madera. Factor de combustión directa que excluye CO2 biogénico y considera CH4, N2O y carbono fósil residual según factores UK Government 2025.",
+        "fuente": "UK Government GHG Conversion Factors 2025, flat file; wood pellets = 55,19389 kgCO2e/tonne = 0,05519 kgCO2e/kg, excluyendo CO2 biogénico.",
+        "incertidumbre_relativa_factor": 0.5,
+        "provisional": false,
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "nota_metodologica": "Factor útil para contabilidad directa excluyendo CO2 biogénico. Se mantiene incertidumbre alta por variabilidad de origen, humedad, transporte, alcance de ciclo de vida y límites metodológicos.",
+        "estado": "documentado_C5"
+      }
+    },
+    "parametros": {
+      "reparto_personas": {
+        "descripcion": "El total del hogar se divide por el número de personas de la vivienda para obtener la contribución personal anual. Se trata como divisor exacto.",
+        "provisional": false,
+        "unidad": "personas",
+        "incertidumbre_relativa_parametro": 0,
+        "estado": "criterio_metodologico_documentado"
+      },
+      "factor_electrico_personalizado_usuario": {
+        "descripcion": "Parámetros de uso del factor eléctrico personalizado introducido por el usuario desde E1.",
+        "unidad_entrada": "kgCO2e/kWh",
+        "incertidumbre_relativa_factor_por_defecto": 0.15,
+        "aplicacion": "Electricidad importada de Vivienda y parte eléctrica de Coche/PHEV cuando corresponde.",
+        "exclusiones": "No se aplica automáticamente a excedentes fotovoltaicos, que se estiman con factor medio de red.",
+        "criterio": "Usar solo con dato documentado de comercializadora, contrato eléctrico, mix específico u otra fuente propia."
+      }
+    },
+    "base_calculo": {
+      "alcance": "Consumos energéticos anuales de la vivienda habitual.",
+      "resultado_hogar": "kgCO2e/año del hogar",
+      "resultado_personal": "kgCO2e/año personales",
+      "criterio_reparto": "El total anual del hogar se divide entre el número de personas residentes. El divisor se trata como exacto, sin incertidumbre propia.",
+      "formula_sin_conversion": "E_hogar = dato_usuario * factor_emision",
+      "formula_con_conversion": "E_hogar = dato_usuario * conversion * factor_emision",
+      "formula_personal": "E_personal = E_hogar / personas",
+      "compensacion_fotovoltaica_C10": {
+        "entrada": "excedente fotovoltaico vertido a red en kWh/año",
+        "formula": "compensacion = kWh_exportados × factor_electrico_evitable",
+        "tratamiento": "separado de la huella estándar; huella neta orientativa = max(0, huella_estandar - compensacion)",
+        "justificacion": "Evita mezclar electricidad importada y exportada como saldo neto y reduce el riesgo de doble contabilización."
+      }
+    },
+    "unidades_entrada": {
+      "electricidad": {
+        "etiqueta": "Electricidad",
+        "unidad_principal": "kWh_anual",
+        "unidades_admitidas": [
+          "kWh_anual"
+        ],
+        "unidad_interna_actividad": "kWh_anual",
+        "factor_aplicado": "vivienda.factores.electricidad",
+        "conversiones_posibles": [],
+        "estado": "activa",
+        "nota_location_based_V1": "El factor aplicado es un factor nacional medio de red (location-based). No refleja comercializadora, garantías de origen, contrato verde, factor residual ni variación horaria."
+      },
+      "gas": {
+        "etiqueta": "Gas natural",
+        "alias_metodologico": "gas_natural",
+        "unidad_principal": "kWh_anual",
+        "unidades_admitidas": [
+          "kWh_anual",
+          "m3_anual"
+        ],
+        "unidad_interna_actividad": "kWh_anual",
+        "factor_aplicado": "vivienda.factores.gas",
+        "conversiones_posibles": [
+          {
+            "desde": "m3_anual",
+            "hacia": "kWh_anual",
+            "ruta_conversion": "vivienda.conversiones.gas_natural_m3_a_kwh"
+          }
+        ],
+        "estado": "preparada_conversion_C6"
+      },
+      "gasoleo": {
+        "etiqueta": "Gasóleo calefacción",
+        "unidad_principal": "litros_anual",
+        "unidades_admitidas": [
+          "litros_anual"
+        ],
+        "unidad_interna_actividad": "litros_anual",
+        "factor_aplicado": "vivienda.factores.gasoleo",
+        "conversiones_posibles": [],
+        "estado": "activa"
+      },
+      "carbon": {
+        "etiqueta": "Carbón",
+        "unidad_principal": "kg_anual",
+        "unidades_admitidas": [
+          "kg_anual",
+          "toneladas_anual"
+        ],
+        "unidad_interna_actividad": "kg_anual",
+        "factor_aplicado": "vivienda.factores.carbon",
+        "conversiones_posibles": [
+          {
+            "desde": "toneladas_anual",
+            "hacia": "kg_anual",
+            "ruta_conversion": "vivienda.conversiones.tonelada_a_kg"
+          }
+        ],
+        "estado": "preparada_conversion_C6"
+      },
+      "glp": {
+        "etiqueta": "GLP",
+        "unidad_principal": "litros_anual",
+        "unidad_interna_recomendada_futura": "kg_anual",
+        "unidades_admitidas": [
+          "litros_anual",
+          "kg_anual"
+        ],
+        "unidad_interna_actividad": "litros_anual",
+        "factor_aplicado": "vivienda.factores.glp",
+        "conversiones_posibles": [
+          {
+            "desde": "kg_anual",
+            "hacia": "litros_anual",
+            "ruta_conversion": "vivienda.conversiones.glp_kg_a_litro"
+          },
+          {
+            "desde": "litros_anual",
+            "hacia": "kg_anual",
+            "ruta_conversion": "vivienda.conversiones.glp_litro_a_kg",
+            "uso": "disponible si en C5 se adopta un factor de emisión por kg"
+          }
+        ],
+        "estado": "preparada_conversion_C6",
+        "nota": "Se mantiene litros_anual como unidad interna de actividad por compatibilidad con el factor provisional actual; en C5 puede migrarse a kg_anual si se adopta factor documentado por masa."
+      },
+      "propano": {
+        "etiqueta": "Propano",
+        "unidad_principal": "kg_anual",
+        "unidades_admitidas": [
+          "kg_anual",
+          "litros_anual"
+        ],
+        "unidad_interna_actividad": "kg_anual",
+        "factor_aplicado": "vivienda.factores.propano",
+        "conversiones_posibles": [
+          {
+            "desde": "litros_anual",
+            "hacia": "kg_anual",
+            "ruta_conversion": "vivienda.conversiones.propano_litro_a_kg"
+          }
+        ],
+        "estado": "activa_V1",
+        "nota": "Se adopta kg/año como unidad principal. Si el dato procede de bombonas, el usuario debe introducir la suma de kg indicados por bombona o factura. Se retira bombonas/año del formulario para evitar asumir una bombona estándar."
+      },
+      "pellets": {
+        "etiqueta": "Pellets de madera",
+        "unidad_principal": "kg_anual",
+        "unidades_admitidas": [
+          "kg_anual",
+          "toneladas_anual"
+        ],
+        "unidad_interna_actividad": "kg_anual",
+        "factor_aplicado": "vivienda.factores.pellets",
+        "conversiones_posibles": [
+          {
+            "desde": "toneladas_anual",
+            "hacia": "kg_anual",
+            "ruta_conversion": "vivienda.conversiones.tonelada_a_kg"
+          }
+        ],
+        "estado": "preparada_conversion_C6"
+      }
+    },
+    "conversiones": {
+      "gas_natural_m3_a_kwh": {
+        "valor": 11.7,
+        "unidad": "kWh/m3",
+        "desde": "m3_anual",
+        "hacia": "kWh_anual",
+        "descripcion": "Conversión aproximada de gas natural de metros cúbicos a kWh mediante poder calorífico superior. El valor real puede variar por composición del gas, municipio, presión y periodo de facturación.",
+        "fuente": "Enagás/GTS para factor de conversión de facturación; valor aproximado de referencia 11,70 kWh/m3 usado por comercializadoras españolas como Naturgy. Documentación detallada pendiente en model_registry.json.",
+        "incertidumbre_relativa_conversion": 0.05,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6",
+        "estado_C6": "activa_en_js_vivienda"
+      },
+      "tonelada_a_kg": {
+        "valor": 1000,
+        "unidad": "kg/t",
+        "desde": "toneladas_anual",
+        "hacia": "kg_anual",
+        "descripcion": "Conversión exacta de tonelada métrica a kilogramo.",
+        "fuente": "Definición SI / conversión métrica estándar.",
+        "incertidumbre_relativa_conversion": 0,
+        "provisional": false,
+        "estado_C6": "activa_en_js_vivienda"
+      },
+      "glp_litro_a_kg": {
+        "valor": 0.51,
+        "unidad": "kg/litro",
+        "desde": "litros_anual",
+        "hacia": "kg_anual",
+        "descripcion": "Conversión aproximada para GLP líquido. Depende de la composición propano/butano y de la temperatura.",
+        "fuente": "Valor técnico habitual para GLP líquido; documentación detallada pendiente en model_registry.json.",
+        "incertidumbre_relativa_conversion": 0.05,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6"
+      },
+      "glp_kg_a_litro": {
+        "valor": 1.96,
+        "unidad": "litros/kg",
+        "desde": "kg_anual",
+        "hacia": "litros_anual",
+        "descripcion": "Conversión inversa aproximada para GLP líquido. Depende de la composición propano/butano y de la temperatura.",
+        "fuente": "Valor técnico habitual para GLP líquido; documentación detallada pendiente en model_registry.json.",
+        "incertidumbre_relativa_conversion": 0.05,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6",
+        "estado_C6": "activa_en_js_vivienda"
+      },
+      "propano_litro_a_kg": {
+        "valor": 0.51,
+        "unidad": "kg/litro",
+        "desde": "litros_anual",
+        "hacia": "kg_anual",
+        "descripcion": "Conversión aproximada para propano líquido de litros a kg. Se usa desde V1 solo cuando el usuario introduce propano en litros/año; la unidad principal es kg/año.",
+        "fuente": "Valor técnico habitual para propano/GLP líquido; documentación detallada pendiente en model_registry.json.",
+        "incertidumbre_relativa_conversion": 0.05,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6",
+        "estado_V1": "activa_en_js_vivienda_para_propano_litros_a_kg"
+      },
+      "propano_kg_a_litro": {
+        "valor": 1.96,
+        "unidad": "litros/kg",
+        "desde": "kg_anual",
+        "hacia": "litros_anual",
+        "descripcion": "Conversión inversa aproximada para propano líquido. Depende de la temperatura y condiciones de almacenamiento.",
+        "fuente": "Valor técnico habitual para propano/GLP líquido; documentación detallada pendiente en model_registry.json.",
+        "incertidumbre_relativa_conversion": 0.05,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6",
+        "estado_C6": "activa_en_js_vivienda",
+        "estado_V1": "no_operativa_desde_V1_propano_calculado_por_kg",
+        "nota_V1": "Se conserva documentada por trazabilidad, pero el formulario ya no la usa para Propano desde V1."
+      },
+      "propano_bombona_estandar_a_kg": {
+        "valor": 12.5,
+        "unidad": "kg/bombona",
+        "desde": "bombonas_anual",
+        "hacia": "kg_anual",
+        "descripcion": "Conversión para una bombona estándar definida explícitamente como 12,5 kg. Si se usa otro tamaño, el valor debe cambiarse o preguntarse al usuario.",
+        "fuente": "Supuesto metodológico interno pendiente de documentación en model_registry.json.",
+        "incertidumbre_relativa_conversion": 0,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6",
+        "estado_V1": "retirada_del_formulario_desde_V1",
+        "nota_V1": "La opción bombonas/año se retira del formulario. El usuario debe introducir kg/año."
+      },
+      "propano_bombona_estandar_a_litro": {
+        "valor": 24.5,
+        "unidad": "litros/bombona",
+        "desde": "bombonas_anual",
+        "hacia": "litros_anual",
+        "descripcion": "Conversión derivada para bombona estándar de 12,5 kg usando 1,96 litros/kg.",
+        "fuente": "Derivado de propano_bombona_estandar_a_kg y propano_kg_a_litro.",
+        "incertidumbre_relativa_conversion": 0.05,
+        "provisional": true,
+        "estado_C5": "conversion_preparada_pendiente_activacion_C6",
+        "estado_C6": "activa_en_js_vivienda",
+        "estado_V1": "retirada_del_formulario_desde_V1",
+        "nota_V1": "La opción bombonas/año se retira del formulario. El usuario debe introducir kg/año."
+      }
+    },
+    "pendientes_metodologicos": [
+      "Revisión futura: revisar GLP si se adopta un factor definitivo por kg/año más específico; Propano ya migra a factor por kg en V1.",
+      "Revisión futura: si se quiere mayor precisión eléctrica, pedir comercializadora/GdO o año de cálculo; por ahora se usa un proxy educativo.",
+      "Revisión futura: valorar si la compensación fotovoltaica debe usar un factor eléctrico marginal, horario o anual específico en lugar del proxy medio usado en C10."
+    ],
+    "compensaciones": {
+      "fotovoltaica_excedente_red": {
+        "descripcion": "Compensación estimada por electricidad fotovoltaica excedentaria vertida a la red desde la vivienda.",
+        "tratamiento_metodologico": "No se contabiliza como consumo eléctrico negativo. Se reporta separada de la huella estándar de Vivienda y puede usarse para mostrar una huella neta orientativa truncada a cero. La incertidumbre del factor evitado se trata como alta porque depende de la electricidad realmente desplazada.",
+        "unidad_entrada": "kWh/año exportados a la red",
+        "formula_hogar": "C_hogar = kWh_exportados × FE_evitable",
+        "formula_personal": "C_personal = C_hogar / personas",
+        "factor_evitable_electricidad": {
+          "valor": 0.26,
+          "unidad": "kgCO2e/kWh",
+          "descripcion": "Factor eléctrico evitado usado de forma orientativa para estimar emisiones evitadas por excedentes fotovoltaicos vertidos a la red. En C10 se adopta el mismo proxy eléctrico operativo usado para electricidad importada, por coherencia y simplicidad educativa.",
+          "fuente": "MITECO_GUIA_HUELLA_CARBONO; proxy eléctrico operativo de Vivienda usado también en electricidad importada.",
+          "fuente_id": "MITECO_GUIA_HUELLA_CARBONO",
+          "incertidumbre_relativa_factor": 0.5,
+          "provisional": false,
+          "estado": "fallback_I4c_factor_nacional_si_disponible",
+          "nota_metodologica": "El efecto real de un kWh exportado depende del mix y de la generación desplazada en el momento de la exportación. La calculadora usa un proxy medio con incertidumbre alta y reporta el resultado como compensación estimada, no como crédito oficial de carbono. Desde FV1 se fija la incertidumbre relativa del factor en 50%, superior a la aplicada al consumo eléctrico importado, porque el cálculo representa emisiones evitadas.",
+          "nota_I4c": "Este factor se conserva como fallback. Desde I4c, los excedentes fotovoltaicos usan el mismo factor eléctrico nacional aplicado a Vivienda cuando está disponible.",
+          "estado_FV1": "incertidumbre_relativa_factor_elevada_a_0_50_para_emisiones_evitadas"
+        },
+        "incertidumbre_dato": "incertidumbres_dato_usuario.consumo_factura_o_medidor",
+        "reparto_personas": "El excedente del hogar se reparte entre las personas residentes igual que el resto del módulo Vivienda.",
+        "limite_neto": "La huella neta orientativa de Vivienda no puede ser inferior a cero.",
+        "credito_oficial_carbono": false,
+        "estado_C10": "activo_en_js_vivienda_y_visible_en_resultados",
+        "nota_FV1": "FV1 no modifica el valor central de la compensación fotovoltaica; solo eleva su incertidumbre relativa de factor al 50%."
+      }
+    },
+    "nota_V1_vivienda": "Propano se calcula por kg/año como unidad principal. Litros/año se acepta como alternativa convertida a kg. La electricidad se presenta explícitamente como factor nacional medio de red o location-based.",
+    "nota_FV1_cierre": "Cierre de la serie R1/V1/C1/T1: Vivienda conserva los cambios V1 de electricidad location-based y propano en kg; FV1 ajusta la incertidumbre de la compensación por excedentes fotovoltaicos al 50%."
+  },
+  "transporte": {
+    "coche": {
+      "descripcion": "Factores documentados para el módulo Coche. La ruta metodológica principal es km/año × consumo por 100 km × factor de emisión, con reparto por ocupación media.",
+      "estado": "documentado_D3_datos; activo_D4_formulario_y_logica_coche; actualizado_C1_kwh_red_coche_electrico; actualizado_H1_hibridos_phev",
+      "alcance_metodologico": {
+        "incluye": [
+          "Uso de coche privado, familiar, compartido o de empresa en trayectos personales de la persona usuaria.",
+          "Coches gasolina, diésel, GLP y eléctricos calculados por consumo real cuando el usuario dispone del dato.",
+          "En coche eléctrico, estimación de kWh de red mediante ajuste de pérdidas de carga cuando el consumo declarado procede del vehículo/ficha técnica o no se conoce su origen."
+        ],
+        "excluye": [
+          "Taxi/VTC, que se trata en el módulo Bus/tren/taxi.",
+          "Moto, transporte público y vuelos.",
+          "Kilómetros del vehículo realizados por otras personas sin participación de la persona usuaria."
+        ],
+        "unidad_resultado": "kgCO2e/año personales",
+        "criterio_ocupacion": "La ocupación media se trata como divisor exacto: emisiones personales = emisiones del vehículo / ocupación media.",
+        "doble_conteo": "En coche eléctrico debe evitarse contabilizar dos veces la electricidad: si la carga doméstica ya está incluida en Vivienda, esa parte no debe volver a sumarse en Coche. Desde C1, este control se aplica sobre los kWh de red estimados."
+      },
+      "factores": {
+        "carburante_liquido_generico": {
+          "valor": 2.249,
+          "unidad": "kgCO2e/litro",
+          "descripcion": "Alias temporal de compatibilidad para la lógica actual de js/coches.js. Equivale al factor de gasolina E5 para turismos M1 del año 2024; en D4 debe sustituirse por la selección explícita de gasolina, diésel o GLP.",
+          "fuente": "MITECO_FACTORES_EMISION_HC_2024; hoja '3. Vehículos y maquinaria'; E5 (l), Turismos (M1), año 2024.",
+          "fuente_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.1,
+          "provisional": false,
+          "estado": "documentado_D3_compatibilidad_no_usado_D4",
+          "nota_metodologica": "Se mantiene como alias de compatibilidad histórica, pero desde D4 js/coches.js usa los factores específicos gasolina, diesel, glp o electricidad_coche."
+        },
+        "gasolina": {
+          "valor": 2.249,
+          "unidad": "kgCO2e/litro",
+          "descripcion": "Gasolina E5 para turismos M1. Factor operativo por defecto para coche gasolina.",
+          "fuente": "MITECO_FACTORES_EMISION_HC_2024; hoja '3. Vehículos y maquinaria'; E5 (l), Turismos (M1), año 2024.",
+          "fuente_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.1,
+          "provisional": false,
+          "estado": "documentado_D3_activo_D4",
+          "nota_metodologica": "Se adopta E5 como gasolina operativa por defecto para simplificar la interfaz. Si en una fase posterior se diferencia E10, el factor disponible en MITECO 2024 para turismos M1 es inferior.",
+          "nota_H1": "Usado también para híbrido gasolina convencional y para la parte térmica gasolina de híbridos enchufables."
+        },
+        "gasolina_e10": {
+          "valor": 2.131,
+          "unidad": "kgCO2e/litro",
+          "descripcion": "Gasolina E10 para turismos M1. Factor documentado disponible para posible uso futuro.",
+          "fuente": "MITECO_FACTORES_EMISION_HC_2024; hoja '3. Vehículos y maquinaria'; E10 (l), Turismos (M1), año 2024.",
+          "fuente_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.1,
+          "provisional": false,
+          "estado": "documentado_D3_disponible_no_usado",
+          "nota_metodologica": "Se documenta para trazabilidad, pero no se activará en el formulario salvo decisión posterior."
+        },
+        "diesel": {
+          "valor": 2.517,
+          "unidad": "kgCO2e/litro",
+          "descripcion": "Gasóleo B7 para turismos M1. Factor operativo para coche diésel.",
+          "fuente": "MITECO_FACTORES_EMISION_HC_2024; hoja '3. Vehículos y maquinaria'; B7 (l), Turismos (M1), año 2024.",
+          "fuente_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.1,
+          "provisional": false,
+          "estado": "documentado_D3_activo_D4",
+          "nota_metodologica": "Se usa B7 como diésel de automoción habitual en el contexto español reciente.",
+          "nota_H1": "Usado también para híbrido diésel convencional y para la parte térmica diésel de híbridos enchufables."
+        },
+        "glp": {
+          "valor": 1.661,
+          "unidad": "kgCO2e/litro",
+          "descripcion": "LPG/GLP para turismos M1. Factor operativo para coche GLP.",
+          "fuente": "MITECO_FACTORES_EMISION_HC_2024; hoja '3. Vehículos y maquinaria'; LPG (l), Turismos (M1), año 2024.",
+          "fuente_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.1,
+          "provisional": false,
+          "estado": "documentado_D3_activo_D4",
+          "nota_metodologica": "Se adopta el factor específico de vehículos MITECO 2024. Puede diferir ligeramente del GLP usado en Vivienda por tratarse de una fuente y contexto de uso distintos."
+        },
+        "electricidad_coche": {
+          "valor": 0.26,
+          "unidad": "kgCO2e/kWh",
+          "descripcion": "Electricidad consumida por coche eléctrico. Se mantiene el mismo proxy eléctrico adoptado en Vivienda para coherencia interna de la calculadora.",
+          "fuente": "MITECO_GUIA_HUELLA_CARBONO; proxy eléctrico usado en Vivienda C5. MITECO_FACTORES_EMISION_HC_2024 aporta mix sin GdO 2024 como referencia de revisión futura.",
+          "fuente_id": "MITECO_GUIA_HUELLA_CARBONO",
+          "fuente_secundaria_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "estado": "fallback_I4d_factor_nacional_si_disponible",
+          "nota_metodologica": "El factor eléctrico real depende del año, comercializadora, garantías de origen y lugar de carga. Para evitar inconsistencias entre Vivienda y Coche eléctrico, D3 mantiene el mismo factor eléctrico operativo ya usado en Vivienda y en la compensación fotovoltaica. Una fase transversal futura puede actualizar todos los usos eléctricos al mismo factor anual más reciente.",
+          "nota_I4d": "Este factor se conserva como base/fallback. Desde I4d, el coche eléctrico usa data/electricity_country_factors.json cuando hay país seleccionado y dato nacional disponible, siempre respetando el control de doble conteo con Vivienda.",
+          "nota_C1": "Desde C1, el factor eléctrico se aplica sobre kWh de red estimados. Si el usuario declara un consumo del vehículo/ficha técnica o desconoce el origen del dato, js/coches.js aplica un ajuste de pérdidas de carga antes de calcular emisiones.",
+          "nota_H1": "Usado también para la parte eléctrica de híbridos enchufables, aplicando el ajuste de pérdidas de carga y el control de doble conteo con Vivienda."
+        },
+        "electricidad_mix_sin_gdo_2024_referencia": {
+          "valor": 0.283,
+          "unidad": "kgCO2e/kWh",
+          "descripcion": "Mix eléctrico sin GdO 2024 documentado por MITECO. Valor de referencia para revisión futura.",
+          "fuente": "MITECO_FACTORES_EMISION_HC_2024; hoja '5. Factores de mix eléctricos'; Mix sin GdO 2024.",
+          "fuente_id": "MITECO_FACTORES_EMISION_HC_2024",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "estado": "documentado_D3_referencia_no_usado",
+          "nota_metodologica": "Se documenta pero no se activa para Coche en D3 porque el resto de la calculadora ya usa 0,260 kgCO2e/kWh. Actualizar solo Coche generaría inconsistencia con Vivienda y con el control de doble conteo."
+        }
+      },
+      "conversiones": {
+        "consumo_l_100km_a_litros_anuales": {
+          "descripcion": "Conversión exacta desde kilómetros anuales y consumo medio en L/100 km a litros anuales.",
+          "formula": "litros_anuales = km_anuales * consumo_l_100km / 100",
+          "divisor": 100,
+          "unidad_entrada": "km/año y L/100 km",
+          "unidad_salida": "litros/año",
+          "incertidumbre_relativa_conversion": 0,
+          "estado": "documentado_D3_exacta"
+        },
+        "consumo_kwh_100km_a_kwh_anuales": {
+          "descripcion": "Conversión exacta desde kilómetros anuales y consumo medio en kWh/100 km a kWh anuales.",
+          "formula": "kWh_anuales = km_anuales * consumo_kWh_100km / 100",
+          "divisor": 100,
+          "unidad_entrada": "km/año y kWh/100 km",
+          "unidad_salida": "kWh/año",
+          "incertidumbre_relativa_conversion": 0,
+          "estado": "documentado_D3_exacta"
+        },
+        "porcentaje_a_fraccion": {
+          "descripcion": "Conversión exacta de porcentaje a fracción para la parte de carga eléctrica ya incluida en Vivienda.",
+          "formula": "fraccion = porcentaje / 100",
+          "divisor": 100,
+          "unidad_entrada": "%",
+          "unidad_salida": "fracción",
+          "incertidumbre_relativa_conversion": 0,
+          "estado": "documentado_D3_exacta"
+        },
+        "ajuste_perdidas_carga_electrica": {
+          "descripcion": "Conversión metodológica para aproximar kWh tomados de la red a partir de kWh/100 km declarados por el usuario en coche eléctrico.",
+          "formula": "kWh_red = km_anuales * consumo_kWh_100km / 100 * factor_ajuste_perdidas_carga",
+          "unidad_entrada": "km/año y kWh/100 km declarados",
+          "unidad_salida": "kWh/año de red estimados",
+          "incertidumbre_relativa_conversion": 0,
+          "estado": "activo_C1",
+          "nota_incertidumbre": "La incertidumbre no se asigna a la conversión matemática, sino al parámetro de ajuste seleccionado en parametros.ajustes_perdidas_carga_electrica."
+        }
+      },
+      "parametros": {
+        "consumo_maximo_validacion": {
+          "valor": 50,
+          "unidad": "L/100km o kWh/100km",
+          "descripcion": "Límite genérico conservado por compatibilidad. Desde D4 se usan límites específicos por tipo de energía.",
+          "estado": "compatibilidad_D3_no_usado_D4"
+        },
+        "ocupacion_media_minima": {
+          "valor": 1,
+          "unidad": "personas",
+          "descripcion": "Ocupación mínima permitida para coche; la ocupación media actúa como divisor exacto.",
+          "incertidumbre_relativa": 0,
+          "estado": "documentado_D3"
+        },
+        "porcentaje_carga_incluida_vivienda_min": {
+          "valor": 0,
+          "unidad": "%",
+          "descripcion": "Mínimo para el porcentaje de electricidad del coche eléctrico ya incluida en Vivienda.",
+          "incertidumbre_relativa": 0,
+          "estado": "documentado_D3"
+        },
+        "porcentaje_carga_incluida_vivienda_max": {
+          "valor": 100,
+          "unidad": "%",
+          "descripcion": "Máximo para el porcentaje de electricidad del coche eléctrico ya incluida en Vivienda.",
+          "incertidumbre_relativa": 0,
+          "estado": "documentado_D3"
+        },
+        "consumo_maximo_validacion_por_energia": {
+          "gasolina": {
+            "valor": 35,
+            "unidad": "L/100km",
+            "descripcion": "Límite de validación para detectar consumos anómalos de coche gasolina. No es un límite físico absoluto.",
+            "estado": "activo_D4_validacion_formulario"
+          },
+          "diesel": {
+            "valor": 35,
+            "unidad": "L/100km",
+            "descripcion": "Límite de validación para detectar consumos anómalos de coche diésel. No es un límite físico absoluto.",
+            "estado": "activo_D4_validacion_formulario"
+          },
+          "glp": {
+            "valor": 45,
+            "unidad": "L/100km",
+            "descripcion": "Límite de validación para detectar consumos anómalos de coche GLP. No es un límite físico absoluto.",
+            "estado": "activo_D4_validacion_formulario"
+          },
+          "electrico": {
+            "valor": 60,
+            "unidad": "kWh/100km",
+            "descripcion": "Límite de validación para detectar consumos anómalos de coche eléctrico. No es un límite físico absoluto.",
+            "estado": "activo_D4_validacion_formulario"
+          }
+        },
+        "ajustes_perdidas_carga_electrica": {
+          "contador_punto_carga": {
+            "valor": 1.0,
+            "unidad": "multiplicador",
+            "etiqueta": "Contador o punto de carga",
+            "descripcion": "El consumo declarado ya representa kWh tomados de la red; no se aplica ajuste adicional.",
+            "incertidumbre_relativa_ajuste": 0.02,
+            "estado": "activo_C1"
+          },
+          "vehiculo_ficha": {
+            "valor": 1.1,
+            "unidad": "multiplicador",
+            "etiqueta": "Ordenador del vehículo o ficha técnica",
+            "descripcion": "Se aplica un ajuste prudente del 10% para aproximar kWh de red por pérdidas de carga cuando el dato procede del vehículo o de una ficha técnica.",
+            "incertidumbre_relativa_ajuste": 0.05,
+            "estado": "activo_C1"
+          },
+          "no_se": {
+            "valor": 1.1,
+            "unidad": "multiplicador",
+            "etiqueta": "No lo sé / dato aproximado",
+            "descripcion": "Se aplica por defecto un ajuste prudente del 10% para no infravalorar el consumo de red cuando el origen del dato no es claro.",
+            "incertidumbre_relativa_ajuste": 0.08,
+            "estado": "activo_C1_opcion_por_defecto"
+          },
+          "criterio": "La calculadora aplica el factor eléctrico sobre kWh de red estimados. El ajuste no pretende modelizar todas las situaciones de carga, sino evitar infravalorar el consumo cuando se usa un dato del vehículo antes de pérdidas."
+        },
+        "incertidumbre_porcentaje_km_electrico_phev": {
+          "valor": 0.15,
+          "unidad": "fraccion",
+          "descripcion": "Incertidumbre relativa orientativa asignada al porcentaje de kilómetros eléctricos declarado por el usuario en híbridos enchufables. Refleja que suele ser una estimación aproximada y que puede variar mucho según hábitos de carga y tipo de trayecto.",
+          "estado": "activo_H1_hibrido_enchufable",
+          "nota_metodologica": "Se combina con la incertidumbre de kilometraje, consumo y, en la parte eléctrica, ajuste de pérdidas de carga. No es una incertidumbre estadística formal; es un parámetro prudente para propagación interna."
+        }
+      },
+      "doble_conteo_coche_electrico": {
+        "regla": "La electricidad usada para cargar el coche eléctrico debe contabilizarse una sola vez. Si ya está incluida en el consumo eléctrico de Vivienda, no debe sumarse de nuevo en Coche.",
+        "formula_kwh_totales_coche": "kWh_red_coche = km_anuales * consumo_kWh_100km / 100 * factor_ajuste_perdidas_carga",
+        "formula_kwh_sumados_en_coche": "kWh_sumados = kWh_red_coche * (1 - fraccion_incluida_en_vivienda)",
+        "formula_emisiones_sumadas": "E_coche = kWh_sumados * factor_electrico / ocupacion_media",
+        "estado": "documentado_D3_implementado_D4_actualizado_C1_kwh_red",
+        "implementacion_D4": "js/coches.js pregunta si la carga eléctrica ya está incluida en Vivienda y excluye esa fracción del cálculo añadido en Coche.",
+        "implementacion_C1": "js/coches.js pregunta el origen del consumo eléctrico y aplica un ajuste de pérdidas de carga cuando el dato no procede claramente de contador/punto de carga."
+      },
+      "pendientes_D4": [],
+      "pendientes_D5_en_adelante": [
+        "Revisar si conviene añadir ruta alternativa por factor medio kgCO2e/km para usuarios que no conocen el consumo.",
+        "Añadir ayudas y explicación ampliada de doble conteo en una subfase posterior.",
+        "Evaluar en una versión futura si conviene añadir una ruta avanzada para híbridos enchufables basada en litros/año y kWh/año medidos directamente, además del modo por porcentaje de kilómetros eléctricos."
+      ],
+      "metodologia_H1_hibridos": {
+        "hibrido_convencional": {
+          "descripcion": "Los híbridos no enchufables se tratan como vehículos de gasolina o diésel con menor consumo real declarado por el usuario.",
+          "formula": "E = km/año × L/100 km / 100 × FE_combustible / ocupación",
+          "nota": "No se añade un factor específico de hibridación para evitar doble corrección: el efecto del sistema híbrido ya debe estar reflejado en el consumo real introducido."
+        },
+        "hibrido_enchufable": {
+          "descripcion": "El híbrido enchufable se calcula como suma de una parte térmica y una parte eléctrica.",
+          "formula_combustible": "E_comb = km × (1 - fracción eléctrica) × L/100 km / 100 × FE_combustible / ocupación",
+          "formula_electricidad": "E_elec = km × fracción eléctrica × kWh/100 km / 100 × ajuste pérdidas carga × (1 - fracción incluida en Vivienda) × FE_electricidad / ocupación",
+          "doble_conteo_vivienda": "La parte eléctrica marcada como ya incluida en Vivienda no se suma de nuevo en Coche; la parte térmica se suma siempre en Coche.",
+          "limitacion": "La división por porcentaje de km eléctricos es una simplificación. Usuarios con datos anuales exactos de litros y kWh podrían obtener un resultado más preciso en una evolución futura."
+        }
+      }
+    },
+    "moto": {
+      "descripcion": "Factores documentados por tipo de moto para el módulo Moto. La ruta metodológica activa es km/año × factor kgCO2e/km.",
+      "estado": "documentado_D5_D6_activo_js_moto",
+      "alcance_metodologico": {
+        "incluye": [
+          "Kilómetros anuales recorridos por la persona usuaria en moto, ciclomotor o escúter.",
+          "Motocicletas pequeñas hasta 125 cc, medianas de más de 125 cc y hasta 500 cc, y grandes de más de 500 cc."
+        ],
+        "excluye": [
+          "Trayectos ya contabilizados en coche, taxi, bus, tren o vuelos.",
+          "Cálculo por consumo real de combustible, que queda como posible mejora futura.",
+          "Moto eléctrica, que requiere una lógica específica de electricidad y doble conteo similar al coche eléctrico."
+        ],
+        "unidad_resultado": "kgCO2e/año personales",
+        "formula": "E = km_anuales × factor_tipo_moto",
+        "doble_conteo": "Los kilómetros introducidos en Moto no deben repetirse en Coche, Taxi/VTC o transporte público."
+      },
+      "factores": {
+        "moto_pequena": {
+          "valor": 0.08319,
+          "unidad": "kgCO2e/km",
+          "descripcion": "Motocicleta pequeña, ciclomotor o escúter hasta 125 cc.",
+          "fuente": "UK Government GHG Conversion Factors 2025, flat file; Passenger vehicles > Motorbike > Small; Scope 1; kg CO2e/km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "estado": "documentado_D5_D6_activo",
+          "nota_metodologica": "Factor medio por kilómetro. No requiere consumo real del usuario; la incertidumbre cubre variabilidad entre modelos, estilos de conducción y condiciones de uso."
+        },
+        "moto_mediana": {
+          "valor": 0.10107,
+          "unidad": "kgCO2e/km",
+          "descripcion": "Motocicleta mediana, de más de 125 cc y hasta 500 cc.",
+          "fuente": "UK Government GHG Conversion Factors 2025, flat file; Passenger vehicles > Motorbike > Medium; Scope 1; kg CO2e/km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "estado": "documentado_D5_D6_activo",
+          "nota_metodologica": "Factor medio por kilómetro. No requiere consumo real del usuario; la incertidumbre cubre variabilidad entre modelos, estilos de conducción y condiciones de uso."
+        },
+        "moto_grande": {
+          "valor": 0.13252,
+          "unidad": "kgCO2e/km",
+          "descripcion": "Motocicleta grande, de más de 500 cc.",
+          "fuente": "UK Government GHG Conversion Factors 2025, flat file; Passenger vehicles > Motorbike > Large; Scope 1; kg CO2e/km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "estado": "documentado_D5_D6_activo",
+          "nota_metodologica": "Factor medio por kilómetro. No requiere consumo real del usuario; la incertidumbre cubre variabilidad entre modelos, estilos de conducción y condiciones de uso."
+        },
+        "moto_generica": {
+          "valor": 0.11337,
+          "unidad": "kgCO2e/km",
+          "descripcion": "Factor medio de motocicleta. Se conserva solo como referencia documental y no se usa en D5-D6.",
+          "fuente": "UK Government GHG Conversion Factors 2025, flat file; Passenger vehicles > Motorbike > Average; Scope 1; kg CO2e/km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "activo": false,
+          "estado": "documentado_D5_D6_referencia_no_usado",
+          "nota_metodologica": "Disponible para una posible opción futura 'no sé el tipo de moto'. En D5-D6 se obliga a elegir tipo para evitar usar un promedio menos informativo."
+        }
+      },
+      "incertidumbre": {
+        "kilometros": "incertidumbres_dato_usuario.kilometros_anuales",
+        "factor_tipo_moto": "incertidumbre_relativa_factor de cada factor",
+        "formula": "σrel = sqrt(σkm² + σfactor²)"
+      },
+      "pendientes": [
+        "D10-D11: ampliar ayudas y explicación '¿Cómo se calcula?' para Moto dentro del bloque de transporte terrestre.",
+        "Fase posterior: valorar una ruta avanzada por consumo real de combustible.",
+        "Fase posterior: valorar tratamiento específico de moto eléctrica."
+      ]
+    },
+    "bus_tren": {
+      "descripcion": "Factores documentados por pasajero-kilómetro para bus, autocar, tren por tipo aproximado, tranvía, metro y taxi/VTC. En T1 se explicitan como proxies orientativos no locales.",
+      "factores": {
+        "bus_urbano": {
+          "valor": 0.10385,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Autobús urbano/local medio por pasajero-km.",
+          "fuente": "UK Government GHG Conversion Factors 2025, condensed set, worksheet 'Business travel- land': Average local bus = 0.10385 kgCO2e/passenger.km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "estado": "documentado_D7_D8b_activo_ocupacion_implicita",
+          "nota_metodologica": "Factor medio por pasajero-km. Se usa como proxy educativo general; la incertidumbre alta cubre diferencias de flota, ocupación media y contexto geográfico.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de autobús urbano/local ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "autocar_interurbano": {
+          "valor": 0.02776,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Autocar o autobús interurbano por pasajero-km.",
+          "fuente": "UK Government GHG Conversion Factors 2025, condensed set, worksheet 'Business travel- land': Coach = 0.02776 kgCO2e/passenger.km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "estado": "documentado_D7_D8b_activo_ocupacion_implicita",
+          "nota_metodologica": "Factor por pasajero-km. La ocupación media está implícita en el factor, por lo que no se divide de nuevo por número de pasajeros.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de autocar/interurbano ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "tren_nacional": {
+          "valor": 0.03546,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Tren nacional medio por pasajero-km. Opción por defecto cuando el usuario no conoce el tipo de tren.",
+          "fuente": "UK Government GHG Conversion Factors 2025, condensed set, worksheet 'Business travel- land': National rail = 0.03546 kgCO2e/passenger.km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.5,
+          "provisional": false,
+          "estado": "I1_activo_tipo_tren_default",
+          "nota_metodologica": "Proxy medio de tren nacional por pasajero-km. En I1 queda como opción por defecto “No lo sé / tren nacional medio”. La incertidumbre alta cubre diferencias por país, mix eléctrico, tipo de tren, tecnología y ocupación.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de tren nacional ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "tranvia": {
+          "valor": 0.0286,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Tranvía o light rail por pasajero-km.",
+          "fuente": "UK Government GHG Conversion Factors 2025, condensed set, worksheet 'Business travel- land': Light rail and tram = 0.02860 kgCO2e/passenger.km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.5,
+          "provisional": false,
+          "estado": "documentado_D7_D8b_activo_ocupacion_implicita",
+          "nota_metodologica": "Factor por pasajero-km; se usa como proxy educativo para tranvía cuando no se dispone de factor local.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de tranvía/light rail ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "metro": {
+          "valor": 0.0278,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Metro por pasajero-km.",
+          "fuente": "UK Government GHG Conversion Factors 2025, condensed set, worksheet 'Business travel- land': London Underground = 0.02780 kgCO2e/passenger.km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.5,
+          "provisional": false,
+          "estado": "documentado_D7_D8b_activo_ocupacion_implicita",
+          "nota_metodologica": "Proxy educativo para metro. La incertidumbre alta cubre diferencias entre redes urbanas, ocupación y mix eléctrico.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de metro ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "taxi_vtc": {
+          "valor": 0.14861,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Taxi/VTC regular por pasajero-km.",
+          "fuente": "UK Government GHG Conversion Factors 2025, condensed set, worksheet 'Business travel- land': Regular taxi = 0.14861 kgCO2e/passenger.km.",
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "incertidumbre_relativa_factor": 0.45,
+          "provisional": false,
+          "estado": "documentado_D7_D8b_activo_ocupacion_implicita",
+          "nota_metodologica": "Taxi/VTC se mantiene en Bus/tren/taxi como servicio de transporte. El usuario introduce km personales; no debe declarar esos km también como Coche privado. El factor ya representa una asignación por pasajero-km.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de taxi/VTC ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "tren_electrico_alta_velocidad": {
+          "valor": 0.02712,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Tren eléctrico o alta velocidad electrificada por pasajero-km.",
+          "fuente": "Campaign for Better Transport, Emissions Comparison Project Methodology, usando datos DESNZ/UK Government GHG Conversion Factors y Office of Rail and Road Table 6100: electric train ≈ 27.12 gCO2e/passenger-km.",
+          "fuente_id": "CAMPAIGN_BETTER_TRANSPORT_RAIL_EMISSIONS_METHOD_2023_ORR_6100",
+          "incertidumbre_relativa_factor": 0.4,
+          "provisional": false,
+          "estado": "documentado_I1_tipo_tren_activo",
+          "nota_metodologica": "Opción simplificada para tren eléctrico o alta velocidad electrificada cuando el usuario conoce el tipo aproximado. No equivale necesariamente a un factor local del país del usuario; mantiene incertidumbre significativa por mix eléctrico, ocupación, operador, velocidad y red.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de tren eléctrico o alta velocidad electrificada ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        },
+        "tren_diesel": {
+          "valor": 0.106,
+          "unidad": "kgCO2e/pasajero-km",
+          "descripcion": "Tren diésel o línea no electrificada por pasajero-km.",
+          "fuente": "Campaign for Better Transport, Emissions Comparison Project Methodology, usando datos DESNZ/UK Government GHG Conversion Factors y Office of Rail and Road Table 6100: diesel train ≈ 106 gCO2e/passenger-km.",
+          "fuente_id": "CAMPAIGN_BETTER_TRANSPORT_RAIL_EMISSIONS_METHOD_2023_ORR_6100",
+          "incertidumbre_relativa_factor": 0.5,
+          "provisional": false,
+          "estado": "documentado_I1_tipo_tren_activo",
+          "nota_metodologica": "Opción simplificada para tren diésel o servicio ferroviario no electrificado. El valor se mantiene como proxy amplio y no sustituye factores locales específicos. La incertidumbre alta cubre variabilidad de flota, ocupación, velocidad, mantenimiento y contexto de explotación.",
+          "ocupacion": {
+            "tratamiento": "implicita_en_factor_pasajero_km",
+            "valor_numerico": null,
+            "se_pide_al_usuario": false,
+            "se_aplica_divisor_adicional": false,
+            "comentario": "El factor de tren diésel o línea no electrificada ya está expresado en kgCO2e/pasajero-km. La ocupación media usada por la fuente no se dispone como parámetro separado dentro de la calculadora.",
+            "implicacion_calculo": "El usuario introduce km personales/año; la calculadora multiplica directamente por el factor por pasajero-km."
+          },
+          "estado_T1": "proxy_orientativo_sin_cambio_de_valor",
+          "limitacion_geografica_T1": "Factor usado como proxy educativo general. Puede diferir de factores locales por país, ciudad, operador, ocupación, flota, tecnología, energía usada y metodología.",
+          "impacto_calculo_T1": "Sin cambio de valor ni fórmula en T1."
+        }
+      },
+      "estado": "T1_factores_proxy_sin_cambios_de_valor",
+      "base_calculo": {
+        "alcance": "Kilómetros personales anuales recorridos en transporte terrestre colectivo o en taxi/VTC.",
+        "unidad_actividad": "pasajero-km/año",
+        "unidad_resultado": "kgCO2e/año personales",
+        "formula": "E = pasajero-km × factor_emision",
+        "nota_ocupacion": "No se pide ocupación al usuario porque los factores operativos ya están expresados por pasajero-km.",
+        "tratamiento_taxi_vtc": "Taxi/VTC se calcula aquí por km personales y factor por pasajero-km; no debe introducirse también en Coche.",
+        "doble_conteo": "Cada trayecto debe declararse una sola vez, en el modo realmente utilizado.",
+        "tratamiento_ocupacion": {
+          "criterio_general": "ocupacion_implicita_en_factor_pasajero_km",
+          "se_pide_ocupacion_al_usuario": false,
+          "se_aplica_divisor_adicional": false,
+          "valor_numerico_ocupacion_media": null,
+          "justificacion": "Los factores operativos están expresados por pasajero-km. Por tanto, los supuestos de ocupación media, flota y condiciones operativas proceden de la fuente del factor y no se parametrizan de forma separada en la calculadora.",
+          "uso_en_memoria_tecnica": "Indicar que el dato de actividad son kilómetros personales recorridos por modo y que no se debe dividir de nuevo por ocupación. La incertidumbre del factor cubre parcialmente la variabilidad por ocupación, país, red, flota, tecnología y contexto de uso."
+        },
+        "nota_memoria_tecnica_ocupacion": "Para bus, autocar, tren, tranvía, metro y taxi/VTC se usan factores por pasajero-km. La ocupación media no es un parámetro operativo independiente; queda incorporada implícitamente en cada factor de emisión. Estos factores son proxies orientativos y no sustituyen factores locales de redes u operadores concretos.",
+        "tratamiento_tipo_tren": "Desde I1 el usuario puede elegir entre tren nacional medio, tren eléctrico/alta velocidad electrificada y tren diésel/no electrificado. Si no conoce el tipo real, se mantiene la opción media.",
+        "formula_tren_I1": "E_tren = pasajero-km/año × factor_tren_tipo_seleccionado",
+        "limitacion_tipo_tren": "La selección reduce parcialmente la variabilidad del factor medio, pero no sustituye factores locales por país, operador, ocupación real o mix eléctrico.",
+        "criterio_T1_factores_proxy": "Los factores se usan como proxies generales por pasajero-km. No representan necesariamente la red local del usuario ni un país, operador o ciudad concretos.",
+        "variabilidad_local_T1": [
+          "país y ciudad",
+          "operador y metodología de la fuente",
+          "ocupación media real",
+          "flota y tecnología del vehículo",
+          "mix eléctrico y eficiencia energética en modos electrificados",
+          "velocidad, paradas, congestión, topografía y condiciones de explotación"
+        ],
+        "ajuste_local_futuro_T1": {
+          "estado": "preparado_metodologicamente_no_activo",
+          "criterio": "En una fase futura podrán incorporarse factores locales o ajustes por país cuando existan datos homogéneos, trazables y comparables por modo.",
+          "motivo_no_activar_ahora": "Para tren eléctrico, metro o tranvía no basta con escalar por el factor eléctrico nacional: también influyen ocupación, eficiencia del material rodante, red, velocidad, operador y límites metodológicos de la fuente.",
+          "impacto_calculo_T1": "Nulo: T1 no modifica factores ni fórmulas."
+        }
+      },
+      "pendientes_metodologicos": [
+        "Revisión futura: valorar factores españoles/locales para metro, tranvía, tren y autobús cuando existan fuentes homogéneas y actualizadas.",
+        "Revisión futura: decidir si Taxi/VTC debe permitir ocupación explícita o mantenerse como factor por pasajero-km.",
+        "Revisión futura: añadir explicación ampliada “¿Cómo se calcula?” y ayudas contextuales en D10-D11.",
+        "Revisión futura: cuando se activen factores dependientes del país, revisar los factores de tren eléctrico/alta velocidad según mix eléctrico nacional o datos ferroviarios locales.",
+        "Revisión futura: valorar si conviene separar cercanías/regional/intercity/alta velocidad con fuentes homogéneas.",
+        "T1: si se activan ajustes por país para tren eléctrico, metro o tranvía, documentar separadamente componente eléctrico, ocupación y límites de comparabilidad; no escalar únicamente por mix eléctrico salvo justificación técnica.",
+        "T1: valorar una futura biblioteca de factores locales por país/ciudad/operador cuando existan datos homogéneos, actualizados y redistribuibles."
+      ]
+    }
+  },
+  "vuelos": {
+    "descripcion": "Factores y parámetros documentados para vuelos. El cálculo usa distancia estimada por tramo, factor por pasajero-km según bin de distancia, modulador de clase por viaje ajustable por bin de distancia, itinerario solo ida/ida y vuelta y número de repeticiones anuales. Desde M2 se calculan siempre dos lecturas: emisiones directas sin RF/no-CO2 indirecto e impacto climático ampliado con multiplicador no-CO2. Desde M3 el método preferente de distancia es aeropuerto-aeropuerto mediante base IATA en data/vuelos.json; ciudades, km y horas se mantienen como respaldo.",
+    "factores": {
+      "vuelo_generico_por_persona_tramo": {
+        "valor": 250,
+        "unidad": "kgCO2e/persona/tramo",
+        "descripcion": "Valor heredado del prototipo anterior. Se conserva solo como referencia histórica y no debería usarse en el cálculo rediseñado por distancia.",
+        "fuente": "factor heredado del prototipo; no operativo",
+        "incertidumbre_relativa_factor": 0.7,
+        "provisional": true,
+        "activo": false,
+        "estado": "historico_no_operativo_E2"
+      }
+    },
+    "factores_por_distancia": {
+      "corto": {
+        "valor": 0.13552,
+        "unidad": "kgCO2e/pasajero-km",
+        "min_km": 0,
+        "max_km": 500,
+        "descripcion": "Vuelo corto. Proxy documentado basado en UK Government GHG Conversion Factors 2025, Business travel-air, Domestic to/from UK, Average passenger, Without RF. Factor directo CO2e sin impactos no-CO2 indirectos adicionales; incluye uplift de distancia del 8% en la fuente.",
+        "fuente": "UK Government GHG Conversion Factors 2025, condensed set, Business travel-air, Domestic to/from UK, Average passenger, Without RF = 0,13552 kgCO2e/passenger.km.",
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "hoja_fuente": "Business travel- air",
+        "columna_fuente": "Without RF - kg CO2e",
+        "referencia_fuente": "Domestic, to/from UK; Average passenger; passenger.km",
+        "distancia_uplift_incluido_en_factor": true,
+        "incertidumbre_relativa_factor": 0.3,
+        "provisional": false,
+        "estado": "documentado_E2",
+        "nota_metodologica": "La categoría de la fuente es doméstica británica; se usa aquí como proxy simplificado para tramos muy cortos. Para distancias cortas la variabilidad por ciclo LTO, ocupación y tipo de aeronave es alta."
+      },
+      "medio": {
+        "valor": 0.07435,
+        "unidad": "kgCO2e/pasajero-km",
+        "min_km": 500,
+        "max_km": 2000,
+        "descripcion": "Vuelo medio. Proxy documentado basado en UK Government GHG Conversion Factors 2025, Short-haul to/from UK, Economy class, Without RF. Factor directo CO2e sin impactos no-CO2 indirectos adicionales; incluye uplift de distancia del 8% en la fuente.",
+        "fuente": "UK Government GHG Conversion Factors 2025, condensed set, Business travel-air, Short-haul to/from UK, Economy class, Without RF = 0,07435 kgCO2e/passenger.km.",
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "hoja_fuente": "Business travel- air",
+        "columna_fuente": "Without RF - kg CO2e",
+        "referencia_fuente": "Short-haul, to/from UK; Economy class; passenger.km",
+        "distancia_uplift_incluido_en_factor": true,
+        "incertidumbre_relativa_factor": 0.25,
+        "provisional": false,
+        "estado": "documentado_E2",
+        "nota_metodologica": "La clasificación operativa de la calculadora usa distancia, no geografía UK/Europa; por tanto este valor es un proxy para tramos interurbanos/regionales de distancia media."
+      },
+      "largo": {
+        "valor": 0.06926,
+        "unidad": "kgCO2e/pasajero-km",
+        "min_km": 2000,
+        "max_km": 5000,
+        "descripcion": "Vuelo largo. Proxy documentado basado en UK Government GHG Conversion Factors 2025, Long-haul to/from UK, Economy class, Without RF. Factor directo CO2e sin impactos no-CO2 indirectos adicionales; incluye uplift de distancia del 8% en la fuente.",
+        "fuente": "UK Government GHG Conversion Factors 2025, condensed set, Business travel-air, Long-haul to/from UK, Economy class, Without RF = 0,06926 kgCO2e/passenger.km.",
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "hoja_fuente": "Business travel- air",
+        "columna_fuente": "Without RF - kg CO2e",
+        "referencia_fuente": "Long-haul, to/from UK; Economy class; passenger.km",
+        "distancia_uplift_incluido_en_factor": true,
+        "incertidumbre_relativa_factor": 0.25,
+        "provisional": false,
+        "estado": "documentado_E2",
+        "nota_metodologica": "Se usa como proxy para vuelos de larga distancia; la calculadora no distingue país de origen/destino ni tipo de aeronave."
+      },
+      "muy_largo": {
+        "valor": 0.06449,
+        "unidad": "kgCO2e/pasajero-km",
+        "min_km": 5000,
+        "max_km": null,
+        "descripcion": "Vuelo muy largo. Proxy documentado basado en UK Government GHG Conversion Factors 2025, International to/from non-UK, Economy class, Without RF. Factor directo CO2e sin impactos no-CO2 indirectos adicionales; incluye uplift de distancia del 8% en la fuente.",
+        "fuente": "UK Government GHG Conversion Factors 2025, condensed set, Business travel-air, International to/from non-UK, Economy class, Without RF = 0,06449 kgCO2e/passenger.km.",
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "hoja_fuente": "Business travel- air",
+        "columna_fuente": "Without RF - kg CO2e",
+        "referencia_fuente": "International, to/from non-UK; Economy class; passenger.km",
+        "distancia_uplift_incluido_en_factor": true,
+        "incertidumbre_relativa_factor": 0.3,
+        "provisional": false,
+        "estado": "documentado_E2",
+        "nota_metodologica": "Se adopta para tramos muy largos en una calculadora global. Es un proxy general y no reemplaza factores específicos por aerolínea, aeronave, ocupación o ruta."
+      }
+    },
+    "parametros": {
+      "velocidad_media_km_h": {
+        "valor": 800,
+        "unidad": "km/h",
+        "descripcion": "Velocidad media orientativa usada para convertir horas de vuelo introducidas por el usuario en kilómetros aproximados.",
+        "fuente": "Supuesto metodológico interno mantenido en E2; representa una velocidad de crucero/promedio simplificada para vuelos comerciales y conserva una incertidumbre alta.",
+        "incertidumbre_relativa_factor": 0.15,
+        "provisional": false,
+        "fuente_id": "SUPUESTO_INTERNO_E2_VELOCIDAD_VUELO",
+        "estado": "supuesto_documentado_E2"
+      },
+      "incertidumbre_ciudad_aeropuerto_km": {
+        "valor": 30,
+        "unidad": "km por tramo",
+        "descripcion": "Incertidumbre absoluta asociada a usar coordenadas de ciudad como proxy de origen/destino, en lugar de coordenadas exactas de aeropuertos.",
+        "fuente": "Supuesto metodológico interno documentado en E2, vinculado al criterio D15b de ciudades como proxy geográfico.",
+        "incertidumbre_relativa_factor": 0,
+        "provisional": false,
+        "fuente_id": "SUPUESTO_INTERNO_E2_CIUDAD_AEROPUERTO",
+        "estado": "supuesto_documentado_E2"
+      },
+      "incertidumbre_aeropuerto_iata_km": {
+        "valor": 10,
+        "unidad": "km por tramo",
+        "descripcion": "Incertidumbre absoluta asociada a usar coordenadas de aeropuertos IATA como aproximación de distancia de gran círculo entre aeropuertos.",
+        "fuente": "Supuesto metodológico interno M3 basado en el uso de coordenadas aeroportuarias; los factores fuente ya incorporan uplift de distancia del 8%, por lo que aquí no se añade otra corrección de ruta.",
+        "incertidumbre_relativa_factor": 0,
+        "provisional": false,
+        "fuente_id": "SUPUESTO_INTERNO_M3_AEROPUERTO_IATA",
+        "estado": "supuesto_documentado_M3"
+      }
+    },
+    "moduladores": {
+      "clase_economica": {
+        "valor": 1,
+        "unidad": "multiplicador",
+        "descripcion": "Multiplicador base para clase económica.",
+        "fuente": "Definición operativa: la economía es la clase base de los factores por distancia de E2.",
+        "incertidumbre_relativa_factor": 0.05,
+        "provisional": false,
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "estado": "documentado_E2",
+        "nota_metodologica": "Los factores por distancia de E2 se toman para economía o promedio doméstico; económica se mantiene como base = 1."
+      },
+      "clase_business": {
+        "valor": 2.9,
+        "unidad": "multiplicador",
+        "descripcion": "Multiplicador global de respaldo para clase business. El cálculo M3 usa preferentemente la matriz por clase y distancia.",
+        "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air. En vuelos long-haul/international, la relación Business/Economy sin RF es aproximadamente 2,9 por el mayor espacio asignado por pasajero.",
+        "incertidumbre_relativa_factor": 0.3,
+        "provisional": false,
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "estado": "documentado_E2_simplificado_fallback_M3",
+        "nota_metodologica": "Desde M3 se evita aplicar automáticamente 2,9 a todos los vuelos: la matriz por distancia reduce la sobreestimación potencial en vuelos cortos/medios."
+      },
+      "clase_primera": {
+        "valor": 4.0,
+        "unidad": "multiplicador",
+        "descripcion": "Multiplicador global de respaldo para primera clase. El cálculo M3 usa preferentemente la matriz por clase y distancia.",
+        "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air. En vuelos long-haul/international, la relación First/Economy sin RF es aproximadamente 4,0 por el mayor espacio asignado por pasajero.",
+        "incertidumbre_relativa_factor": 0.35,
+        "provisional": false,
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "estado": "documentado_E2_simplificado_fallback_M3",
+        "nota_metodologica": "Desde M3 se usa una matriz por distancia; primera clase es una simplificación y no existe en todos los vuelos."
+      },
+      "forzamiento_radiativo": {
+        "valor": 1.7,
+        "unidad": "multiplicador",
+        "descripcion": "Multiplicador para incorporar de forma orientativa impactos climáticos no-CO2 de la aviación en altura en la lectura ampliada.",
+        "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air y methodology paper: factores con RF aplican un incremento aproximado del 70% sobre el componente CO2 para representar impactos indirectos no-CO2.",
+        "incertidumbre_relativa_factor": 0.6,
+        "provisional": false,
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "fuente_contexto_id": "IPCC_SPECIAL_REPORT_AVIATION_1999",
+        "estado": "documentado_E2",
+        "nota_metodologica": "Los impactos no-CO2 tienen alta incertidumbre científica y dependen de altura, latitud, meteorología, hora y ruta. Desde M2 la calculadora muestra siempre una lectura directa y una lectura ampliada; este multiplicador se aplica una sola vez solo en la lectura ampliada."
+      },
+      "solo_ida": {
+        "valor": 1,
+        "unidad": "multiplicador_trayecto",
+        "descripcion": "Multiplicador para viaje de solo ida.",
+        "fuente": "definición lógica",
+        "incertidumbre_relativa_factor": 0,
+        "provisional": false,
+        "estado": "definicion_logica_documentada_E2"
+      },
+      "ida_y_vuelta": {
+        "valor": 2,
+        "unidad": "multiplicador_trayecto",
+        "descripcion": "Multiplicador para viaje de ida y vuelta.",
+        "fuente": "definición lógica",
+        "incertidumbre_relativa_factor": 0,
+        "provisional": false,
+        "estado": "definicion_logica_documentada_E2"
+      },
+      "clase_premium_economy": {
+        "valor": 1.6,
+        "unidad": "multiplicador",
+        "descripcion": "Multiplicador global de respaldo para premium economy. El cálculo M3 usa preferentemente la matriz por clase y distancia.",
+        "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air. Relación orientativa Premium economy/Economy en vuelos long-haul/international; se conserva como fallback operativo.",
+        "incertidumbre_relativa_factor": 0.25,
+        "provisional": false,
+        "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+        "estado": "documentado_M3_fallback",
+        "nota_metodologica": "No se usa como valor principal si existe vuelos.moduladores_clase_por_distancia para el bin del tramo."
+      }
+    },
+    "base_calculo": {
+      "unidad_resultado": "kgCO2e/año personales",
+      "formula_operativa": "E_tramo = distancia_km × FE_distancia × modulador_clase × modulador_no_CO2 × modulador_itinerario",
+      "factor_base": "Los factores por distancia de E2 se expresan en kgCO2e/pasajero-km sin RF/no-CO2 indirecto adicional.",
+      "distancia": "La distancia por ciudades se estima mediante Haversine entre coordenadas urbanas. La entrada manual por km permite usar una distancia más ajustada si el usuario la conoce.",
+      "uplift_ruta": "Los factores UK Government Business travel-air incorporan un uplift de distancia del 8% para rutas no perfectamente directas, desvíos, esperas y congestión. Por eso la calculadora no aplica un multiplicador adicional de ruta en JS.",
+      "impactos_no_CO2": "Si el usuario activa la casilla, se aplica el multiplicador vuelos.moduladores.forzamiento_radiativo sobre el resultado directo del tramo.",
+      "clase": "Los multiplicadores de clase son una simplificación global aplicada a todos los tramos; representan la mayor asignación por pasajero asociada al espacio ocupado por clases superiores.",
+      "estado_E2": "factores_documentados_sin_cambios_JS"
+    },
+    "incertidumbres_E2": {
+      "criterio_general": "Las incertidumbres son relativas y se combinan con la capa común de incertidumbre. En vuelos se mantienen relativamente altas por variabilidad de ruta, ocupación, aeronave, clase, aproximación ciudad/aeropuerto y efectos no-CO2.",
+      "factores_por_distancia": "±25% a ±30% según bin, por el uso de proxies genéricos internacionales y bins simplificados por distancia.",
+      "clase": "Economía ±5%; business ±30%; primera ±35%, porque el multiplicador único simplifica relaciones que dependen de haul y configuración de cabina.",
+      "impactos_no_CO2": "±60%, por elevada incertidumbre espacial, temporal y científica del efecto climático no-CO2.",
+      "horas_a_km": "La conversión horas→km usa velocidad media con incertidumbre ±15%."
+    },
+    "criterios_resultado_M2": {
+      "directo": {
+        "descripcion": "Resultado basado en factores por distancia Without RF, clase por viaje, itinerario y repeticiones. No aplica el multiplicador de impactos no-CO2.",
+        "multiplicador_no_CO2": 1,
+        "uso": "Lectura informativa y opción de resultado principal si se desea mostrar solo emisiones directas del vuelo."
+      },
+      "ampliado": {
+        "descripcion": "Resultado que aplica una sola vez el multiplicador vuelos.moduladores.forzamiento_radiativo sobre la lectura directa para representar impactos climáticos no-CO2 en altura.",
+        "multiplicador_no_CO2": "vuelos.moduladores.forzamiento_radiativo",
+        "uso": "Lectura recomendada por defecto como resultado principal para evitar infravalorar la aviación en una calculadora climática personal."
+      },
+      "nota_incertidumbre": "La incertidumbre combinada enviada a Resultados corresponde al criterio seleccionado como resultado principal. El criterio ampliado incorpora la incertidumbre elevada del multiplicador no-CO2."
+    },
+    "moduladores_clase_por_distancia": {
+      "economica": {
+        "corto": {
+          "valor": 1.0,
+          "unidad": "multiplicador",
+          "descripcion": "Clase económica en vuelo corto; valor base del factor por distancia.",
+          "fuente": "Definición operativa: económica es la clase base.",
+          "incertidumbre_relativa_factor": 0.05,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "medio": {
+          "valor": 1.0,
+          "unidad": "multiplicador",
+          "descripcion": "Clase económica en vuelo medio; valor base del factor por distancia.",
+          "fuente": "Definición operativa: económica es la clase base.",
+          "incertidumbre_relativa_factor": 0.05,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "largo": {
+          "valor": 1.0,
+          "unidad": "multiplicador",
+          "descripcion": "Clase económica en vuelo largo; valor base del factor por distancia.",
+          "fuente": "Definición operativa: económica es la clase base.",
+          "incertidumbre_relativa_factor": 0.05,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "muy_largo": {
+          "valor": 1.0,
+          "unidad": "multiplicador",
+          "descripcion": "Clase económica en vuelo muy largo; valor base del factor por distancia.",
+          "fuente": "Definición operativa: económica es la clase base.",
+          "incertidumbre_relativa_factor": 0.05,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "default": {
+          "valor": 1.0,
+          "unidad": "multiplicador",
+          "descripcion": "Clase económica, respaldo por defecto.",
+          "fuente": "Definición operativa.",
+          "incertidumbre_relativa_factor": 0.05,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        }
+      },
+      "premium_economy": {
+        "corto": {
+          "valor": 1.2,
+          "unidad": "multiplicador",
+          "descripcion": "Premium economy en vuelo corto. Proxy prudente porque la categoría no siempre existe en rutas cortas.",
+          "fuente": "Supuesto M3 basado en relaciones de cabina UK Government 2025 y criterio prudente para short-haul.",
+          "incertidumbre_relativa_factor": 0.25,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "supuesto_documentado_M3"
+        },
+        "medio": {
+          "valor": 1.3,
+          "unidad": "multiplicador",
+          "descripcion": "Premium economy en vuelo medio. Proxy prudente.",
+          "fuente": "Supuesto M3 basado en relaciones de cabina UK Government 2025 y criterio prudente para short-haul/medium.",
+          "incertidumbre_relativa_factor": 0.25,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "supuesto_documentado_M3"
+        },
+        "largo": {
+          "valor": 1.6,
+          "unidad": "multiplicador",
+          "descripcion": "Premium economy en vuelo largo. Relación orientativa frente a economía.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relación Premium economy/Economy en long-haul/international.",
+          "incertidumbre_relativa_factor": 0.25,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "muy_largo": {
+          "valor": 1.6,
+          "unidad": "multiplicador",
+          "descripcion": "Premium economy en vuelo muy largo. Relación orientativa frente a economía.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relación Premium economy/Economy en long-haul/international.",
+          "incertidumbre_relativa_factor": 0.25,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "default": {
+          "valor": 1.6,
+          "unidad": "multiplicador",
+          "descripcion": "Premium economy, respaldo por defecto.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air.",
+          "incertidumbre_relativa_factor": 0.25,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        }
+      },
+      "business": {
+        "corto": {
+          "valor": 1.5,
+          "unidad": "multiplicador",
+          "descripcion": "Business en vuelo corto. Proxy reducido para evitar aplicar relaciones long-haul a rutas cortas.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relaciones por cabina y criterio prudente M3 para short-haul.",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "supuesto_documentado_M3"
+        },
+        "medio": {
+          "valor": 1.8,
+          "unidad": "multiplicador",
+          "descripcion": "Business en vuelo medio. Proxy intermedio.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relaciones por cabina y criterio prudente M3 para medium-haul.",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "supuesto_documentado_M3"
+        },
+        "largo": {
+          "valor": 2.9,
+          "unidad": "multiplicador",
+          "descripcion": "Business en vuelo largo. Relación orientativa frente a economía.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relación Business/Economy en long-haul/international.",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "muy_largo": {
+          "valor": 2.9,
+          "unidad": "multiplicador",
+          "descripcion": "Business en vuelo muy largo. Relación orientativa frente a economía.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relación Business/Economy en long-haul/international.",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "default": {
+          "valor": 2.9,
+          "unidad": "multiplicador",
+          "descripcion": "Business, respaldo por defecto.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air.",
+          "incertidumbre_relativa_factor": 0.3,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        }
+      },
+      "primera": {
+        "corto": {
+          "valor": 2.0,
+          "unidad": "multiplicador",
+          "descripcion": "Primera clase en vuelo corto. Proxy conservador; muchas rutas cortas no ofrecen primera clase real.",
+          "fuente": "Supuesto M3 basado en relaciones de cabina y criterio prudente para short-haul.",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "supuesto_documentado_M3"
+        },
+        "medio": {
+          "valor": 2.5,
+          "unidad": "multiplicador",
+          "descripcion": "Primera clase en vuelo medio. Proxy intermedio.",
+          "fuente": "Supuesto M3 basado en relaciones de cabina y criterio prudente para medium-haul.",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "supuesto_documentado_M3"
+        },
+        "largo": {
+          "valor": 4.0,
+          "unidad": "multiplicador",
+          "descripcion": "Primera clase en vuelo largo. Relación orientativa frente a economía.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relación First/Economy en long-haul/international.",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "muy_largo": {
+          "valor": 4.0,
+          "unidad": "multiplicador",
+          "descripcion": "Primera clase en vuelo muy largo. Relación orientativa frente a economía.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air; relación First/Economy en long-haul/international.",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        },
+        "default": {
+          "valor": 4.0,
+          "unidad": "multiplicador",
+          "descripcion": "Primera clase, respaldo por defecto.",
+          "fuente": "UK Government GHG Conversion Factors 2025, Business travel-air.",
+          "incertidumbre_relativa_factor": 0.35,
+          "provisional": false,
+          "fuente_id": "UK_GOV_GHG_CONVERSION_FACTORS_2025",
+          "estado": "documentado_M3"
+        }
+      }
+    }
+  },
+  "productos": {
+    "descripcion": "Módulo de consumo personal anual estimado mediante factores monetarios kgCO2e/EUR. Desde L1 permite introducir importes en EUR o USD; los importes en USD se convierten internamente a EUR antes de aplicar los factores. Desde M1 incorpora ajuste precio-base y escala de incertidumbre por categoría.",
+    "frecuencias": {
+      "diario": {
+        "valor": 365,
+        "unidad": "multiplicador_anual",
+        "descripcion": "Conversión de gasto diario a gasto anual. Debe usarse solo cuando el importe introducido representa realmente un día medio de consumo.",
+        "incertidumbre_dato_usuario_ruta": "incertidumbres_dato_usuario.gasto_diario_recurrente",
+        "estado_metodologico": "documentado_F3_frecuencia"
+      },
+      "semanal": {
+        "valor": 52,
+        "unidad": "multiplicador_anual",
+        "descripcion": "Conversión de gasto semanal a gasto anual. Adecuado para gastos que el usuario estima por semana típica.",
+        "incertidumbre_dato_usuario_ruta": "incertidumbres_dato_usuario.gasto_semanal_recurrente",
+        "estado_metodologico": "documentado_F3_frecuencia"
+      },
+      "mensual": {
+        "valor": 12,
+        "unidad": "multiplicador_anual",
+        "descripcion": "Conversión de gasto mensual a gasto anual. Es la selección inicial recomendada para gastos recurrentes por ser la escala presupuestaria más habitual.",
+        "incertidumbre_dato_usuario_ruta": "incertidumbres_dato_usuario.gasto_mensual_recurrente",
+        "estado_metodologico": "documentado_F3_frecuencia"
+      },
+      "anual": {
+        "valor": 1,
+        "unidad": "multiplicador_anual",
+        "descripcion": "Gasto ya expresado en base anual. Tiene menor incertidumbre de extrapolación temporal que las frecuencias más cortas.",
+        "incertidumbre_dato_usuario_ruta": "incertidumbres_dato_usuario.gasto_anual_recurrente",
+        "estado_metodologico": "documentado_F3_frecuencia"
+      }
+    },
+    "factores": {
+      "comida_bebida": {
+        "valor": 1.0,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Productos alimenticios y bebidas. Proxy monetario sectorial basado en productos agroalimentarios transformados; puede modularse por perfil alimentario aproximado en I3.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.6,
+        "provisional": false,
+        "fuente_categoria": "Produits agro-alimentaires transformés",
+        "valor_original_kgco2e_por_keuro_ht": 1000,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_I3_proxy_monetario_con_modulador_dieta; M1_factor_monetario_ajustado",
+        "notas_uso": "Aplicado como proxy amplio para compra de alimentos y bebidas. En I3 puede ajustarse con un modulador prudente según dieta vegana, vegetariana u omnívora con consumo bajo/medio/alto de carne. Sigue siendo un cálculo monetario, no físico: el precio no captura completamente composición alimentaria, kg consumidos, desperdicio, origen ni estacionalidad. P2: se mantiene el factor central, pero se clasifica como categoría de alta sensibilidad y futura candidata a módulo propio de Alimentación.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.94,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "ropa_textiles_calzado": {
+        "valor": 0.6,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Ropa, textiles y calzado. Proxy monetario sectorial para prendas y textiles de consumo personal.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.55,
+        "provisional": false,
+        "fuente_categoria": "Vêtements / textiles",
+        "valor_original_kgco2e_por_keuro_ht": 600,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Factor monetario medio; no distingue fibras, origen, segunda mano, reparación ni vida útil real de la prenda. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "papel": {
+        "valor": 0.28,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Libros, revistas, periódicos y publicaciones impresas. Proxy monetario basado en edición/publicaciones.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.45,
+        "provisional": false,
+        "fuente_categoria": "Édition (livres, journaux, revues, etc.)",
+        "valor_original_kgco2e_por_keuro_ht": 280,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Adecuado para publicaciones y material impreso. No debe interpretarse como un factor genérico para grandes compras de papel, cartón, embalajes o productos higiénicos de celulosa; para esos casos serían preferibles factores físicos específicos. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; P2: se ajusta la etiqueta visible para reflejar mejor la categoría de fuente.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "computadoras": {
+        "valor": 0.4,
+        "unidad": "kgCO2e/EUR_compra",
+        "tipo": "producto_duradero",
+        "descripcion": "Computadoras, teléfonos móviles y equipos informáticos. Proxy monetario de fabricación/adquisición anualizado por vida útil.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.55,
+        "provisional": false,
+        "fuente_categoria": "Produits informatiques, électroniques et optiques",
+        "valor_original_kgco2e_por_keuro_ht": 400,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Incluye móviles metodológicamente por vida útil corta y obsolescencia tecnológica. Si se conoce el modelo concreto, es preferible un dato ACV por unidad. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "television_radio_telefono": {
+        "valor": 0.4,
+        "unidad": "kgCO2e/EUR_compra",
+        "tipo": "producto_duradero",
+        "descripcion": "Televisión, radio y otros equipos audiovisuales. Proxy monetario de fabricación/adquisición anualizado por vida útil; los teléfonos móviles se agrupan con informática.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.55,
+        "provisional": false,
+        "fuente_categoria": "Produits informatiques, électroniques et optiques",
+        "valor_original_kgco2e_por_keuro_ht": 400,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Se usa el mismo proxy sectorial de electrónica/equipos ópticos que para informática, pero la vida útil puede ser mayor y se revisará en F3. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "vehiculos_motor": {
+        "valor": 0.7,
+        "unidad": "kgCO2e/EUR_compra",
+        "tipo": "producto_duradero",
+        "descripcion": "Compra de vehículos de motor: fabricación/adquisición anualizada por vida útil. No incluye combustible, electricidad de carga, uso, peajes, mantenimiento corriente ni seguros para evitar doble conteo con Transporte y otras categorías.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.5,
+        "provisional": false,
+        "fuente_categoria": "Machines et équipements / proxy monetario para bienes duraderos complejos",
+        "valor_original_kgco2e_por_keuro_ht": 700,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Proxy monetario conservador para compra de vehículos cuando no se usa masa del vehículo ni factor físico de fabricación. El uso energético pertenece a Transporte. No incluir combustible, recargas, peajes, mantenimiento corriente ni seguros si ya se tratan en otros módulos. P2: la incertidumbre del factor se ajusta de 0,60 a 0,50 porque el usuario suele conocer el precio de compra y la vida útil prevista; la incertidumbre restante refleja que el precio sigue siendo un proxy imperfecto de la fabricación, especialmente por tamaño, tecnología, batería, país de fabricación y mercado nuevo/usado.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "muebles_otros": {
+        "valor": 0.6,
+        "unidad": "kgCO2e/EUR_compra",
+        "tipo": "producto_duradero",
+        "descripcion": "Muebles y otros productos manufacturados. Proxy monetario anualizado por vida útil.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.55,
+        "provisional": false,
+        "fuente_categoria": "Meubles et autres biens manufacturés",
+        "valor_original_kgco2e_por_keuro_ht": 600,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Proxy amplio para mobiliario y manufacturas; no distingue materiales, peso, durabilidad ni segunda mano. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "bares_cafeterias_desayunos": {
+        "valor": 0.18,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Bares, cafeterías y desayunos ligeros. Proxy monetario P2b para consumos ligeros fuera de casa; evita aplicar el factor amplio de hostelería a cafés o desayunos simples.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES; CRITERIO_AHDC_P2B",
+        "incertidumbre_relativa_factor": 0.45,
+        "provisional": false,
+        "fuente_categoria": "Hébergement et restauration — desglose operativo AHdC P2b para consumo ligero de bar/cafetería",
+        "valor_equivalente_operativo_kgco2e_por_keuro_ht": 180,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_equivalente_operativo_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "factor_derivado_AHDC_P2b": true,
+        "estado_metodologico": "P2b_desagregacion_hosteleria_servicios_hogar; M1_factor_monetario_ajustado",
+        "notas_uso": "Usar para cafés, desayunos ligeros, bebidas y snacks sencillos fuera de casa. No usar para comidas/cenas completas ni alojamiento. Factor derivado de forma prudente a partir del bloque amplio de hostelería; debe revisarse si se dispone de un ratio específico.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con factores monetarios kgCO2e/k€ HT."
+      },
+      "restaurantes": {
+        "valor": 0.32,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Restaurantes y comidas/cenas fuera. Proxy monetario equivalente al factor amplio de hostelería/restauración aplicado específicamente a comidas o cenas completas fuera del hogar.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES; CRITERIO_AHDC_P2B",
+        "incertidumbre_relativa_factor": 0.45,
+        "provisional": false,
+        "fuente_categoria": "Hébergement et restauration",
+        "valor_equivalente_operativo_kgco2e_por_keuro_ht": 320,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_equivalente_operativo_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "factor_derivado_AHDC_P2b": true,
+        "estado_metodologico": "P2b_desagregacion_hosteleria_servicios_hogar; M1_factor_monetario_ajustado",
+        "notas_uso": "Usar para comidas y cenas fuera de casa. No duplicar compra doméstica de alimentos ni gastos de bares/cafeterías ligeros declarados en su categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con factores monetarios kgCO2e/k€ HT."
+      },
+      "alojamientos_ocasionales": {
+        "valor": 0.24,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Alojamientos ocasionales. Proxy monetario P2b para noches de hotel, hostal, apartamento turístico u otros alojamientos no habituales.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES; CRITERIO_AHDC_P2B",
+        "incertidumbre_relativa_factor": 0.55,
+        "provisional": false,
+        "fuente_categoria": "Hébergement et restauration — desglose operativo AHdC P2b para alojamiento",
+        "valor_equivalente_operativo_kgco2e_por_keuro_ht": 240,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_equivalente_operativo_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "factor_derivado_AHDC_P2b": true,
+        "estado_metodologico": "P2b_desagregacion_hosteleria_servicios_hogar; M1_factor_monetario_ajustado",
+        "notas_uso": "Usar solo para alojamiento ocasional personal. No incluye vuelos, trenes, taxi/VTC ni desplazamientos asociados. Alta variabilidad por país, categoría de alojamiento, ocupación, climatización y servicios.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con factores monetarios kgCO2e/k€ HT."
+      },
+      "llamadas_telefonicas": {
+        "valor": 0.17,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Telefonía, internet y comunicaciones: servicios, no equipos. Los teléfonos móviles comprados se incluyen con informática.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.35,
+        "provisional": false,
+        "fuente_categoria": "Télécommunications",
+        "valor_original_kgco2e_por_keuro_ht": 170,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Aplicable a cuotas y servicios de telecomunicaciones. No cubre la compra de dispositivos. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "servicios_hogar": {
+        "valor": 0.17,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Servicios del hogar: seguridad, mantenimiento y otros servicios domésticos no energéticos. Proxy monetario para cuotas de alarma, vigilancia, monitorización, mantenimiento recurrente o asistencia del hogar.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES; CRITERIO_AHDC_P2B",
+        "incertidumbre_relativa_factor": 0.45,
+        "provisional": false,
+        "fuente_categoria": "Services aux ménages / services génériques — proxy AHdC P2b basado en ratios monetarios de servicios",
+        "valor_equivalente_operativo_kgco2e_por_keuro_ht": 170,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_equivalente_operativo_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "factor_derivado_AHDC_P2b": true,
+        "estado_metodologico": "P2b_desagregacion_hosteleria_servicios_hogar; M1_factor_monetario_ajustado",
+        "notas_uso": "Si el gasto corresponde a todo el hogar, introducir solo la parte personal. No incluir electricidad, gas, internet/telefonía, seguros reales ni compra de equipos duraderos.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con factores monetarios kgCO2e/k€ HT."
+      },
+      "banca_finanzas": {
+        "valor": 0.11,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Servicios bancarios y financieros — comisiones y servicios. Proxy monetario; no representa compra de vivienda, inversiones, ahorro, transferencias, amortización de préstamos ni capital prestado.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.35,
+        "provisional": false,
+        "fuente_categoria": "Assurance, services bancaires, conseil et honoraires",
+        "valor_original_kgco2e_por_keuro_ht": 110,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Aplicable a comisiones, mantenimiento de cuentas, tarjetas, gestión, asesoría y otros servicios financieros personales. No introducir compra de vivienda, inversiones, ahorro, transferencias entre cuentas, amortización ni capital de préstamos. Los intereses de hipotecas o préstamos solo deberían incluirse, si se decide hacerlo, como aproximación muy incierta y poco comparable entre países. P2: categoría sensible por uso de proxy monetario de servicios; no representa bienes financiados ni capital.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.95,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "seguro": {
+        "valor": 0.11,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Seguros. Proxy monetario para primas reales de seguros personales, del hogar, vehículo, salud, vida, viaje o responsabilidad civil.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.35,
+        "provisional": false,
+        "fuente_categoria": "Assurance, services bancaires, conseil et honoraires",
+        "valor_original_kgco2e_por_keuro_ht": 110,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Proxy monetario para primas y servicios de seguro. No representa la huella de los bienes asegurados. No incluir servicios de alarma, vigilancia o mantenimiento doméstico: van en Servicios del hogar. Para seguro del coche compartido, repartir según uso real aproximado del vehículo, no por ocupación media de viaje.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.95,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "educacion": {
+        "valor": 0.12,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Educación. Proxy monetario para gastos educativos personales.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.35,
+        "provisional": false,
+        "fuente_categoria": "Enseignement",
+        "valor_original_kgco2e_por_keuro_ht": 120,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Proxy monetario de servicios educativos; no distingue modalidad, materiales, desplazamientos ni alojamiento asociado. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.95,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      },
+      "actividades_recreativas": {
+        "valor": 0.27,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Actividades recreativas, culturales y deportivas. Proxy monetario para ocio, cultura y deporte.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+        "incertidumbre_relativa_factor": 0.45,
+        "provisional": false,
+        "fuente_categoria": "Loisirs et activités sportives",
+        "valor_original_kgco2e_por_keuro_ht": 270,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario; M1_factor_monetario_ajustado",
+        "notas_uso": "Proxy amplio; no incluye desplazamientos si ya se declaran en Transporte ni compras de equipos duraderos si se declaran aparte. M1: el importe declarado se multiplica por un coeficiente precio-base antes de aplicar el factor; la incertidumbre deja de ser 0,80 genérica y pasa a una escala por categoría.",
+        "incertidumbre_relativa_factor_pre_M1": 0.8,
+        "coeficiente_gasto_final_a_base_factor": 0.9,
+        "descripcion_coeficiente_gasto_final_a_base_factor": "Coeficiente M1 para aproximar gasto final declarado a una base monetaria comparable con el factor ADEME kgCO2e/k€ HT."
+      }
+    },
+    "vida_util_por_defecto_anios": {
+      "computadoras": {
+        "valor": 4,
+        "descripcion": "Vida útil por defecto para computadoras, teléfonos móviles y equipos informáticos. Valor mixto y conservador por incluir teléfonos móviles y equipos con obsolescencia tecnológica rápida.",
+        "criterio_F3": "El usuario puede modificar la vida útil si conoce mejor su caso. La categoría mezcla móviles, portátiles, tablets, periféricos y equipos informáticos; por eso se usa un valor por defecto más corto que el de equipos audiovisuales.",
+        "incertidumbre_relativa_vida_util_recomendada": 0.35,
+        "estado_metodologico": "documentado_F3_vida_util"
+      },
+      "television_radio_telefono": {
+        "valor": 8,
+        "descripcion": "Vida útil por defecto para televisión, radio y otros equipos audiovisuales. Los teléfonos móviles no pertenecen a esta categoría operativa.",
+        "criterio_F3": "Se adopta una vida útil mayor que informática/móviles porque televisores, radios y equipos audiovisuales suelen renovarse con menor frecuencia que teléfonos y computadoras personales.",
+        "incertidumbre_relativa_vida_util_recomendada": 0.35,
+        "estado_metodologico": "documentado_F3_vida_util"
+      },
+      "vehiculos_motor": {
+        "valor": 12,
+        "descripcion": "Vida útil por defecto para compra/fabricación de vehículos de motor, sin uso ni combustible.",
+        "criterio_F3": "Se mantiene 12 años como valor operativo prudente para anualizar la compra/fabricación cuando el usuario no aporta una vida útil distinta.",
+        "incertidumbre_relativa_vida_util_recomendada": 0.3,
+        "estado_metodologico": "documentado_F3_vida_util"
+      },
+      "muebles_otros": {
+        "valor": 10,
+        "descripcion": "Vida útil por defecto para muebles y otros productos manufacturados.",
+        "criterio_F3": "Se mantiene 10 años como promedio práctico para una categoría muy heterogénea; la incertidumbre cubre diferencias entre muebles, enseres y manufacturas diversas.",
+        "incertidumbre_relativa_vida_util_recomendada": 0.4,
+        "estado_metodologico": "documentado_F3_vida_util"
+      }
+    },
+    "metodologia_factores_monetarios": {
+      "estado": "M1_proxy_monetario_ajustado",
+      "fuente_principal": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+      "fuente_datos": "ADEME_BASE_CARBONE_OPEN_DATA",
+      "unidad_fuente": "kgCO2e/k€ HT",
+      "unidad_operativa": "kgCO2e/EUR",
+      "conversion_operativa": "valor_operativo = valor_fuente_kgCO2e_por_kEUR_HT / 1000; cálculo M1 = gasto_final_declarado_EUR × coeficiente_precio_base × valor_operativo",
+      "criterio_uso": "Se usan ratios monetarios solo cuando no hay dato físico directo disponible; los módulos de Vivienda y Transporte mantienen prioridad sobre Productos.",
+      "limitacion_IVA": "Desde M1 se aplica un coeficiente precio-base prudente para reducir la sobreaplicación de factores kgCO2e/k€ HT sobre importes finales pagados. No equivale a una corrección fiscal específica por país.",
+      "incertidumbre_por_defecto": null,
+      "nota": "Los valores son trazables y dejan de estar como fuente pendiente, pero siguen siendo proxies sectoriales de baja precisión relativa frente a factores físicos por kWh, litros, km o kg.",
+      "nota_F3": "F3 no modifica los factores monetarios F2; ajusta frecuencia inicial, vidas útiles por defecto e incertidumbres de dato de usuario.",
+      "nota_F4": "F4 no modifica los factores monetarios F2; añade ayudas de interpretación y validaciones suaves para evitar errores de entrada y doble conteo.",
+      "limitacion_IVA_pre_M1": "La fuente se expresa por k€ HT. La interfaz pide euros declarados por el usuario y no aplica corrección por IVA en F2; esta simplificación queda cubierta parcialmente por la incertidumbre alta del factor.",
+      "incertidumbre_por_defecto_pre_M1": 0.8,
+      "incertidumbre_M1_por_categoria": {
+        "comida_bebida": 0.6,
+        "ropa_textiles_calzado": 0.55,
+        "papel": 0.45,
+        "computadoras": 0.55,
+        "television_radio_telefono": 0.55,
+        "vehiculos_motor": 0.5,
+        "muebles_otros": 0.55,
+        "bares_cafeterias_desayunos": 0.45,
+        "restaurantes": 0.45,
+        "alojamientos_ocasionales": 0.55,
+        "llamadas_telefonicas": 0.35,
+        "servicios_hogar": 0.45,
+        "banca_finanzas": 0.35,
+        "seguro": 0.35,
+        "educacion": 0.35,
+        "actividades_recreativas": 0.45
+      },
+      "nota_M1": "M1 sustituye la incertidumbre genérica de 0,80 por una escala por calidad de proxy: servicios más homogéneos 0,35; categorías monetarias intermedias 0,45; bienes heterogéneos 0,55; vehículos 0,60; alimentación 0,60 si no se especifica dieta.",
+      "nota_P2": "P2 mantiene los factores centrales y no calibra contra calculadoras sin fuentes visibles. La incertidumbre de vehículos de motor se ajusta a 0,50 por disponer de precio de compra y vida útil declarados, manteniendo cautela porque el precio es proxy imperfecto de fabricación. UK/DEFRA y bases MRIO se consideran fuentes de contraste, no promedios automáticos.",
+      "nota_P2b": "P2b sustituye el factor operativo único hoteles_restaurantes por tres categorías de hostelería y añade servicios_hogar; las incertidumbres se asignan por homogeneidad y calidad del proxy."
+    },
+    "frecuencia_por_defecto_gastos_recurrentes": {
+      "valor": "mensual",
+      "descripcion": "Selección inicial recomendada para gastos recurrentes. Muchos gastos personales se recuerdan o presupuestan mensualmente; evita que un importe introducido sin cambiar frecuencia se extrapole accidentalmente como gasto diario.",
+      "criterio_metodologico": "La frecuencia sigue siendo editable por el usuario. La fórmula no cambia: gasto_anual = importe_usuario * multiplicador_frecuencia.",
+      "estado_metodologico": "documentado_F3_frecuencia"
+    },
+    "metodologia_frecuencias_vidas_utiles_incertidumbre": {
+      "estado": "documentado_F3",
+      "frecuencia_por_defecto_gastos_recurrentes": "mensual",
+      "criterio_frecuencia_por_defecto": "La selección mensual reduce el riesgo de sobreestimar por dejar Diario seleccionado accidentalmente. No altera la fórmula ni impide declarar importes diarios, semanales o anuales.",
+      "incertidumbre_por_frecuencia": {
+        "diario": {
+          "sigma_relativa": 0.3,
+          "criterio": "Mayor extrapolación temporal y variabilidad día a día."
+        },
+        "semanal": {
+          "sigma_relativa": 0.25,
+          "criterio": "Extrapolación intermedia desde semana típica."
+        },
+        "mensual": {
+          "sigma_relativa": 0.2,
+          "criterio": "Escala presupuestaria habitual para gastos personales recurrentes."
+        },
+        "anual": {
+          "sigma_relativa": 0.15,
+          "criterio": "Menor extrapolación temporal si el usuario conoce el gasto anual."
+        }
+      },
+      "vidas_utiles_por_defecto_anios": {
+        "computadoras_telefonos_moviles_e_informatica": 4,
+        "television_radio_y_audiovisuales": 8,
+        "vehiculos_motor_compra_fabricacion": 12,
+        "muebles_y_otros_manufacturados": 10
+      },
+      "incertidumbre_vida_util": "Se aplica una incertidumbre relativa genérica operativa de 35% para la vida útil usada como divisor; se documentan incertidumbres recomendadas por categoría para futura granularidad.",
+      "impacto_calculo": "Las vidas útiles por defecto modifican el resultado solo si el usuario no introduce otro valor. La frecuencia mensual por defecto modifica solo la selección inicial visible, no las fórmulas ni los multiplicadores.",
+      "nota_F4": "F4 usa las vidas útiles y frecuencias documentadas en F3 para mostrar avisos de coherencia, sin modificar incertidumbres ni fórmulas.",
+      "incertidumbre_factor_monetario_M1": {
+        "criterio": "Se elimina el 0,80 genérico para todos los factores y se usa una escala por categoría.",
+        "escala": {
+          "servicios_homogeneos": 0.35,
+          "categorias_intermedias": 0.45,
+          "bienes_materiales_heterogeneos": 0.55,
+          "vehiculos_compra": 0.5,
+          "alimentacion_sin_perfil": 0.6,
+          "alimentacion_con_perfil": "0,50–0,55",
+          "hosteleria_desagregada_P2b": {
+            "bares_cafeterias_desayunos": 0.45,
+            "restaurantes": 0.45,
+            "alojamientos_ocasionales": 0.55,
+            "servicios_hogar": 0.45
+          }
+        }
+      },
+      "nota_P2": "Las incertidumbres de factor son márgenes orientativos definidos por AHdC según calidad del proxy; no son intervalos estadísticos oficiales de ADEME."
+    },
+    "validaciones": {
+      "descripcion": "Parámetros operativos para validaciones suaves y avisos de coherencia del módulo Productos. No alteran las fórmulas ni los factores: solo activan alertas/confirmaciones para valores potencialmente anómalos o con riesgo de doble conteo.",
+      "estado_metodologico": "documentado_F4_validaciones_suaves",
+      "minimos_absolutos": {
+        "vida_util_anios": {
+          "valor": 0,
+          "unidad": "años",
+          "descripcion": "La vida útil operativa debe ser mayor que cero cuando hay importe de compra."
+        }
+      },
+      "maximos_absolutos": {
+        "importe_eur": {
+          "valor": 1000000,
+          "unidad": "EUR",
+          "descripcion": "Límite duro heredado para evitar errores extremos de digitación en importes monetarios."
+        },
+        "vida_util_anios": {
+          "valor": 50,
+          "unidad": "años",
+          "descripcion": "Límite duro heredado para evitar vidas útiles no plausibles en productos duraderos."
+        }
+      },
+      "umbrales_aviso": {
+        "descripcion": "Umbrales de aviso no bloqueante. Si se superan, la calculadora pide confirmación para detectar errores de frecuencia, unidades o doble conteo.",
+        "gasto_anual_recurrente_eur": {
+          "comida-bebida": 12000,
+          "ropa-textiles-calzado": 10000,
+          "papel": 3000,
+          "bares-cafeterias-desayunos": 5000,
+          "restaurantes": 12000,
+          "alojamientos-ocasionales": 15000,
+          "llamadas-telefonicas": 3600,
+          "servicios-hogar": 6000,
+          "banca-finanzas": 10000,
+          "seguro": 12000,
+          "educacion": 30000,
+          "actividades-recreativas": 15000,
+          "descripcion": "Gasto anualizado por categoría a partir del importe y la frecuencia introducidos."
+        },
+        "importe_compra_duradero_eur": {
+          "descripcion": "Importe de compra de duraderos que activa confirmación antes de anualizar.",
+          "computadoras": 10000,
+          "television-radio-telefono": 8000,
+          "vehiculos-motor": 120000,
+          "muebles-otros": 50000
+        },
+        "vida_util_baja_anios": {
+          "descripcion": "Vida útil baja que activa aviso porque aumenta mucho la huella anualizada.",
+          "computadoras": 2,
+          "television-radio-telefono": 3,
+          "vehiculos-motor": 5,
+          "muebles-otros": 3
+        },
+        "vida_util_alta_anios": {
+          "descripcion": "Vida útil alta que activa aviso porque reduce mucho la huella anualizada.",
+          "computadoras": 8,
+          "television-radio-telefono": 15,
+          "vehiculos-motor": 25,
+          "muebles-otros": 30
+        }
+      },
+      "advertencias_doble_conteo": {
+        "vehiculos_motor": "Confirmación específica cuando se introduce importe en vehículos: solo compra/fabricación anualizada, no uso, combustible, recargas, peajes, mantenimiento ni seguros.",
+        "regla_general": "Las demás categorías se cubren mediante advertencia inicial visible y ayudas por categoría para no duplicar Vivienda, Transporte o Vuelos.",
+        "seguros_servicios_hogar": "Seguros incluye primas aseguradoras reales; servicios de alarma, vigilancia o mantenimiento doméstico deben ir en Servicios del hogar. El seguro del coche compartido se reparte según uso real aproximado del vehículo."
+      }
+    },
+    "metodologia_validaciones_ayudas_advertencias": {
+      "estado": "documentado_F4",
+      "objetivo": "Reducir errores de introducción de datos y doble conteo sin bloquear valores plausibles en casos personales excepcionales.",
+      "tipo_validaciones": "Validaciones duras solo para números no válidos, importes negativos, más de dos decimales, importes extremadamente altos y vidas útiles nulas o extremas. Valores altos pero posibles generan confirmaciones suaves.",
+      "ayudas": "Los botones ? de todas las categorías se conectan a popovers no invasivos con inclusiones, exclusiones y recordatorios metodológicos.",
+      "advertencia_visible": "productos.html muestra una advertencia inicial reforzada sobre factores monetarios, energía doméstica, transporte y vehículos de motor.",
+      "impacto_calculo": "No modifica factores monetarios F2, vidas útiles F3, frecuencias, incertidumbres ni fórmulas."
+    },
+    "metodologia_como_calcula": {
+      "estado": "documentado_F5_interfaz_visible",
+      "objetivo": "Explicar al usuario las fórmulas, la anualización de gastos, el reparto de duraderos por vida útil, la naturaleza de los factores monetarios, las exclusiones por doble conteo y la incertidumbre.",
+      "ubicacion_interfaz": "productos.html, botón “¿Cómo se calcula?” y modal asociado.",
+      "formulas_explicitadas": {
+        "gastos_recurrentes": "E = gasto anual × factor kgCO2e/EUR; gasto anual = importe × multiplicador de frecuencia.",
+        "productos_duraderos": "E anual = importe de compra × factor kgCO2e/EUR / vida útil.",
+        "incertidumbre": "Combina incertidumbre del dato de usuario, incertidumbre del factor monetario y, en duraderos, incertidumbre de la vida útil como divisor."
+      },
+      "mensajes_clave": [
+        "Productos es un módulo aproximado porque usa gasto económico como proxy, no datos físicos directos.",
+        "Los factores monetarios son ratios sectoriales amplios; no equivalen a ACV específica de cada producto, marca o modelo.",
+        "La frecuencia mensual es la selección inicial recomendada para reducir errores de extrapolación.",
+        "No deben duplicarse energía doméstica, transportes, combustibles, recargas, taxi/VTC, bus/tren o vuelos ya declarados en otros módulos.",
+        "Vehículos de motor representa solo compra/fabricación anualizada; el uso energético pertenece a Coche o Moto."
+      ],
+      "impacto_calculo": "Sin impacto en factores, frecuencias, vidas útiles, validaciones, fórmulas ni resultados. Es una mejora explicativa/documental.",
+      "nota_M1": "Desde M1 las fórmulas públicas incorporan un coeficiente precio-base: E = gasto × coeficiente × factor. El objetivo es aproximar importes finales declarados a la base monetaria HT de los ratios ADEME."
+    },
+    "metodologia_resultados_pruebas_funcionales": {
+      "estado": "documentado_F6_resultados_pruebas_funcionales",
+      "objetivo": "Verificar que Productos calcula cada categoría, guarda el resultado con incertidumbre en el estado común y aparece correctamente en resultados.html.",
+      "alcance": "Pruebas funcionales sobre gastos recurrentes, productos duraderos, frecuencia, vida útil, incertidumbre, validaciones básicas y lectura del módulo Productos desde Resultados.",
+      "impacto_calculo": "Sin cambios en factores monetarios F2, frecuencias, vidas útiles F3, incertidumbres, validaciones F4, ayudas F4 ni fórmulas de cálculo.",
+      "criterios_verificados": [
+        "Los gastos recurrentes usan E = importe × multiplicador de frecuencia × factor monetario.",
+        "Los productos duraderos usan E anual = importe de compra × factor monetario / vida útil.",
+        "Las incertidumbres de productos se guardan como incertidumbreKgCO2eAnual y se combinan mediante suma cuadrática de contribuciones.",
+        "El módulo guarda totalKgCO2eAnual y totalKgCO2e por compatibilidad con Resultados.",
+        "Resultados muestra Productos en kg CO2e/año y lo incorpora al total anual en t CO2e/año ± incertidumbre.",
+        "Los importes negativos se bloquean y la advertencia específica de vehículos se activa cuando corresponde."
+      ],
+      "casos_prueba_F6": {
+        "caso_cero": {
+          "descripcion": "Sin introducir importes, con vidas útiles por defecto precargadas.",
+          "resultado_esperado": "0,0 kgCO2e/año; Productos se guarda como módulo calculado con contribuciones nulas."
+        },
+        "caso_mixto_normal": {
+          "entradas": {
+            "Productos alimenticios y bebidas": "100 EUR mensuales",
+            "Ropa, textiles y calzado": "600 EUR anuales",
+            "Computadoras, teléfonos móviles y equipos informáticos": "1000 EUR de compra; vida útil 4 años",
+            "Telefonía, internet y comunicaciones": "50 EUR mensuales"
+          },
+          "resultado_esperado_kgCO2e_anual": 1633.8,
+          "incertidumbre_esperada_kgCO2e_anual_aprox": 740.31,
+          "detalle_calculo": {
+            "comida_bebida": "100 × 12 × 0,94 × 1,00 = 1128,0 kgCO2e/año",
+            "ropa_textiles_calzado": "600 × 0,90 × 0,60 = 324,0 kgCO2e/año",
+            "computadoras": "1000 × 0,90 × 0,40 / 4 = 90,0 kgCO2e/año",
+            "llamadas_telefonicas": "50 × 12 × 0,90 × 0,17 = 91,8 kgCO2e/año",
+            "total": "1128,0 + 324,0 + 90,0 + 91,8 = 1633,8 kgCO2e/año"
+          },
+          "resultado_esperado_kgCO2e_anual_pre_M1": 1762.0,
+          "incertidumbre_esperada_kgCO2e_anual_aprox_pre_M1": 1039.22
+        },
+        "validaciones_basicas": {
+          "importe_negativo": "Muestra alerta y no calcula.",
+          "vehiculos_motor": "Muestra confirmación específica sobre compra/fabricación, sin combustible ni uso."
+        }
+      },
+      "nota_M1": "Los casos F6 quedan actualizados: los importes declarados se ajustan con coeficiente precio-base antes de aplicar el factor. La incertidumbre esperada baja por la escala M1 de incertidumbre de factores."
+    },
+    "metodologia_exclusion_farmacia_H6": {
+      "estado_metodologico": "H6_farmacia_excluida_de_items_operativos",
+      "decision": "Eliminar Farmacia como categoría operativa del módulo Productos.",
+      "justificacion": "El gasto directo del usuario en farmacia y medicamentos no representa de forma fiable el consumo real ni la huella asociada en países con sanidad pública, copagos, seguros privados o medicamentos subvencionados. Mantenerlo como factor monetario podía aumentar la incertidumbre global y reducir la comparabilidad entre usuarios y países.",
+      "tratamiento_operativo": "La categoría se retira de la interfaz y de las categorías leídas por js/productos.js. No aporta emisiones ni incertidumbre al total de Productos.",
+      "factor_documental_retirado": {
+        "valor": 0.5,
+        "unidad": "kgCO2e/EUR",
+        "tipo": "gasto_recurrente",
+        "descripcion": "Farmacia. Proxy monetario sectorial para medicamentos y productos farmacéuticos comprados por el usuario.",
+        "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES; SHIFT_PROJECT_NOTE_MEDICAMENTS_2023",
+        "incertidumbre_relativa_factor": 0.8,
+        "provisional": false,
+        "fuente_categoria": "Médicaments / produits pharmaceutiques",
+        "valor_original_kgco2e_por_keuro_ht": 500,
+        "unidad_original": "kgCO2e/k€ HT",
+        "conversion_operativa": "valor = valor_original_kgco2e_por_keuro_ht / 1000",
+        "proxy_monetario": true,
+        "estado_metodologico": "documentado_F2_proxy_monetario",
+        "notas_uso": "Valor de orden de magnitud para medicamentos; la literatura destaca alta dispersión e incertidumbre en este factor."
+      },
+      "nota_para_memoria_tecnica": "La exclusión no implica que los medicamentos carezcan de huella climática, sino que el dato de entrada disponible para el usuario medio —gasto directo— es metodológicamente poco robusto para una calculadora personal general. Podría reconsiderarse en el futuro con un enfoque físico o sanitario más específico.",
+      "tratamiento_estados_previos": "Si existían resultados guardados de Productos con Farmacia, al reabrir Productos se recalculan las categorías operativas vigentes y se guarda un nuevo total sin Farmacia."
+    },
+    "moduladores_dieta_alimentaria": {
+      "descripcion": "Moduladores prudentes aplicados exclusivamente al factor monetario de Productos alimenticios y bebidas. Buscan reducir parte de la variabilidad asociada al patrón alimentario sin sustituir un cálculo físico por kg de alimentos.",
+      "estado_metodologico": "M1_recalibrado_dieta_alimentaria",
+      "fuente_principal": "SCARBOROUGH_NATURE_FOOD_2023",
+      "criterio": "La literatura muestra una relación clara entre consumo de alimentos de origen animal y emisiones de dieta. Como la calculadora sigue usando gasto monetario, los moduladores se aplican de forma conservadora y no reproducen directamente las diferencias extremas observadas en estudios por ingesta física.",
+      "aplicacion": "factor_operativo_alimentacion = factor_monetario_base × modulador_dieta",
+      "selector_por_defecto": "no_especificar",
+      "opciones": {
+        "no_especificar": {
+          "valor": 1.0,
+          "etiqueta": "No especificar / usar factor medio",
+          "descripcion": "Mantiene el factor monetario medio de alimentación sin ajuste por dieta.",
+          "incertidumbre_relativa_factor_ajustada": 0.6,
+          "fuente": "ADEME_BASE_EMPREINTE_RATIOS_MONETAIRES",
+          "valor_pre_M1": 1.0,
+          "incertidumbre_relativa_factor_ajustada_pre_M1": 0.8,
+          "nota_M1": "Recalibración prudente M1: modulador algo más expresivo para alimentación y menor incertidumbre cuando el usuario especifica perfil dietario."
+        },
+        "vegana": {
+          "valor": 0.55,
+          "etiqueta": "Vegano / basado en plantas",
+          "descripcion": "Reducción prudente del factor medio para dietas sin productos animales. No equivale a una huella física detallada.",
+          "incertidumbre_relativa_factor_ajustada": 0.5,
+          "fuente": "SCARBOROUGH_NATURE_FOOD_2023",
+          "valor_pre_M1": 0.6,
+          "incertidumbre_relativa_factor_ajustada_pre_M1": 0.6,
+          "nota_M1": "Recalibración prudente M1: modulador algo más expresivo para alimentación y menor incertidumbre cuando el usuario especifica perfil dietario."
+        },
+        "vegetariana": {
+          "valor": 0.7,
+          "etiqueta": "Vegetariano",
+          "descripcion": "Reducción prudente del factor medio para dietas sin carne ni pescado, manteniendo posible consumo de lácteos/huevos.",
+          "incertidumbre_relativa_factor_ajustada": 0.5,
+          "fuente": "SCARBOROUGH_NATURE_FOOD_2023",
+          "valor_pre_M1": 0.75,
+          "incertidumbre_relativa_factor_ajustada_pre_M1": 0.6,
+          "nota_M1": "Recalibración prudente M1: modulador algo más expresivo para alimentación y menor incertidumbre cuando el usuario especifica perfil dietario."
+        },
+        "omnivoro_bajo_carne": {
+          "valor": 0.85,
+          "etiqueta": "Omnívoro con bajo consumo de carne",
+          "descripcion": "Ajuste moderado para dietas omnívoras con bajo consumo de carne.",
+          "incertidumbre_relativa_factor_ajustada": 0.5,
+          "fuente": "SCARBOROUGH_NATURE_FOOD_2023",
+          "valor_pre_M1": 0.85,
+          "incertidumbre_relativa_factor_ajustada_pre_M1": 0.6,
+          "nota_M1": "Recalibración prudente M1: modulador algo más expresivo para alimentación y menor incertidumbre cuando el usuario especifica perfil dietario."
+        },
+        "omnivoro_medio": {
+          "valor": 1.0,
+          "etiqueta": "Omnívoro con consumo medio de carne",
+          "descripcion": "Mantiene el factor monetario medio como aproximación de una dieta omnívora media.",
+          "incertidumbre_relativa_factor_ajustada": 0.5,
+          "fuente": "SCARBOROUGH_NATURE_FOOD_2023_AJUSTE_PRUDENTE",
+          "valor_pre_M1": 1.0,
+          "incertidumbre_relativa_factor_ajustada_pre_M1": 0.65,
+          "nota_M1": "Recalibración prudente M1: modulador algo más expresivo para alimentación y menor incertidumbre cuando el usuario especifica perfil dietario."
+        },
+        "omnivoro_alto_carne_roja": {
+          "valor": 1.3,
+          "etiqueta": "Omnívoro con alto consumo de carne, especialmente roja",
+          "descripcion": "Aumento prudente del factor medio para dietas con consumo alto de carne, especialmente carne roja.",
+          "incertidumbre_relativa_factor_ajustada": 0.55,
+          "fuente": "SCARBOROUGH_NATURE_FOOD_2023",
+          "valor_pre_M1": 1.25,
+          "incertidumbre_relativa_factor_ajustada_pre_M1": 0.65,
+          "nota_M1": "Recalibración prudente M1: modulador algo más expresivo para alimentación y menor incertidumbre cuando el usuario especifica perfil dietario."
+        }
+      },
+      "limitaciones": [
+        "No diferencia kg reales de carne, lácteos, pescado, cereales, verduras, bebidas o desperdicio alimentario.",
+        "No corrige precios relativos entre dietas, países, calidades o canales de compra.",
+        "No debe interpretarse como análisis de ciclo de vida específico de la dieta del usuario.",
+        "Los moduladores reducen parte de la incertidumbre del factor de alimentación, pero la categoría sigue siendo un proxy monetario."
+      ],
+      "criterio_M1": "Los perfiles dietarios se mantienen como ajuste prudente sobre un factor monetario medio, no como inventario físico. Se amplía ligeramente el diferencial vegano/vegetariano/alto consumo de carne y se reduce la incertidumbre de la categoría cuando el usuario especifica su perfil, sin bajar de 50% por permanecer la variabilidad de precio, composición, origen y desperdicio."
+    },
+    "metodologia_dieta_alimentaria_I3": {
+      "descripcion": "En I3 se añade un selector opcional de perfil alimentario para la categoría Productos alimenticios y bebidas.",
+      "formula": "E_alimentacion = gasto_anual_alimentacion × coeficiente_precio_base × factor_monetario_base × modulador_dieta",
+      "objetivo": "Reducir parte de la incertidumbre real asociada a mezclar en un único factor monetario dietas veganas, vegetarianas y omnívoras con consumos de carne muy diferentes.",
+      "criterio_prudencia": "Los moduladores son conservadores porque el dato de entrada sigue siendo gasto económico, no cantidades físicas de alimentos.",
+      "estado_metodologico": "M1_revisado",
+      "nota_M1": "En M1 se mantienen los perfiles existentes, pero se recalibran los multiplicadores a 0,55 / 0,70 / 0,85 / 1,00 / 1,30 para hacer más significativa la diferencia de dieta sin abandonar el enfoque prudente basado en gasto."
+    },
+    "moneda_entrada": {
+      "estado_metodologico": "L1_moneda_entrada_eur_usd",
+      "descripcion": "Configuración operativa para permitir importes de Productos en euros o dólares estadounidenses. Los factores monetarios siguen expresados en kgCO2e/EUR; por tanto, cualquier importe en USD se convierte internamente a EUR antes del cálculo.",
+      "moneda_calculo_interno": "EUR",
+      "moneda_defecto": "EUR",
+      "tasa_eur_usd": {
+        "valor": 1.17,
+        "unidad": "USD por 1 EUR",
+        "criterio": "Valor redondeado y fijo para uso operativo en una calculadora estática. No se actualiza en tiempo real.",
+        "fuente_documental": "ECB_EURO_REFERENCE_EXCHANGE_RATE_USD",
+        "fecha_referencia_documental": "2026-05-05",
+        "valor_referencia_consultado": 1.1686,
+        "nota": "La precisión cambiaria no reduce las incertidumbres propias de los factores monetarios sectoriales; por eso se adopta 1.17 como valor redondeado."
+      },
+      "monedas": {
+        "EUR": {
+          "codigo": "EUR",
+          "etiqueta": "Euros (€)",
+          "simbolo": "€",
+          "factor_a_eur": 1,
+          "formula_conversion": "EUR = importe_EUR"
+        },
+        "USD": {
+          "codigo": "USD",
+          "etiqueta": "Dólares estadounidenses (USD $)",
+          "simbolo": "US$",
+          "factor_a_eur": 0.8547008547008548,
+          "formula_conversion": "EUR = importe_USD / 1.17"
+        }
+      },
+      "limitaciones": [
+        "La conversión USD→EUR es una comodidad de entrada, no una adaptación por país.",
+        "No corrige poder adquisitivo, IVA/impuestos, diferencias de precios, estructura de consumo, origen de los bienes ni paridad de poder adquisitivo.",
+        "Si el usuario cambia la moneda después de escribir importes, debe revisar los valores introducidos."
+      ]
+    },
+    "ajuste_precio_base": {
+      "estado_metodologico": "M1_productos_factor_monetario_ajustado",
+      "descripcion": "Coeficientes operativos para aproximar el gasto final declarado por el usuario a una base monetaria más comparable con los ratios monetarios ADEME, documentados originalmente en kgCO2e/k€ HT. No son una corrección fiscal específica por país; son un ajuste prudente para no aplicar directamente factores sin impuestos sobre importes finales pagados.",
+      "aplicacion": "gasto_base_factor = gasto_declarado_convertido_a_EUR × coeficiente_gasto_final_a_base_factor",
+      "coeficiente_defecto": 0.9,
+      "coeficientes_por_categoria": {
+        "comida-bebida": 0.94,
+        "ropa-textiles-calzado": 0.9,
+        "papel": 0.9,
+        "computadoras": 0.9,
+        "television-radio-telefono": 0.9,
+        "vehiculos-motor": 0.9,
+        "muebles-otros": 0.9,
+        "bares-cafeterias-desayunos": 0.9,
+        "restaurantes": 0.9,
+        "alojamientos-ocasionales": 0.9,
+        "llamadas-telefonicas": 0.9,
+        "servicios-hogar": 0.9,
+        "banca-finanzas": 0.95,
+        "seguro": 0.95,
+        "educacion": 0.95,
+        "actividades-recreativas": 0.9
+      },
+      "criterio": "Se usa 0,90 como coeficiente prudente general; alimentación se ajusta menos por posible peso de tipos reducidos y banca/seguros/educación se corrigen menos por la heterogeneidad fiscal y de precios de estos servicios. En P2b las nuevas categorías de hostelería y servicios del hogar usan el coeficiente general 0,90.",
+      "limitaciones": [
+        "No sustituye un ajuste country-based por IVA/impuestos, paridad de poder adquisitivo o estructura de precios.",
+        "No convierte los factores ADEME en factores nacionales específicos.",
+        "Reduce una fuente probable de sobreestimación sistemática, pero el módulo sigue siendo un proxy monetario aproximado."
+      ]
+    },
+    "criterios_P2_auditoria_productos": {
+      "objetivo": "Revisar el módulo Productos tras comparación con otra calculadora, sin hacer una recalibración global injustificada.",
+      "decision_general": "Mantener factores monetarios centrales ADEME/Base Empreinte y coeficientes precio-base; mejorar textos, etiquetas, trazabilidad e incertidumbre de vehículos.",
+      "cambios_operativos": [
+        "Renombrar la categoría de papel a libros, revistas, periódicos y publicaciones impresas.",
+        "Aclarar banca/finanzas, seguros y vehículos para evitar dobles conteos o inclusión de capital/bienes asegurados.",
+        "Ajustar incertidumbre del factor vehículos de motor de 0,60 a 0,50.",
+        "Mantener alimentación dentro de Productos como categoría sensible y futura candidata a módulo propio.",
+        "P2b: desagregar hostelería en bares/cafeterías, restaurantes y alojamientos; añadir servicios del hogar y aclarar Seguros."
+      ],
+      "cambios_no_realizados": [
+        "No aplicar factor corrector global a Productos.",
+        "No calibrar contra calculadoras sin fuentes, fecha o memoria técnica visibles.",
+        "No promediar automáticamente ADEME con UK/DEFRA o MRIO por diferencias de país, año, moneda, impuestos y límites del sistema."
+      ],
+      "interpretacion_incertidumbre": "Los márgenes de incertidumbre de Productos son criterios orientativos de AHdC; reflejan calidad del proxy monetario y heterogeneidad de categorías, no intervalos estadísticos oficiales de la fuente."
+    },
+    "criterios_P2b_productos_ampliado": {
+      "objetivo": "Refinar categorías de Productos que mezclaban actividades con intensidad y significado distintos, sin recalibrar globalmente el módulo.",
+      "cambios_operativos": [
+        "Sustituir la categoría única Restauración, bares y alojamientos ocasionales por tres categorías: Bares/cafeterías/desayunos ligeros, Restaurantes y comidas/cenas fuera, y Alojamientos ocasionales.",
+        "Añadir Servicios del hogar: seguridad, mantenimiento y otros servicios domésticos no energéticos.",
+        "Aclarar que Seguros incluye primas reales y no servicios de alarma, vigilancia o mantenimiento doméstico.",
+        "Aclarar que el seguro del coche, si se comparte el vehículo, debe repartirse según uso real aproximado, no por ocupación media del trayecto ni necesariamente por hogar."
+      ],
+      "criterio_factores_hosteleria": "La categoría restaurantes conserva el factor monetario amplio de hostelería/restauración. Bares/cafeterías/desayunos ligeros y alojamientos ocasionales usan proxies P2b derivados de forma prudente para evitar aplicar el mismo factor a consumos ligeros, comidas completas y pernoctaciones.",
+      "factores_nuevos": {
+        "bares_cafeterias_desayunos": {
+          "valor": 0.18,
+          "incertidumbre_relativa_factor": 0.45,
+          "nota": "Factor más bajo que el bloque amplio para consumos ligeros; reduce el problema detectado con desayunos/cafés diarios."
+        },
+        "restaurantes": {
+          "valor": 0.32,
+          "incertidumbre_relativa_factor": 0.45,
+          "nota": "Mantiene el factor amplio para comidas/cenas completas."
+        },
+        "alojamientos_ocasionales": {
+          "valor": 0.24,
+          "incertidumbre_relativa_factor": 0.55,
+          "nota": "Proxy separado con incertidumbre alta por variabilidad de alojamientos."
+        },
+        "servicios_hogar": {
+          "valor": 0.17,
+          "incertidumbre_relativa_factor": 0.45,
+          "nota": "Proxy de servicios no energéticos del hogar; gasto compartido debe repartirse por personas o criterio adecuado."
+        }
+      },
+      "impacto_QA": "Los casos de regresión deben actualizarse en la subfase QA posterior porque cambian categorías operativas y resultados si existían importes en la antigua categoría de hostelería."
+    }
+  },
+  "incertidumbres_dato_usuario": {
+    "descripcion": "Valores para reflejar la aproximación del dato introducido por el usuario. Desde F3, Productos distingue la incertidumbre del gasto recurrente según frecuencia de entrada.",
+    "consumo_factura_o_medidor": {
+      "valor": 0.1,
+      "unidad": "sigma_relativa",
+      "descripcion": "Dato tomado de factura, contador o registro relativamente fiable."
+    },
+    "consumo_estimado": {
+      "valor": 0.25,
+      "unidad": "sigma_relativa",
+      "descripcion": "Dato estimado por el usuario sin factura exacta."
+    },
+    "kilometros_anuales": {
+      "valor": 0.2,
+      "unidad": "sigma_relativa",
+      "descripcion": "Kilometraje anual estimado."
+    },
+    "gasto_mensual_recurrente": {
+      "valor": 0.2,
+      "unidad": "sigma_relativa",
+      "descripcion": "Gasto mensual aproximado recordado por el usuario; frecuencia inicial recomendada para Productos."
+    },
+    "gasto_anual_recurrente": {
+      "valor": 0.15,
+      "unidad": "sigma_relativa",
+      "descripcion": "Gasto anual aproximado; menor incertidumbre de extrapolación temporal."
+    },
+    "importe_producto_duradero": {
+      "valor": 0.15,
+      "unidad": "sigma_relativa",
+      "descripcion": "Precio aproximado de compra de un producto duradero; no incluye la incertidumbre del factor monetario ni de la vida útil."
+    },
+    "vida_util_producto_duradero": {
+      "valor": 0.35,
+      "unidad": "sigma_relativa",
+      "descripcion": "Vida útil estimada por el usuario para productos duraderos; se usa como divisor en la anualización y tiene incertidumbre elevada."
+    },
+    "distancia_vuelo_manual_km": {
+      "valor": 0.1,
+      "unidad": "sigma_relativa",
+      "descripcion": "Distancia de vuelo introducida manualmente en kilómetros por el usuario."
+    },
+    "horas_vuelo_estimadas": {
+      "valor": 0.2,
+      "unidad": "sigma_relativa",
+      "descripcion": "Horas de vuelo aproximadas introducidas por el usuario; se combinan con la incertidumbre de la velocidad media usada para convertir horas en kilómetros."
+    },
+    "gasto_diario_recurrente": {
+      "valor": 0.3,
+      "unidad": "sigma_relativa",
+      "descripcion": "Gasto diario aproximado extrapolado a un año; alta variabilidad día a día."
+    },
+    "gasto_semanal_recurrente": {
+      "valor": 0.25,
+      "unidad": "sigma_relativa",
+      "descripcion": "Gasto semanal aproximado extrapolado a un año; variabilidad moderada entre semanas."
+    }
+  },
+  "pendientes_metodologicos": [
+    "Sustituir todos los factores provisionales por factores trazables y fechados.",
+    "Separar factores por país cuando sea necesario, especialmente electricidad.",
+    "Rehacer vuelos con distancia real, clases y factores por pasajero-km.",
+    "Revisar Productos para reducir doble conteo y mejorar factores de ciclo de vida o monetarios.",
+    "Mostrar la propagación de incertidumbres en resultados finales y completar la revisión de fuentes definitivas.",
+    "Activar en el formulario y en la lógica de Vivienda las unidades alternativas preparadas en vivienda.unidades_entrada y vivienda.conversiones.",
+    "Documentar en data/model_registry.json las fuentes, criterios y fechas de revisión de los factores y conversiones de Vivienda.",
+    "Fase D4: activar en coche.html/js/coches.js los factores específicos de Coche documentados en D3 y el control de doble conteo de coche eléctrico con Vivienda."
+  ],
+  "indicador_planetas": {
+    "descripcion": "Indicador visual \"planetas\" del módulo calculadora de la plataforma. Es orientativo: compara la huella personal de carbono calculada con un presupuesto anual por persona compatible con el objetivo de 1,5 °C. No es la huella ecológica (hectáreas globales) de Global Footprint Network.",
+    "formula": "planetas = huella_total_kgCO2e_anual / presupuesto_kgCO2e_persona_anio",
+    "presupuesto_kgCO2e_persona_anio": {
+      "valor": 2500,
+      "unidad": "kgCO2e/persona/año",
+      "referencia": "Objetivo 2030 de huella de estilo de vida compatible con 1,5 °C (2,5 tCO2e por persona).",
+      "fuente": "IGES, Aalto University y D-mat (2019). 1.5-Degree Lifestyles: Targets and options for reducing lifestyle carbon footprints.",
+      "estado": "propuesta_plataforma_pendiente_validacion_AHC"
+    }
+  }
+}

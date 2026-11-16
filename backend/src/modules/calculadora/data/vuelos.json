@@ -1,0 +1,1442 @@
+[
+  {
+    "codigo": "ACE",
+    "nombre": "César Manrique-Lanzarote Airport",
+    "ciudad": "Lanzarote",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 28.9455,
+    "lon": -13.6052
+  },
+  {
+    "codigo": "ADD",
+    "nombre": "Bole International Airport",
+    "ciudad": "Addis Ababa",
+    "pais": "Etiopía",
+    "paisCodigo": "ET",
+    "lat": 8.9779,
+    "lon": 38.7993
+  },
+  {
+    "codigo": "AEP",
+    "nombre": "Aeroparque Jorge Newbery",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "paisCodigo": "AR",
+    "lat": -34.5592,
+    "lon": -58.4156
+  },
+  {
+    "codigo": "AGP",
+    "nombre": "Málaga-Costa del Sol Airport",
+    "ciudad": "Málaga",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 36.6749,
+    "lon": -4.4991
+  },
+  {
+    "codigo": "AKL",
+    "nombre": "Auckland Airport",
+    "ciudad": "Auckland",
+    "pais": "Nueva Zelanda",
+    "paisCodigo": "NZ",
+    "lat": -37.0082,
+    "lon": 174.785
+  },
+  {
+    "codigo": "ALC",
+    "nombre": "Alicante-Elche Miguel Hernández Airport",
+    "ciudad": "Alicante",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 38.2822,
+    "lon": -0.5582
+  },
+  {
+    "codigo": "AMS",
+    "nombre": "Amsterdam Schiphol Airport",
+    "ciudad": "Ámsterdam",
+    "pais": "Países Bajos",
+    "paisCodigo": "NL",
+    "lat": 52.3105,
+    "lon": 4.7683
+  },
+  {
+    "codigo": "ARN",
+    "nombre": "Stockholm Arlanda Airport",
+    "ciudad": "Estocolmo",
+    "pais": "Suecia",
+    "paisCodigo": "SE",
+    "lat": 59.6498,
+    "lon": 17.9238
+  },
+  {
+    "codigo": "ATH",
+    "nombre": "Athens International Airport",
+    "ciudad": "Atenas",
+    "pais": "Grecia",
+    "paisCodigo": "GR",
+    "lat": 37.9364,
+    "lon": 23.9445
+  },
+  {
+    "codigo": "ATL",
+    "nombre": "Hartsfield-Jackson Atlanta International Airport",
+    "ciudad": "Atlanta",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 33.6407,
+    "lon": -84.4277
+  },
+  {
+    "codigo": "AUH",
+    "nombre": "Zayed International Airport",
+    "ciudad": "Abu Dhabi",
+    "pais": "Emiratos Árabes Unidos",
+    "paisCodigo": "AE",
+    "lat": 24.433,
+    "lon": 54.6511
+  },
+  {
+    "codigo": "AUS",
+    "nombre": "Austin-Bergstrom International Airport",
+    "ciudad": "Austin",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 30.1975,
+    "lon": -97.6664
+  },
+  {
+    "codigo": "BCN",
+    "nombre": "Josep Tarradellas Barcelona-El Prat Airport",
+    "ciudad": "Barcelona",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 41.2974,
+    "lon": 2.0833
+  },
+  {
+    "codigo": "BEG",
+    "nombre": "Belgrade Nikola Tesla Airport",
+    "ciudad": "Belgrado",
+    "pais": "Serbia",
+    "paisCodigo": "RS",
+    "lat": 44.8184,
+    "lon": 20.3091
+  },
+  {
+    "codigo": "BER",
+    "nombre": "Berlin Brandenburg Airport",
+    "ciudad": "Berlín",
+    "pais": "Alemania",
+    "paisCodigo": "DE",
+    "lat": 52.3667,
+    "lon": 13.5033
+  },
+  {
+    "codigo": "BGY",
+    "nombre": "Milan Bergamo Airport",
+    "ciudad": "Bérgamo / Milán",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 45.6689,
+    "lon": 9.7003
+  },
+  {
+    "codigo": "BIO",
+    "nombre": "Bilbao Airport",
+    "ciudad": "Bilbao",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 43.3011,
+    "lon": -2.9106
+  },
+  {
+    "codigo": "BKK",
+    "nombre": "Suvarnabhumi Airport",
+    "ciudad": "Bangkok",
+    "pais": "Tailandia",
+    "paisCodigo": "TH",
+    "lat": 13.69,
+    "lon": 100.7501
+  },
+  {
+    "codigo": "BLR",
+    "nombre": "Kempegowda International Airport",
+    "ciudad": "Bengaluru",
+    "pais": "India",
+    "paisCodigo": "IN",
+    "lat": 13.1986,
+    "lon": 77.7066
+  },
+  {
+    "codigo": "BNE",
+    "nombre": "Brisbane Airport",
+    "ciudad": "Brisbane",
+    "pais": "Australia",
+    "paisCodigo": "AU",
+    "lat": -27.3842,
+    "lon": 153.1175
+  },
+  {
+    "codigo": "BOD",
+    "nombre": "Bordeaux-Mérignac Airport",
+    "ciudad": "Burdeos",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 44.8283,
+    "lon": -0.7156
+  },
+  {
+    "codigo": "BOG",
+    "nombre": "El Dorado International Airport",
+    "ciudad": "Bogotá",
+    "pais": "Colombia",
+    "paisCodigo": "CO",
+    "lat": 4.7016,
+    "lon": -74.1469
+  },
+  {
+    "codigo": "BOM",
+    "nombre": "Chhatrapati Shivaji Maharaj International Airport",
+    "ciudad": "Mumbai",
+    "pais": "India",
+    "paisCodigo": "IN",
+    "lat": 19.0896,
+    "lon": 72.8656
+  },
+  {
+    "codigo": "BOS",
+    "nombre": "Logan International Airport",
+    "ciudad": "Boston",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 42.3656,
+    "lon": -71.0096
+  },
+  {
+    "codigo": "BRU",
+    "nombre": "Brussels Airport",
+    "ciudad": "Bruselas",
+    "pais": "Bélgica",
+    "paisCodigo": "BE",
+    "lat": 50.9014,
+    "lon": 4.4844
+  },
+  {
+    "codigo": "BUD",
+    "nombre": "Budapest Ferenc Liszt International Airport",
+    "ciudad": "Budapest",
+    "pais": "Hungría",
+    "paisCodigo": "HU",
+    "lat": 47.4298,
+    "lon": 19.2611
+  },
+  {
+    "codigo": "CAI",
+    "nombre": "Cairo International Airport",
+    "ciudad": "El Cairo",
+    "pais": "Egipto",
+    "paisCodigo": "EG",
+    "lat": 30.1219,
+    "lon": 31.4056
+  },
+  {
+    "codigo": "CAN",
+    "nombre": "Guangzhou Baiyun International Airport",
+    "ciudad": "Guangzhou",
+    "pais": "China",
+    "paisCodigo": "CN",
+    "lat": 23.3924,
+    "lon": 113.2988
+  },
+  {
+    "codigo": "CDG",
+    "nombre": "Charles de Gaulle Airport",
+    "ciudad": "París",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 49.0097,
+    "lon": 2.5479
+  },
+  {
+    "codigo": "CGH",
+    "nombre": "São Paulo-Congonhas Airport",
+    "ciudad": "São Paulo",
+    "pais": "Brasil",
+    "paisCodigo": "BR",
+    "lat": -23.6267,
+    "lon": -46.6554
+  },
+  {
+    "codigo": "CGK",
+    "nombre": "Soekarno-Hatta International Airport",
+    "ciudad": "Yakarta",
+    "pais": "Indonesia",
+    "paisCodigo": "ID",
+    "lat": -6.1256,
+    "lon": 106.6559
+  },
+  {
+    "codigo": "CIA",
+    "nombre": "Rome Ciampino Airport",
+    "ciudad": "Roma",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 41.7994,
+    "lon": 12.5949
+  },
+  {
+    "codigo": "CLT",
+    "nombre": "Charlotte Douglas International Airport",
+    "ciudad": "Charlotte",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 35.2144,
+    "lon": -80.9473
+  },
+  {
+    "codigo": "CMN",
+    "nombre": "Mohammed V International Airport",
+    "ciudad": "Casablanca",
+    "pais": "Marruecos",
+    "paisCodigo": "MA",
+    "lat": 33.3675,
+    "lon": -7.59
+  },
+  {
+    "codigo": "CPH",
+    "nombre": "Copenhagen Airport",
+    "ciudad": "Copenhague",
+    "pais": "Dinamarca",
+    "paisCodigo": "DK",
+    "lat": 55.6181,
+    "lon": 12.6561
+  },
+  {
+    "codigo": "CPT",
+    "nombre": "Cape Town International Airport",
+    "ciudad": "Ciudad del Cabo",
+    "pais": "Sudáfrica",
+    "paisCodigo": "ZA",
+    "lat": -33.9715,
+    "lon": 18.6021
+  },
+  {
+    "codigo": "CUN",
+    "nombre": "Cancún International Airport",
+    "ciudad": "Cancún",
+    "pais": "México",
+    "paisCodigo": "MX",
+    "lat": 21.0365,
+    "lon": -86.8771
+  },
+  {
+    "codigo": "DBV",
+    "nombre": "Dubrovnik Airport",
+    "ciudad": "Dubrovnik",
+    "pais": "Croacia",
+    "paisCodigo": "HR",
+    "lat": 42.5614,
+    "lon": 18.2682
+  },
+  {
+    "codigo": "DCA",
+    "nombre": "Ronald Reagan Washington National Airport",
+    "ciudad": "Washington, D.C.",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 38.8512,
+    "lon": -77.0402
+  },
+  {
+    "codigo": "DEL",
+    "nombre": "Indira Gandhi International Airport",
+    "ciudad": "Delhi",
+    "pais": "India",
+    "paisCodigo": "IN",
+    "lat": 28.5562,
+    "lon": 77.1
+  },
+  {
+    "codigo": "DEN",
+    "nombre": "Denver International Airport",
+    "ciudad": "Denver",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 39.8561,
+    "lon": -104.6737
+  },
+  {
+    "codigo": "DFW",
+    "nombre": "Dallas/Fort Worth International Airport",
+    "ciudad": "Dallas/Fort Worth",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 32.8998,
+    "lon": -97.0403
+  },
+  {
+    "codigo": "DMK",
+    "nombre": "Don Mueang International Airport",
+    "ciudad": "Bangkok",
+    "pais": "Tailandia",
+    "paisCodigo": "TH",
+    "lat": 13.9126,
+    "lon": 100.607
+  },
+  {
+    "codigo": "DOH",
+    "nombre": "Hamad International Airport",
+    "ciudad": "Doha",
+    "pais": "Catar",
+    "paisCodigo": "QA",
+    "lat": 25.2731,
+    "lon": 51.6081
+  },
+  {
+    "codigo": "DTW",
+    "nombre": "Detroit Metropolitan Wayne County Airport",
+    "ciudad": "Detroit",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 42.2162,
+    "lon": -83.3554
+  },
+  {
+    "codigo": "DUB",
+    "nombre": "Dublin Airport",
+    "ciudad": "Dublín",
+    "pais": "Irlanda",
+    "paisCodigo": "IE",
+    "lat": 53.4264,
+    "lon": -6.2499
+  },
+  {
+    "codigo": "DUS",
+    "nombre": "Düsseldorf Airport",
+    "ciudad": "Düsseldorf",
+    "pais": "Alemania",
+    "paisCodigo": "DE",
+    "lat": 51.2895,
+    "lon": 6.7668
+  },
+  {
+    "codigo": "DXB",
+    "nombre": "Dubai International Airport",
+    "ciudad": "Dubái",
+    "pais": "Emiratos Árabes Unidos",
+    "paisCodigo": "AE",
+    "lat": 25.2532,
+    "lon": 55.3657
+  },
+  {
+    "codigo": "EDI",
+    "nombre": "Edinburgh Airport",
+    "ciudad": "Edimburgo",
+    "pais": "Reino Unido",
+    "paisCodigo": "GB",
+    "lat": 55.95,
+    "lon": -3.3725
+  },
+  {
+    "codigo": "EWR",
+    "nombre": "Newark Liberty International Airport",
+    "ciudad": "Nueva York / Newark",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 40.6895,
+    "lon": -74.1745
+  },
+  {
+    "codigo": "EZE",
+    "nombre": "Ministro Pistarini International Airport",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "paisCodigo": "AR",
+    "lat": -34.8222,
+    "lon": -58.5358
+  },
+  {
+    "codigo": "FAO",
+    "nombre": "Faro Airport",
+    "ciudad": "Faro",
+    "pais": "Portugal",
+    "paisCodigo": "PT",
+    "lat": 37.0144,
+    "lon": -7.9659
+  },
+  {
+    "codigo": "FCO",
+    "nombre": "Rome Fiumicino Airport",
+    "ciudad": "Roma",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 41.8003,
+    "lon": 12.2389
+  },
+  {
+    "codigo": "FLL",
+    "nombre": "Fort Lauderdale-Hollywood International Airport",
+    "ciudad": "Fort Lauderdale",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 26.0726,
+    "lon": -80.1527
+  },
+  {
+    "codigo": "FRA",
+    "nombre": "Frankfurt Airport",
+    "ciudad": "Fráncfort",
+    "pais": "Alemania",
+    "paisCodigo": "DE",
+    "lat": 50.0379,
+    "lon": 8.5622
+  },
+  {
+    "codigo": "FUE",
+    "nombre": "Fuerteventura Airport",
+    "ciudad": "Fuerteventura",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 28.4527,
+    "lon": -13.8638
+  },
+  {
+    "codigo": "GDL",
+    "nombre": "Miguel Hidalgo y Costilla Guadalajara International Airport",
+    "ciudad": "Guadalajara",
+    "pais": "México",
+    "paisCodigo": "MX",
+    "lat": 20.5218,
+    "lon": -103.3112
+  },
+  {
+    "codigo": "GIG",
+    "nombre": "Rio de Janeiro-Galeão International Airport",
+    "ciudad": "Río de Janeiro",
+    "pais": "Brasil",
+    "paisCodigo": "BR",
+    "lat": -22.81,
+    "lon": -43.2506
+  },
+  {
+    "codigo": "GMP",
+    "nombre": "Gimpo International Airport",
+    "ciudad": "Seúl",
+    "pais": "Corea del Sur",
+    "paisCodigo": "KR",
+    "lat": 37.5583,
+    "lon": 126.7906
+  },
+  {
+    "codigo": "GRU",
+    "nombre": "São Paulo/Guarulhos International Airport",
+    "ciudad": "São Paulo",
+    "pais": "Brasil",
+    "paisCodigo": "BR",
+    "lat": -23.4356,
+    "lon": -46.4731
+  },
+  {
+    "codigo": "GVA",
+    "nombre": "Geneva Airport",
+    "ciudad": "Ginebra",
+    "pais": "Suiza",
+    "paisCodigo": "CH",
+    "lat": 46.2381,
+    "lon": 6.109
+  },
+  {
+    "codigo": "HAM",
+    "nombre": "Hamburg Airport",
+    "ciudad": "Hamburgo",
+    "pais": "Alemania",
+    "paisCodigo": "DE",
+    "lat": 53.6304,
+    "lon": 9.9882
+  },
+  {
+    "codigo": "HAN",
+    "nombre": "Noi Bai International Airport",
+    "ciudad": "Hanói",
+    "pais": "Vietnam",
+    "paisCodigo": "VN",
+    "lat": 21.2187,
+    "lon": 105.8042
+  },
+  {
+    "codigo": "HAV",
+    "nombre": "José Martí International Airport",
+    "ciudad": "La Habana",
+    "pais": "Cuba",
+    "paisCodigo": "CU",
+    "lat": 22.9892,
+    "lon": -82.4091
+  },
+  {
+    "codigo": "HEL",
+    "nombre": "Helsinki Airport",
+    "ciudad": "Helsinki",
+    "pais": "Finlandia",
+    "paisCodigo": "FI",
+    "lat": 60.3172,
+    "lon": 24.9633
+  },
+  {
+    "codigo": "HKG",
+    "nombre": "Hong Kong International Airport",
+    "ciudad": "Hong Kong",
+    "pais": "China",
+    "paisCodigo": "HK",
+    "lat": 22.308,
+    "lon": 113.9185
+  },
+  {
+    "codigo": "HND",
+    "nombre": "Tokyo Haneda Airport",
+    "ciudad": "Tokio",
+    "pais": "Japón",
+    "paisCodigo": "JP",
+    "lat": 35.5494,
+    "lon": 139.7798
+  },
+  {
+    "codigo": "IAD",
+    "nombre": "Washington Dulles International Airport",
+    "ciudad": "Washington, D.C.",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 38.9531,
+    "lon": -77.4565
+  },
+  {
+    "codigo": "IAH",
+    "nombre": "George Bush Intercontinental Airport",
+    "ciudad": "Houston",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 29.9902,
+    "lon": -95.3368
+  },
+  {
+    "codigo": "IBZ",
+    "nombre": "Ibiza Airport",
+    "ciudad": "Ibiza",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 38.8729,
+    "lon": 1.3731
+  },
+  {
+    "codigo": "ICN",
+    "nombre": "Incheon International Airport",
+    "ciudad": "Seúl",
+    "pais": "Corea del Sur",
+    "paisCodigo": "KR",
+    "lat": 37.4602,
+    "lon": 126.4407
+  },
+  {
+    "codigo": "IST",
+    "nombre": "Istanbul Airport",
+    "ciudad": "Estambul",
+    "pais": "Turquía",
+    "paisCodigo": "TR",
+    "lat": 41.2753,
+    "lon": 28.7519
+  },
+  {
+    "codigo": "JFK",
+    "nombre": "John F. Kennedy International Airport",
+    "ciudad": "Nueva York",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 40.6413,
+    "lon": -73.7781
+  },
+  {
+    "codigo": "JNB",
+    "nombre": "O. R. Tambo International Airport",
+    "ciudad": "Johannesburgo",
+    "pais": "Sudáfrica",
+    "paisCodigo": "ZA",
+    "lat": -26.1337,
+    "lon": 28.242
+  },
+  {
+    "codigo": "KIX",
+    "nombre": "Kansai International Airport",
+    "ciudad": "Osaka",
+    "pais": "Japón",
+    "paisCodigo": "JP",
+    "lat": 34.4273,
+    "lon": 135.244
+  },
+  {
+    "codigo": "KRK",
+    "nombre": "Kraków John Paul II International Airport",
+    "ciudad": "Cracovia",
+    "pais": "Polonia",
+    "paisCodigo": "PL",
+    "lat": 50.0777,
+    "lon": 19.7848
+  },
+  {
+    "codigo": "KUL",
+    "nombre": "Kuala Lumpur International Airport",
+    "ciudad": "Kuala Lumpur",
+    "pais": "Malasia",
+    "paisCodigo": "MY",
+    "lat": 2.7456,
+    "lon": 101.7099
+  },
+  {
+    "codigo": "LAS",
+    "nombre": "Harry Reid International Airport",
+    "ciudad": "Las Vegas",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 36.084,
+    "lon": -115.1537
+  },
+  {
+    "codigo": "LAX",
+    "nombre": "Los Angeles International Airport",
+    "ciudad": "Los Ángeles",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 33.9416,
+    "lon": -118.4085
+  },
+  {
+    "codigo": "LCY",
+    "nombre": "London City Airport",
+    "ciudad": "Londres",
+    "pais": "Reino Unido",
+    "paisCodigo": "GB",
+    "lat": 51.5053,
+    "lon": 0.0553
+  },
+  {
+    "codigo": "LGA",
+    "nombre": "LaGuardia Airport",
+    "ciudad": "Nueva York",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 40.7769,
+    "lon": -73.874
+  },
+  {
+    "codigo": "LGW",
+    "nombre": "London Gatwick Airport",
+    "ciudad": "Londres",
+    "pais": "Reino Unido",
+    "paisCodigo": "GB",
+    "lat": 51.1537,
+    "lon": -0.1821
+  },
+  {
+    "codigo": "LHR",
+    "nombre": "London Heathrow Airport",
+    "ciudad": "Londres",
+    "pais": "Reino Unido",
+    "paisCodigo": "GB",
+    "lat": 51.47,
+    "lon": -0.4543
+  },
+  {
+    "codigo": "LIM",
+    "nombre": "Jorge Chávez International Airport",
+    "ciudad": "Lima",
+    "pais": "Perú",
+    "paisCodigo": "PE",
+    "lat": -12.0219,
+    "lon": -77.1143
+  },
+  {
+    "codigo": "LIN",
+    "nombre": "Milan Linate Airport",
+    "ciudad": "Milán",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 45.4451,
+    "lon": 9.2767
+  },
+  {
+    "codigo": "LIS",
+    "nombre": "Humberto Delgado Airport",
+    "ciudad": "Lisboa",
+    "pais": "Portugal",
+    "paisCodigo": "PT",
+    "lat": 38.7742,
+    "lon": -9.1342
+  },
+  {
+    "codigo": "LPA",
+    "nombre": "Gran Canaria Airport",
+    "ciudad": "Gran Canaria",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 27.9319,
+    "lon": -15.3866
+  },
+  {
+    "codigo": "LYS",
+    "nombre": "Lyon-Saint Exupéry Airport",
+    "ciudad": "Lyon",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 45.7256,
+    "lon": 5.0811
+  },
+  {
+    "codigo": "MAD",
+    "nombre": "Adolfo Suárez Madrid-Barajas Airport",
+    "ciudad": "Madrid",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 40.4719,
+    "lon": -3.5626
+  },
+  {
+    "codigo": "MAH",
+    "nombre": "Menorca Airport",
+    "ciudad": "Menorca",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 39.8626,
+    "lon": 4.2186
+  },
+  {
+    "codigo": "MAN",
+    "nombre": "Manchester Airport",
+    "ciudad": "Manchester",
+    "pais": "Reino Unido",
+    "paisCodigo": "GB",
+    "lat": 53.365,
+    "lon": -2.2722
+  },
+  {
+    "codigo": "MCO",
+    "nombre": "Orlando International Airport",
+    "ciudad": "Orlando",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 28.4312,
+    "lon": -81.3081
+  },
+  {
+    "codigo": "MDE",
+    "nombre": "José María Córdova International Airport",
+    "ciudad": "Medellín",
+    "pais": "Colombia",
+    "paisCodigo": "CO",
+    "lat": 6.1645,
+    "lon": -75.4231
+  },
+  {
+    "codigo": "MEL",
+    "nombre": "Melbourne Airport",
+    "ciudad": "Melbourne",
+    "pais": "Australia",
+    "paisCodigo": "AU",
+    "lat": -37.6733,
+    "lon": 144.8433
+  },
+  {
+    "codigo": "MEX",
+    "nombre": "Mexico City International Airport",
+    "ciudad": "Ciudad de México",
+    "pais": "México",
+    "paisCodigo": "MX",
+    "lat": 19.4361,
+    "lon": -99.0719
+  },
+  {
+    "codigo": "MIA",
+    "nombre": "Miami International Airport",
+    "ciudad": "Miami",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 25.7959,
+    "lon": -80.287
+  },
+  {
+    "codigo": "MNL",
+    "nombre": "Ninoy Aquino International Airport",
+    "ciudad": "Manila",
+    "pais": "Filipinas",
+    "paisCodigo": "PH",
+    "lat": 14.5086,
+    "lon": 121.0198
+  },
+  {
+    "codigo": "MRS",
+    "nombre": "Marseille Provence Airport",
+    "ciudad": "Marsella",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 43.4393,
+    "lon": 5.2214
+  },
+  {
+    "codigo": "MSP",
+    "nombre": "Minneapolis-Saint Paul International Airport",
+    "ciudad": "Minneapolis / Saint Paul",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 44.8848,
+    "lon": -93.2223
+  },
+  {
+    "codigo": "MTY",
+    "nombre": "Monterrey International Airport",
+    "ciudad": "Monterrey",
+    "pais": "México",
+    "paisCodigo": "MX",
+    "lat": 25.7785,
+    "lon": -100.107
+  },
+  {
+    "codigo": "MUC",
+    "nombre": "Munich Airport",
+    "ciudad": "Múnich",
+    "pais": "Alemania",
+    "paisCodigo": "DE",
+    "lat": 48.3538,
+    "lon": 11.7861
+  },
+  {
+    "codigo": "MXP",
+    "nombre": "Milan Malpensa Airport",
+    "ciudad": "Milán",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 45.6306,
+    "lon": 8.7281
+  },
+  {
+    "codigo": "NAP",
+    "nombre": "Naples International Airport",
+    "ciudad": "Nápoles",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 40.886,
+    "lon": 14.2908
+  },
+  {
+    "codigo": "NBO",
+    "nombre": "Jomo Kenyatta International Airport",
+    "ciudad": "Nairobi",
+    "pais": "Kenia",
+    "paisCodigo": "KE",
+    "lat": -1.3192,
+    "lon": 36.9278
+  },
+  {
+    "codigo": "NCE",
+    "nombre": "Nice Côte d'Azur Airport",
+    "ciudad": "Niza",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 43.6653,
+    "lon": 7.215
+  },
+  {
+    "codigo": "NGO",
+    "nombre": "Chubu Centrair International Airport",
+    "ciudad": "Nagoya",
+    "pais": "Japón",
+    "paisCodigo": "JP",
+    "lat": 34.8584,
+    "lon": 136.8054
+  },
+  {
+    "codigo": "NLU",
+    "nombre": "Felipe Ángeles International Airport",
+    "ciudad": "Ciudad de México",
+    "pais": "México",
+    "paisCodigo": "MX",
+    "lat": 19.742,
+    "lon": -99.016
+  },
+  {
+    "codigo": "NRT",
+    "nombre": "Narita International Airport",
+    "ciudad": "Tokio",
+    "pais": "Japón",
+    "paisCodigo": "JP",
+    "lat": 35.772,
+    "lon": 140.3929
+  },
+  {
+    "codigo": "NTE",
+    "nombre": "Nantes Atlantique Airport",
+    "ciudad": "Nantes",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 47.1569,
+    "lon": -1.6078
+  },
+  {
+    "codigo": "OPO",
+    "nombre": "Francisco Sá Carneiro Airport",
+    "ciudad": "Oporto",
+    "pais": "Portugal",
+    "paisCodigo": "PT",
+    "lat": 41.2481,
+    "lon": -8.6814
+  },
+  {
+    "codigo": "ORD",
+    "nombre": "O'Hare International Airport",
+    "ciudad": "Chicago",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 41.9742,
+    "lon": -87.9073
+  },
+  {
+    "codigo": "ORY",
+    "nombre": "Paris-Orly Airport",
+    "ciudad": "París",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 48.7262,
+    "lon": 2.3652
+  },
+  {
+    "codigo": "OSL",
+    "nombre": "Oslo Airport",
+    "ciudad": "Oslo",
+    "pais": "Noruega",
+    "paisCodigo": "NO",
+    "lat": 60.1976,
+    "lon": 11.1004
+  },
+  {
+    "codigo": "OTP",
+    "nombre": "Henri Coandă International Airport",
+    "ciudad": "Bucarest",
+    "pais": "Rumanía",
+    "paisCodigo": "RO",
+    "lat": 44.5711,
+    "lon": 26.085
+  },
+  {
+    "codigo": "PEK",
+    "nombre": "Beijing Capital International Airport",
+    "ciudad": "Pekín",
+    "pais": "China",
+    "paisCodigo": "CN",
+    "lat": 40.0801,
+    "lon": 116.5846
+  },
+  {
+    "codigo": "PER",
+    "nombre": "Perth Airport",
+    "ciudad": "Perth",
+    "pais": "Australia",
+    "paisCodigo": "AU",
+    "lat": -31.9403,
+    "lon": 115.9672
+  },
+  {
+    "codigo": "PHL",
+    "nombre": "Philadelphia International Airport",
+    "ciudad": "Filadelfia",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 39.8744,
+    "lon": -75.2424
+  },
+  {
+    "codigo": "PHX",
+    "nombre": "Phoenix Sky Harbor International Airport",
+    "ciudad": "Phoenix",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 33.4342,
+    "lon": -112.0116
+  },
+  {
+    "codigo": "PKX",
+    "nombre": "Beijing Daxing International Airport",
+    "ciudad": "Pekín",
+    "pais": "China",
+    "paisCodigo": "CN",
+    "lat": 39.5099,
+    "lon": 116.4109
+  },
+  {
+    "codigo": "PMI",
+    "nombre": "Palma de Mallorca Airport",
+    "ciudad": "Palma de Mallorca",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 39.5517,
+    "lon": 2.7388
+  },
+  {
+    "codigo": "PRG",
+    "nombre": "Václav Havel Airport Prague",
+    "ciudad": "Praga",
+    "pais": "Chequia",
+    "paisCodigo": "CZ",
+    "lat": 50.1008,
+    "lon": 14.2632
+  },
+  {
+    "codigo": "PTY",
+    "nombre": "Tocumen International Airport",
+    "ciudad": "Ciudad de Panamá",
+    "pais": "Panamá",
+    "paisCodigo": "PA",
+    "lat": 9.0714,
+    "lon": -79.3835
+  },
+  {
+    "codigo": "PUJ",
+    "nombre": "Punta Cana International Airport",
+    "ciudad": "Punta Cana",
+    "pais": "República Dominicana",
+    "paisCodigo": "DO",
+    "lat": 18.5674,
+    "lon": -68.3634
+  },
+  {
+    "codigo": "PVG",
+    "nombre": "Shanghai Pudong International Airport",
+    "ciudad": "Shanghái",
+    "pais": "China",
+    "paisCodigo": "CN",
+    "lat": 31.1443,
+    "lon": 121.8083
+  },
+  {
+    "codigo": "RAK",
+    "nombre": "Marrakesh Menara Airport",
+    "ciudad": "Marrakech",
+    "pais": "Marruecos",
+    "paisCodigo": "MA",
+    "lat": 31.6069,
+    "lon": -8.0363
+  },
+  {
+    "codigo": "SAN",
+    "nombre": "San Diego International Airport",
+    "ciudad": "San Diego",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 32.7338,
+    "lon": -117.1933
+  },
+  {
+    "codigo": "SAW",
+    "nombre": "Istanbul Sabiha Gökçen International Airport",
+    "ciudad": "Estambul",
+    "pais": "Turquía",
+    "paisCodigo": "TR",
+    "lat": 40.8986,
+    "lon": 29.3092
+  },
+  {
+    "codigo": "SCL",
+    "nombre": "Arturo Merino Benítez International Airport",
+    "ciudad": "Santiago de Chile",
+    "pais": "Chile",
+    "paisCodigo": "CL",
+    "lat": -33.3928,
+    "lon": -70.7858
+  },
+  {
+    "codigo": "SCQ",
+    "nombre": "Santiago-Rosalía de Castro Airport",
+    "ciudad": "Santiago de Compostela",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 42.8963,
+    "lon": -8.4151
+  },
+  {
+    "codigo": "SDQ",
+    "nombre": "Las Américas International Airport",
+    "ciudad": "Santo Domingo",
+    "pais": "República Dominicana",
+    "paisCodigo": "DO",
+    "lat": 18.4297,
+    "lon": -69.6689
+  },
+  {
+    "codigo": "SEA",
+    "nombre": "Seattle-Tacoma International Airport",
+    "ciudad": "Seattle",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 47.4502,
+    "lon": -122.3088
+  },
+  {
+    "codigo": "SFO",
+    "nombre": "San Francisco International Airport",
+    "ciudad": "San Francisco",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 37.6213,
+    "lon": -122.379
+  },
+  {
+    "codigo": "SGN",
+    "nombre": "Tan Son Nhat International Airport",
+    "ciudad": "Ho Chi Minh City",
+    "pais": "Vietnam",
+    "paisCodigo": "VN",
+    "lat": 10.8188,
+    "lon": 106.6519
+  },
+  {
+    "codigo": "SIN",
+    "nombre": "Singapore Changi Airport",
+    "ciudad": "Singapur",
+    "pais": "Singapur",
+    "paisCodigo": "SG",
+    "lat": 1.3644,
+    "lon": 103.9915
+  },
+  {
+    "codigo": "SJO",
+    "nombre": "Juan Santamaría International Airport",
+    "ciudad": "San José",
+    "pais": "Costa Rica",
+    "paisCodigo": "CR",
+    "lat": 9.9939,
+    "lon": -84.2088
+  },
+  {
+    "codigo": "SLC",
+    "nombre": "Salt Lake City International Airport",
+    "ciudad": "Salt Lake City",
+    "pais": "Estados Unidos",
+    "paisCodigo": "US",
+    "lat": 40.7899,
+    "lon": -111.9791
+  },
+  {
+    "codigo": "SOF",
+    "nombre": "Sofia Airport",
+    "ciudad": "Sofía",
+    "pais": "Bulgaria",
+    "paisCodigo": "BG",
+    "lat": 42.6967,
+    "lon": 23.4114
+  },
+  {
+    "codigo": "SPC",
+    "nombre": "La Palma Airport",
+    "ciudad": "La Palma",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 28.6265,
+    "lon": -17.7556
+  },
+  {
+    "codigo": "SPU",
+    "nombre": "Split Airport",
+    "ciudad": "Split",
+    "pais": "Croacia",
+    "paisCodigo": "HR",
+    "lat": 43.5389,
+    "lon": 16.298
+  },
+  {
+    "codigo": "STN",
+    "nombre": "London Stansted Airport",
+    "ciudad": "Londres",
+    "pais": "Reino Unido",
+    "paisCodigo": "GB",
+    "lat": 51.886,
+    "lon": 0.2389
+  },
+  {
+    "codigo": "SVQ",
+    "nombre": "Seville Airport",
+    "ciudad": "Sevilla",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 37.418,
+    "lon": -5.8931
+  },
+  {
+    "codigo": "SYD",
+    "nombre": "Sydney Kingsford Smith Airport",
+    "ciudad": "Sídney",
+    "pais": "Australia",
+    "paisCodigo": "AU",
+    "lat": -33.9399,
+    "lon": 151.1753
+  },
+  {
+    "codigo": "SZX",
+    "nombre": "Shenzhen Bao'an International Airport",
+    "ciudad": "Shenzhen",
+    "pais": "China",
+    "paisCodigo": "CN",
+    "lat": 22.6393,
+    "lon": 113.8107
+  },
+  {
+    "codigo": "TFN",
+    "nombre": "Tenerife North-Ciudad de La Laguna Airport",
+    "ciudad": "Tenerife",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 28.4827,
+    "lon": -16.3415
+  },
+  {
+    "codigo": "TFS",
+    "nombre": "Tenerife South Airport",
+    "ciudad": "Tenerife",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 28.0445,
+    "lon": -16.5725
+  },
+  {
+    "codigo": "TLS",
+    "nombre": "Toulouse-Blagnac Airport",
+    "ciudad": "Toulouse",
+    "pais": "Francia",
+    "paisCodigo": "FR",
+    "lat": 43.6291,
+    "lon": 1.3638
+  },
+  {
+    "codigo": "TLV",
+    "nombre": "Ben Gurion Airport",
+    "ciudad": "Tel Aviv",
+    "pais": "Israel",
+    "paisCodigo": "IL",
+    "lat": 32.0114,
+    "lon": 34.8867
+  },
+  {
+    "codigo": "TPE",
+    "nombre": "Taiwan Taoyuan International Airport",
+    "ciudad": "Taipéi",
+    "pais": "Taiwán",
+    "paisCodigo": "TW",
+    "lat": 25.0777,
+    "lon": 121.2328
+  },
+  {
+    "codigo": "TUN",
+    "nombre": "Tunis-Carthage International Airport",
+    "ciudad": "Túnez",
+    "pais": "Túnez",
+    "paisCodigo": "TN",
+    "lat": 36.851,
+    "lon": 10.2272
+  },
+  {
+    "codigo": "VCE",
+    "nombre": "Venice Marco Polo Airport",
+    "ciudad": "Venecia",
+    "pais": "Italia",
+    "paisCodigo": "IT",
+    "lat": 45.5053,
+    "lon": 12.3519
+  },
+  {
+    "codigo": "VIE",
+    "nombre": "Vienna International Airport",
+    "ciudad": "Viena",
+    "pais": "Austria",
+    "paisCodigo": "AT",
+    "lat": 48.1103,
+    "lon": 16.5697
+  },
+  {
+    "codigo": "VLC",
+    "nombre": "Valencia Airport",
+    "ciudad": "Valencia",
+    "pais": "España",
+    "paisCodigo": "ES",
+    "lat": 39.4893,
+    "lon": -0.4816
+  },
+  {
+    "codigo": "WAW",
+    "nombre": "Warsaw Chopin Airport",
+    "ciudad": "Varsovia",
+    "pais": "Polonia",
+    "paisCodigo": "PL",
+    "lat": 52.1657,
+    "lon": 20.9671
+  },
+  {
+    "codigo": "YOW",
+    "nombre": "Ottawa Macdonald-Cartier International Airport",
+    "ciudad": "Ottawa",
+    "pais": "Canadá",
+    "paisCodigo": "CA",
+    "lat": 45.3225,
+    "lon": -75.6692
+  },
+  {
+    "codigo": "YUL",
+    "nombre": "Montréal-Trudeau International Airport",
+    "ciudad": "Montreal",
+    "pais": "Canadá",
+    "paisCodigo": "CA",
+    "lat": 45.4706,
+    "lon": -73.7408
+  },
+  {
+    "codigo": "YVR",
+    "nombre": "Vancouver International Airport",
+    "ciudad": "Vancouver",
+    "pais": "Canadá",
+    "paisCodigo": "CA",
+    "lat": 49.1967,
+    "lon": -123.1815
+  },
+  {
+    "codigo": "YYC",
+    "nombre": "Calgary International Airport",
+    "ciudad": "Calgary",
+    "pais": "Canadá",
+    "paisCodigo": "CA",
+    "lat": 51.1215,
+    "lon": -114.0076
+  },
+  {
+    "codigo": "YYZ",
+    "nombre": "Toronto Pearson International Airport",
+    "ciudad": "Toronto",
+    "pais": "Canadá",
+    "paisCodigo": "CA",
+    "lat": 43.6777,
+    "lon": -79.6248
+  },
+  {
+    "codigo": "ZAG",
+    "nombre": "Zagreb Airport",
+    "ciudad": "Zagreb",
+    "pais": "Croacia",
+    "paisCodigo": "HR",
+    "lat": 45.7429,
+    "lon": 16.0688
+  },
+  {
+    "codigo": "ZRH",
+    "nombre": "Zurich Airport",
+    "ciudad": "Zúrich",
+    "pais": "Suiza",
+    "paisCodigo": "CH",
+    "lat": 47.4582,
+    "lon": 8.5555
+  }
+]

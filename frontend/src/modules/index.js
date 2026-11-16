@@ -7,6 +7,7 @@ import { lazy } from 'react';
 export const modules = [
   { path: '/ecogestos', label: 'Ecogestos', Component: lazy(() => import('./ecogestos/index.jsx')) },
   { path: '/chatbot', label: 'Chatbot', Component: lazy(() => import('./chatbot/index.jsx')) },
+  { path: '/calculadora', label: 'Calculadora', Component: lazy(() => import('./calculadora/index.jsx')) },
   {
     name: 'auth',
     showInMenu: false,

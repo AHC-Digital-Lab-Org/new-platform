@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "descripcion": "Catálogo de vehículos del módulo calculadora: tipos de energía del coche y tipos de moto. Sustituye a coches.json de la calculadora AHC 1.2, que no se usaba en el cálculo. Los factores de emisión siguen en reference_factors.json; aquí solo hay etiquetas, unidades y valores de ayuda para el formulario.",
+    "fecha_creacion": "2026-11-16",
+    "nota_consumo_orientativo": "consumo_orientativo es un valor de ayuda que se propone en el formulario cuando la persona no conoce el consumo de su vehículo. Son valores medios aproximados de turismos recientes y están pendientes de validación por AHC; el cálculo aplica siempre la incertidumbre de consumo estimado (incertidumbres_dato_usuario.consumo_estimado).",
+    "estado": "propuesta_plataforma_pendiente_validacion_AHC"
+  },
+  "coches": {
+    "energias": [
+      { "id": "gasolina", "etiqueta": "Gasolina", "tipo": "liquido", "factor": "gasolina", "unidad": "L/100 km", "consumo_orientativo": 6.5, "consumo_maximo": 35 },
+      { "id": "diesel", "etiqueta": "Diésel", "tipo": "liquido", "factor": "diesel", "unidad": "L/100 km", "consumo_orientativo": 5.5, "consumo_maximo": 35 },
+      { "id": "glp", "etiqueta": "GLP (autogás)", "tipo": "liquido", "factor": "glp", "unidad": "L/100 km", "consumo_orientativo": 8, "consumo_maximo": 45 },
+      { "id": "hibrido_gasolina", "etiqueta": "Híbrido gasolina", "tipo": "liquido", "factor": "gasolina", "unidad": "L/100 km", "consumo_orientativo": 4.8, "consumo_maximo": 35 },
+      { "id": "hibrido_diesel", "etiqueta": "Híbrido diésel", "tipo": "liquido", "factor": "diesel", "unidad": "L/100 km", "consumo_orientativo": 4.5, "consumo_maximo": 35 },
+      { "id": "electrico", "etiqueta": "Eléctrico", "tipo": "electrico", "factor": "electricidad_coche", "unidad": "kWh/100 km", "consumo_orientativo": 17, "consumo_maximo": 60 },
+      { "id": "hibrido_enchufable", "etiqueta": "Híbrido enchufable", "tipo": "enchufable", "factor": "electricidad_coche", "unidad": "kWh/100 km", "consumo_orientativo": 18, "consumo_maximo": 60 }
+    ],
+    "combustibles_termicos_enchufable": [
+      { "id": "gasolina", "etiqueta": "Gasolina", "consumo_orientativo": 6 },
+      { "id": "diesel", "etiqueta": "Diésel", "consumo_orientativo": 5.5 }
+    ]
+  },
+  "motos": {
+    "tipos": [
+      { "id": "moto_pequena", "etiqueta": "Pequeña, ciclomotor o escúter (hasta 125 cc)" },
+      { "id": "moto_mediana", "etiqueta": "Mediana (de 125 a 500 cc)" },
+      { "id": "moto_grande", "etiqueta": "Grande (más de 500 cc)" }
+    ]
+  }
+}
