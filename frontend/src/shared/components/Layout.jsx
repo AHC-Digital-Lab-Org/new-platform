@@ -46,6 +46,9 @@ export default function Layout() {
           >
             Chatbot <span className="text-emerald-200">(En desarrollo…)</span>
           </span>
+          <NavLink to="/calculadora" className={linkClass}>
+            Calculadora
+          </NavLink>
           <div className="ml-auto flex items-center gap-2">
             {status === 'authenticated' && (
               <>

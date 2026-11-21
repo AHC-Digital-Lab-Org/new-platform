@@ -1,0 +1,2817 @@
+{
+  "metadata": {
+    "schema_version": "1.1",
+    "estado": "R1_referencias_nacionales_territorial_consumo_preparado",
+    "descripcion": "Referencias nacionales externas para contextualizar el resultado personal calculado. No modifican ningún cálculo de emisiones; solo ofrecen comparación orientativa en Resultados. Desde R1 el esquema permite distinguir referencia territorial y referencia de consumo.",
+    "fuente_principal": "Worldometer CO2 emissions per capita, basado en EDGAR/JRC/IEA 2025",
+    "fuente_url": "https://www.worldometers.info/co2-emissions/co2-emissions-per-capita/",
+    "fuente_secundaria_contextual": "Our World in Data / Global Carbon Budget para definir la diferencia entre emisiones territoriales y de consumo.",
+    "anio_datos": 2024,
+    "unidad": "t CO2/persona/año",
+    "referencia_mundial_tCO2_persona_anio": 4.89,
+    "tipo_referencia": "CO2 territorial per cápita, no CO2e de consumo",
+    "uso_en_calculadora": "Comparación prudente en Resultados. Si existe referencia de consumo para el país, Resultados la usará como referencia preferente; si no, usará la referencia territorial disponible. El total de la calculadora puede incluir CO2e, productos/proxies monetarios y módulos parciales, por lo que la comparación no debe leerse como equivalencia exacta ni evaluación normativa.",
+    "limitaciones": [
+      "La referencia es territorial: no ajusta por importaciones/exportaciones ni por consumo individual real.",
+      "La referencia es CO2, no CO2e completo: no incluye todos los gases o impactos que pueden aparecer en la calculadora.",
+      "La referencia nacional es media poblacional: no representa hogares, estilos de vida ni todos los módulos de la calculadora.",
+      "Si el resultado de la calculadora es parcial, la comparación solo sirve como contexto general.",
+      "Cuando solo existe referencia territorial, la comparación no debe leerse como huella personal de consumo.",
+      "Cuando exista referencia de consumo, seguirá siendo CO2 per cápita y no CO2e completo; tampoco equivale a los módulos exactos calculados por la herramienta."
+    ],
+    "cobertura": "Se incluyen referencias para los países del selector cuando la tabla fuente ofrece dato separado o agrupado utilizable; los países sin dato claro quedan sin referencia operativa.",
+    "referencia_preferente_para_calculadora_personal": "consumo_si_disponible",
+    "fuente_consumo_contextual": "Our World in Data / Global Carbon Project, emisiones de CO2 basadas en consumo per cápita",
+    "fuente_consumo_url": "https://ourworldindata.org/grapher/consumption-co2-per-capita",
+    "estructura_R1": {
+      "legacy_compatible": "Se conservan las claves tCO2_persona_anio, tipo_referencia y nota para compatibilidad con versiones previas.",
+      "nueva_estructura": "Cada país puede incluir referencias.territorial y, en el futuro, referencias.consumo.",
+      "criterio_operativo": "Resultados selecciona consumo si está disponible; en caso contrario selecciona territorial.",
+      "estado_consumo": "R1 prepara el esquema y la lógica, pero no inventa ni rellena valores de consumo cuando la base local no los contiene."
+    }
+  },
+  "countries": {
+    "afganistan": {
+      "nombre_es": "Afganistán",
+      "selector_value": "afganistan",
+      "iso3": "AFG",
+      "tCO2_persona_anio": 0.29,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.29,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "albania": {
+      "nombre_es": "Albania",
+      "selector_value": "albania",
+      "iso3": "ALB",
+      "tCO2_persona_anio": 1.44,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.44,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "argelia": {
+      "nombre_es": "Argelia",
+      "selector_value": "argelia",
+      "iso3": "DZA",
+      "tCO2_persona_anio": 4.07,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.07,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "andorra": {
+      "nombre_es": "Andorra",
+      "selector_value": "andorra",
+      "iso3": "AND",
+      "tCO2_persona_anio": 4.75,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Worldometer/EDGAR agrupa el dato con España en la tabla consultada; se usa como referencia territorial provisional, no como dato nacional propio.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.75,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Worldometer/EDGAR agrupa el dato con España en la tabla consultada; se usa como referencia territorial provisional, no como dato nacional propio."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "angola": {
+      "nombre_es": "Angola",
+      "selector_value": "angola",
+      "iso3": "AGO",
+      "tCO2_persona_anio": 0.75,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.75,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "argentina": {
+      "nombre_es": "Argentina",
+      "selector_value": "argentina",
+      "iso3": "ARG",
+      "tCO2_persona_anio": 3.89,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.89,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "armenia": {
+      "nombre_es": "Armenia",
+      "selector_value": "armenia",
+      "iso3": "ARM",
+      "tCO2_persona_anio": 2.55,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.55,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "australia": {
+      "nombre_es": "Australia",
+      "selector_value": "australia",
+      "iso3": "AUS",
+      "tCO2_persona_anio": 14.43,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 14.43,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "austria": {
+      "nombre_es": "Austria",
+      "selector_value": "austria",
+      "iso3": "AUT",
+      "tCO2_persona_anio": 6.55,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 6.55,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "azerbaiyán": {
+      "nombre_es": "Azerbaiyán",
+      "selector_value": "azerbaiyán",
+      "iso3": "AZE",
+      "tCO2_persona_anio": 3.75,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.75,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bahamas": {
+      "nombre_es": "Bahamas",
+      "selector_value": "bahamas",
+      "iso3": "BHS",
+      "tCO2_persona_anio": 3.47,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.47,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "baréin": {
+      "nombre_es": "Baréin",
+      "selector_value": "baréin",
+      "iso3": "BHR",
+      "tCO2_persona_anio": 20.7,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 20.7,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bangladesh": {
+      "nombre_es": "Bangladés",
+      "selector_value": "bangladesh",
+      "iso3": "BGD",
+      "tCO2_persona_anio": 0.7,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.7,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "barbados": {
+      "nombre_es": "Barbados",
+      "selector_value": "barbados",
+      "iso3": "BRB",
+      "tCO2_persona_anio": 2.47,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.47,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bielorrusia": {
+      "nombre_es": "Bielorrusia",
+      "selector_value": "bielorrusia",
+      "iso3": "BLR",
+      "tCO2_persona_anio": 5.81,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.81,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bélgica": {
+      "nombre_es": "Bélgica",
+      "selector_value": "bélgica",
+      "iso3": "BEL",
+      "tCO2_persona_anio": 7.35,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.35,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "belice": {
+      "nombre_es": "Belice",
+      "selector_value": "belice",
+      "iso3": "BLZ",
+      "tCO2_persona_anio": 0.91,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.91,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "benín": {
+      "nombre_es": "Benín",
+      "selector_value": "benín",
+      "iso3": "BEN",
+      "tCO2_persona_anio": 0.52,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.52,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bután": {
+      "nombre_es": "Bután",
+      "selector_value": "bután",
+      "iso3": "BTN",
+      "tCO2_persona_anio": 1.83,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.83,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bolivia": {
+      "nombre_es": "Bolivia",
+      "selector_value": "bolivia",
+      "iso3": "BOL",
+      "tCO2_persona_anio": 2.33,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.33,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bosnia_herzegovina": {
+      "nombre_es": "Bosnia y Herzegovina",
+      "selector_value": "bosnia_herzegovina",
+      "iso3": "BIH",
+      "tCO2_persona_anio": 5.89,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.89,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "botsuana": {
+      "nombre_es": "Botsuana",
+      "selector_value": "botsuana",
+      "iso3": "BWA",
+      "tCO2_persona_anio": 2.68,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.68,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "brasil": {
+      "nombre_es": "Brasil",
+      "selector_value": "brasil",
+      "iso3": "BRA",
+      "tCO2_persona_anio": 2.24,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.24,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "brunéi": {
+      "nombre_es": "Brunéi",
+      "selector_value": "brunéi",
+      "iso3": "BRN",
+      "tCO2_persona_anio": 20.19,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 20.19,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "bulgaria": {
+      "nombre_es": "Bulgaria",
+      "selector_value": "bulgaria",
+      "iso3": "BGR",
+      "tCO2_persona_anio": 5.07,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.07,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "burkina_faso": {
+      "nombre_es": "Burkina Faso",
+      "selector_value": "burkina_faso",
+      "iso3": "BFA",
+      "tCO2_persona_anio": 0.28,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.28,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "burundi": {
+      "nombre_es": "Burundi",
+      "selector_value": "burundi",
+      "iso3": "BDI",
+      "tCO2_persona_anio": 0.07,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.07,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "camboya": {
+      "nombre_es": "Camboya",
+      "selector_value": "camboya",
+      "iso3": "KHM",
+      "tCO2_persona_anio": 1.1,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.1,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "camerún": {
+      "nombre_es": "Camerún",
+      "selector_value": "camerún",
+      "iso3": "CMR",
+      "tCO2_persona_anio": 0.36,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.36,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "canadá": {
+      "nombre_es": "Canadá",
+      "selector_value": "canadá",
+      "iso3": "CAN",
+      "tCO2_persona_anio": 14.87,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 14.87,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "cabo_verde": {
+      "nombre_es": "Cabo Verde",
+      "selector_value": "cabo_verde",
+      "iso3": "CPV",
+      "tCO2_persona_anio": 1.14,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.14,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "rep_centroafricana": {
+      "nombre_es": "República Centroafricana",
+      "selector_value": "rep_centroafricana",
+      "iso3": "CAF",
+      "tCO2_persona_anio": 0.06,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.06,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "chad": {
+      "nombre_es": "Chad",
+      "selector_value": "chad",
+      "iso3": "TCD",
+      "tCO2_persona_anio": 0.16,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.16,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "chile": {
+      "nombre_es": "Chile",
+      "selector_value": "chile",
+      "iso3": "CHL",
+      "tCO2_persona_anio": 4.1,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.1,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "china": {
+      "nombre_es": "China",
+      "selector_value": "china",
+      "iso3": "CHN",
+      "tCO2_persona_anio": 9.13,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 9.13,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "colombia": {
+      "nombre_es": "Colombia",
+      "selector_value": "colombia",
+      "iso3": "COL",
+      "tCO2_persona_anio": 1.84,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.84,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "comoras": {
+      "nombre_es": "Comoras",
+      "selector_value": "comoras",
+      "iso3": "COM",
+      "tCO2_persona_anio": 0.47,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.47,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "costa_rica": {
+      "nombre_es": "Costa Rica",
+      "selector_value": "costa_rica",
+      "iso3": "CRI",
+      "tCO2_persona_anio": 1.61,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.61,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "croacia": {
+      "nombre_es": "Croacia",
+      "selector_value": "croacia",
+      "iso3": "HRV",
+      "tCO2_persona_anio": 4.64,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.64,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "cuba": {
+      "nombre_es": "Cuba",
+      "selector_value": "cuba",
+      "iso3": "CUB",
+      "tCO2_persona_anio": 1.82,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.82,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "chipre": {
+      "nombre_es": "Chipre",
+      "selector_value": "chipre",
+      "iso3": "CYP",
+      "tCO2_persona_anio": 5.92,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.92,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "rep_checa": {
+      "nombre_es": "República Checa",
+      "selector_value": "rep_checa",
+      "iso3": "CZE",
+      "tCO2_persona_anio": 7.32,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.32,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "dinamarca": {
+      "nombre_es": "Dinamarca",
+      "selector_value": "dinamarca",
+      "iso3": "DNK",
+      "tCO2_persona_anio": 4.34,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.34,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "yibuti": {
+      "nombre_es": "Yibuti",
+      "selector_value": "yibuti",
+      "iso3": "DJI",
+      "tCO2_persona_anio": 0.85,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.85,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "rep_dominicana": {
+      "nombre_es": "República Dominicana",
+      "selector_value": "rep_dominicana",
+      "iso3": "DOM",
+      "tCO2_persona_anio": 2.97,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.97,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "ecuador": {
+      "nombre_es": "Ecuador",
+      "selector_value": "ecuador",
+      "iso3": "ECU",
+      "tCO2_persona_anio": 2.63,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.63,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "egipto": {
+      "nombre_es": "Egipto",
+      "selector_value": "egipto",
+      "iso3": "EGY",
+      "tCO2_persona_anio": 2.66,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.66,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "el_salvador": {
+      "nombre_es": "El Salvador",
+      "selector_value": "el_salvador",
+      "iso3": "SLV",
+      "tCO2_persona_anio": 1.44,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.44,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "estonia": {
+      "nombre_es": "Estonia",
+      "selector_value": "estonia",
+      "iso3": "EST",
+      "tCO2_persona_anio": 8.29,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 8.29,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "etiopía": {
+      "nombre_es": "Etiopía",
+      "selector_value": "etiopía",
+      "iso3": "ETH",
+      "tCO2_persona_anio": 0.16,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.16,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "finlandia": {
+      "nombre_es": "Finlandia",
+      "selector_value": "finlandia",
+      "iso3": "FIN",
+      "tCO2_persona_anio": 5.5,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.5,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "francia": {
+      "nombre_es": "Francia",
+      "selector_value": "francia",
+      "iso3": "FRA",
+      "tCO2_persona_anio": 4.12,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Worldometer/EDGAR agrupa Francia con Mónaco en la tabla consultada.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.12,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Worldometer/EDGAR agrupa Francia con Mónaco en la tabla consultada."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "alemania": {
+      "nombre_es": "Alemania",
+      "selector_value": "alemania",
+      "iso3": "DEU",
+      "tCO2_persona_anio": 7.03,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.03,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "ghana": {
+      "nombre_es": "Ghana",
+      "selector_value": "ghana",
+      "iso3": "GHA",
+      "tCO2_persona_anio": 0.73,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.73,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "grecia": {
+      "nombre_es": "Grecia",
+      "selector_value": "grecia",
+      "iso3": "GRC",
+      "tCO2_persona_anio": 4.78,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.78,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "guatemala": {
+      "nombre_es": "Guatemala",
+      "selector_value": "guatemala",
+      "iso3": "GTM",
+      "tCO2_persona_anio": 1.06,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.06,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "hungría": {
+      "nombre_es": "Hungría",
+      "selector_value": "hungría",
+      "iso3": "HUN",
+      "tCO2_persona_anio": 4.5,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.5,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "india": {
+      "nombre_es": "India",
+      "selector_value": "india",
+      "iso3": "IND",
+      "tCO2_persona_anio": 2.19,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.19,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "indonesia": {
+      "nombre_es": "Indonesia",
+      "selector_value": "indonesia",
+      "iso3": "IDN",
+      "tCO2_persona_anio": 2.88,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.88,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "irán": {
+      "nombre_es": "Irán",
+      "selector_value": "irán",
+      "iso3": "IRN",
+      "tCO2_persona_anio": 9.62,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 9.62,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "iraq": {
+      "nombre_es": "Iraq",
+      "selector_value": "iraq",
+      "iso3": "IRQ",
+      "tCO2_persona_anio": 5.19,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.19,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "irlanda": {
+      "nombre_es": "Irlanda",
+      "selector_value": "irlanda",
+      "iso3": "IRL",
+      "tCO2_persona_anio": 6.47,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 6.47,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "israel": {
+      "nombre_es": "Israel",
+      "selector_value": "israel",
+      "iso3": "ISR",
+      "tCO2_persona_anio": 3.82,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.82,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "italia": {
+      "nombre_es": "Italia",
+      "selector_value": "italia",
+      "iso3": "ITA",
+      "tCO2_persona_anio": 5.1,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Worldometer/EDGAR agrupa Italia con San Marino y la Santa Sede en la tabla consultada.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.1,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Worldometer/EDGAR agrupa Italia con San Marino y la Santa Sede en la tabla consultada."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "japón": {
+      "nombre_es": "Japón",
+      "selector_value": "japón",
+      "iso3": "JPN",
+      "tCO2_persona_anio": 7.79,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.79,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "jordania": {
+      "nombre_es": "Jordania",
+      "selector_value": "jordania",
+      "iso3": "JOR",
+      "tCO2_persona_anio": 2.29,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.29,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "kenia": {
+      "nombre_es": "Kenia",
+      "selector_value": "kenia",
+      "iso3": "KEN",
+      "tCO2_persona_anio": 0.37,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.37,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "kuwait": {
+      "nombre_es": "Kuwait",
+      "selector_value": "kuwait",
+      "iso3": "KWT",
+      "tCO2_persona_anio": 25.51,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 25.51,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "letonia": {
+      "nombre_es": "Letonia",
+      "selector_value": "letonia",
+      "iso3": "LVA",
+      "tCO2_persona_anio": 3.73,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.73,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "líbano": {
+      "nombre_es": "Líbano",
+      "selector_value": "líbano",
+      "iso3": "LBN",
+      "tCO2_persona_anio": 1.93,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.93,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "libia": {
+      "nombre_es": "Libia",
+      "selector_value": "libia",
+      "iso3": "LBY",
+      "tCO2_persona_anio": 9.18,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 9.18,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "lituania": {
+      "nombre_es": "Lituania",
+      "selector_value": "lituania",
+      "iso3": "LTU",
+      "tCO2_persona_anio": 4.63,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.63,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "malasia": {
+      "nombre_es": "Malasia",
+      "selector_value": "malasia",
+      "iso3": "MYS",
+      "tCO2_persona_anio": 8.57,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 8.57,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "méxico": {
+      "nombre_es": "México",
+      "selector_value": "méxico",
+      "iso3": "MEX",
+      "tCO2_persona_anio": 3.41,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.41,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "marruecos": {
+      "nombre_es": "Marruecos",
+      "selector_value": "marruecos",
+      "iso3": "MAR",
+      "tCO2_persona_anio": 1.81,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.81,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "países_bajos": {
+      "nombre_es": "Países Bajos",
+      "selector_value": "países_bajos",
+      "iso3": "NLD",
+      "tCO2_persona_anio": 6.84,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 6.84,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "nueva_zelanda": {
+      "nombre_es": "Nueva Zelanda",
+      "selector_value": "nueva_zelanda",
+      "iso3": "NZL",
+      "tCO2_persona_anio": 6.37,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 6.37,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "nigeria": {
+      "nombre_es": "Nigeria",
+      "selector_value": "nigeria",
+      "iso3": "NGA",
+      "tCO2_persona_anio": 0.58,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.58,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "noruega": {
+      "nombre_es": "Noruega",
+      "selector_value": "noruega",
+      "iso3": "NOR",
+      "tCO2_persona_anio": 7.07,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.07,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "pakistán": {
+      "nombre_es": "Pakistán",
+      "selector_value": "pakistán",
+      "iso3": "PAK",
+      "tCO2_persona_anio": 0.91,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.91,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "palestina": {
+      "nombre_es": "Palestina",
+      "selector_value": "palestina",
+      "iso3": "PSE",
+      "tCO2_persona_anio": null,
+      "anio": null,
+      "tipo_referencia": "no_disponible",
+      "fuente": null,
+      "estado_dato": "sin_referencia_operativa_I4e",
+      "nota": "No se incorpora referencia operativa: la tabla consultada no permite separar con claridad la referencia para Palestina.",
+      "referencias": {},
+      "referencias_disponibles": []
+    },
+    "perú": {
+      "nombre_es": "Perú",
+      "selector_value": "perú",
+      "iso3": "PER",
+      "tCO2_persona_anio": 1.99,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.99,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "filipinas": {
+      "nombre_es": "Filipinas",
+      "selector_value": "filipinas",
+      "iso3": "PHL",
+      "tCO2_persona_anio": 1.5,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 1.5,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "polonia": {
+      "nombre_es": "Polonia",
+      "selector_value": "polonia",
+      "iso3": "POL",
+      "tCO2_persona_anio": 7.36,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.36,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "portugal": {
+      "nombre_es": "Portugal",
+      "selector_value": "portugal",
+      "iso3": "PRT",
+      "tCO2_persona_anio": 3.53,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.53,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "qatar": {
+      "nombre_es": "Qatar",
+      "selector_value": "qatar",
+      "iso3": "QAT",
+      "tCO2_persona_anio": 45.33,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 45.33,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "rumania": {
+      "nombre_es": "Rumanía",
+      "selector_value": "rumania",
+      "iso3": "ROU",
+      "tCO2_persona_anio": 3.73,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.73,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "rusia": {
+      "nombre_es": "Rusia",
+      "selector_value": "rusia",
+      "iso3": "RUS",
+      "tCO2_persona_anio": 14.06,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 14.06,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "arabia_saudita": {
+      "nombre_es": "Arabia Saudita",
+      "selector_value": "arabia_saudita",
+      "iso3": "SAU",
+      "tCO2_persona_anio": 17.73,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 17.73,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "serbia": {
+      "nombre_es": "Serbia",
+      "selector_value": "serbia",
+      "iso3": "SRB",
+      "tCO2_persona_anio": null,
+      "anio": null,
+      "tipo_referencia": "no_disponible",
+      "fuente": null,
+      "estado_dato": "sin_referencia_operativa_I4e",
+      "nota": "No se incorpora referencia operativa en esta primera versión: no aparece de forma separada en la tabla Worldometer/EDGAR consultada.",
+      "referencias": {},
+      "referencias_disponibles": []
+    },
+    "singapur": {
+      "nombre_es": "Singapur",
+      "selector_value": "singapur",
+      "iso3": "SGP",
+      "tCO2_persona_anio": 9.62,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 9.62,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "eslovaquia": {
+      "nombre_es": "Eslovaquia",
+      "selector_value": "eslovaquia",
+      "iso3": "SVK",
+      "tCO2_persona_anio": 5.49,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.49,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "eslovenia": {
+      "nombre_es": "Eslovenia",
+      "selector_value": "eslovenia",
+      "iso3": "SVN",
+      "tCO2_persona_anio": 6.42,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 6.42,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "sudáfrica": {
+      "nombre_es": "Sudáfrica",
+      "selector_value": "sudáfrica",
+      "iso3": "ZAF",
+      "tCO2_persona_anio": 7.19,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 7.19,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "corea_del_sur": {
+      "nombre_es": "Corea del Sur",
+      "selector_value": "corea_del_sur",
+      "iso3": "KOR",
+      "tCO2_persona_anio": 11.29,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 11.29,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "españa": {
+      "nombre_es": "España",
+      "selector_value": "españa",
+      "iso3": "ESP",
+      "tCO2_persona_anio": 4.75,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.75,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "suecia": {
+      "nombre_es": "Suecia",
+      "selector_value": "suecia",
+      "iso3": "SWE",
+      "tCO2_persona_anio": 3.64,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.64,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "suiza": {
+      "nombre_es": "Suiza",
+      "selector_value": "suiza",
+      "iso3": "CHE",
+      "tCO2_persona_anio": 3.79,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Worldometer/EDGAR agrupa Suiza con Liechtenstein en la tabla consultada.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 3.79,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Worldometer/EDGAR agrupa Suiza con Liechtenstein en la tabla consultada."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "tailandia": {
+      "nombre_es": "Tailandia",
+      "selector_value": "tailandia",
+      "iso3": "THA",
+      "tCO2_persona_anio": 4.07,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.07,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "turquía": {
+      "nombre_es": "Turquía",
+      "selector_value": "turquía",
+      "iso3": "TUR",
+      "tCO2_persona_anio": 5.36,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 5.36,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "ucrania": {
+      "nombre_es": "Ucrania",
+      "selector_value": "ucrania",
+      "iso3": "UKR",
+      "tCO2_persona_anio": 2.78,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.78,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "emiratos_arabes_unidos": {
+      "nombre_es": "Emiratos Árabes Unidos",
+      "selector_value": "emiratos_arabes_unidos",
+      "iso3": "ARE",
+      "tCO2_persona_anio": 19.45,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 19.45,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "reino_unido": {
+      "nombre_es": "Reino Unido",
+      "selector_value": "reino_unido",
+      "iso3": "GBR",
+      "tCO2_persona_anio": 4.25,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.25,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "estados_unidos": {
+      "nombre_es": "Estados Unidos",
+      "selector_value": "estados_unidos",
+      "iso3": "USA",
+      "tCO2_persona_anio": 13.59,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 13.59,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "venezuela": {
+      "nombre_es": "Venezuela",
+      "selector_value": "venezuela",
+      "iso3": "VEN",
+      "tCO2_persona_anio": 2.78,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 2.78,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "vietnam": {
+      "nombre_es": "Vietnam",
+      "selector_value": "vietnam",
+      "iso3": "VNM",
+      "tCO2_persona_anio": 4.23,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 4.23,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "zambia": {
+      "nombre_es": "Zambia",
+      "selector_value": "zambia",
+      "iso3": "ZMB",
+      "tCO2_persona_anio": 0.55,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.55,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    },
+    "zimbabue": {
+      "nombre_es": "Zimbabue",
+      "selector_value": "zimbabue",
+      "iso3": "ZWE",
+      "tCO2_persona_anio": 0.67,
+      "anio": 2024,
+      "tipo_referencia": "CO2_territorial_per_capita",
+      "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+      "estado_dato": "referencia_territorial_CO2_2024",
+      "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo.",
+      "referencias": {
+        "territorial": {
+          "etiqueta": "CO2 territorial medio por persona",
+          "tCO2_persona_anio": 0.67,
+          "anio": 2024,
+          "tipo_referencia": "CO2_territorial_per_capita",
+          "unidad": "t CO2/persona/año",
+          "fuente": "Worldometer, con datos EDGAR/JRC/IEA 2025 para CO2 territorial 2024",
+          "estado_dato": "referencia_territorial_CO2_2024",
+          "nota": "Referencia nacional territorial de CO2 per cápita. No equivale a una huella personal de consumo ni a CO2e completo."
+        }
+      },
+      "referencias_disponibles": [
+        "territorial"
+      ]
+    }
+  }
+}

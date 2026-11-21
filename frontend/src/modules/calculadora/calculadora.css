@@ -1,0 +1,98 @@
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
+
+/* Tokens del módulo: solo existen dentro de .calculadora, no afectan al resto de la plataforma. */
+.calculadora {
+  --c-fondo: #f2efe6;
+  --c-superficie: #fbfaf6;
+  --c-tinta: #1b2b22;
+  --c-tinta-suave: #4e5f55;
+  --c-linea: #d9d3c4;
+  --c-bosque: #1f5137;
+  --c-bosque-hondo: #153a27;
+  --c-hoja: #4c9a5f;
+  --c-brote: #d8ead0;
+  --c-tierra: #9a5b2e;
+  --c-arcilla: #ecd5b8;
+  --c-cielo: #d3e6ea;
+  --c-agua: #2f6f88;
+  --c-ciruela: #74507f;
+  --c-sol: #f0b44c;
+  --c-alerta: #a3341f;
+  --c-sombra: 0 1px 2px rgb(27 43 34 / 0.06), 0 8px 24px -12px rgb(27 43 34 / 0.18);
+  --font-titular: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+
+  color: var(--c-tinta);
+  font-feature-settings: 'tnum' 0;
+}
+
+.calculadora .titular {
+  font-family: var(--font-titular);
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.calculadora .cifra {
+  font-family: var(--font-titular);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.calculadora :focus-visible {
+  outline: 3px solid var(--c-sol);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Los títulos reciben el foco al cambiar de paso (lectores de pantalla) pero no necesitan anillo. */
+.calculadora [tabindex='-1']:focus-visible {
+  outline: none;
+}
+
+.calculadora input[type='number']::-webkit-inner-spin-button,
+.calculadora input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.calculadora input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* El camino de pasos se dibuja al cambiar de paso. */
+.calculadora .sendero-trazo {
+  transition: stroke-dashoffset 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.calculadora .entrada-paso {
+  animation: entrada-paso 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes entrada-paso {
+  from {
+    opacity: 0.001;
+    transform: translateY(10px);
+    filter: blur(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calculadora .entrada-paso { animation: none; }
+  .calculadora .sendero-trazo { transition: none; }
+}
+
+/* Informe imprimible: solo se imprime el informe de resultados. */
+@media print {
+  body * { visibility: hidden; }
+  .calculadora .informe-imprimible,
+  .calculadora .informe-imprimible * { visibility: visible; }
+  .calculadora .informe-imprimible {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    background: #fff;
+  }
+  .calculadora .no-imprimir { display: none !important; }
+  .calculadora .informe-imprimible section { break-inside: avoid; box-shadow: none !important; }
+}
